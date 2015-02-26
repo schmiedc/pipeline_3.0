@@ -1,0 +1,16 @@
+#!/bin/bash
+dir="/projects/tribolium/Stefan/15-02-17_VW_inj_GAPYFP+H2Bmcherry_32C_PBS_3min_15h_4angles/"
+jobs="$dir/jobs/normalize_output"
+
+mkdir -p $jobs
+
+for i in `seq 101 125`
+#for i in 100
+
+do
+	job="$jobs/normalize_output-$i.job"
+		echo $job
+		echo "#!/bin/bash" > "$job"
+		echo "/sw/bin/xvfb-run -a /sw/users/munster/packages/Fiji.app/ImageJ-linux64 -Ddir=$dir -Dtimepoint=$i -- --no-splash ${jobs}/normalize.bsh" >> "$job"
+		chmod a+x "$job"
+ 	done

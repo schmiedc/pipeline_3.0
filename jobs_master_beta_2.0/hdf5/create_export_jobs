@@ -1,0 +1,44 @@
+#!/bin/bash
+
+source /projects/tomancak_lightsheet/Valia/Valia/new_pipeline/master
+
+job="$jobs_export/hdf5-0.job"
+echo $job
+echo "#!/bin/bash" > "$job"
+echo "$XVFB_RUN -a $Fiji_export -Xmx10g \
+      	-Ddir=$dir \
+        -Dxml_filename=$xml_filename \
+        -Dresave_angle=$resave_angle \
+        -Dresave_channel=$resave_channel \
+        -Dresave_illumination=$resave_illumination \
+        -Dresave_timepoint=$resave_timepoint \
+        -Dsubsampling_factors=$subsampling_factors \
+        -Dhdf5_chunk_sizes=$hdf5_chunk_sizes \
+        -Dtimepoints_per_partition=$timepoints_per_partition \
+        -Dsetups_per_partition=$setups_per_partition \
+        -Drun_only_job_number=0 \
+                 -- --no-splash $export" >> "$job"
+chmod a+x "$job"
+
+for i in $timepoint
+do
+	job="$jobs_export/hdf5-$i.job"
+	echo $job
+	echo "#!/bin/bash" > "$job"
+	echo "$XVFB_RUN -a $Fiji_export -Xmx10g \
+		-Ddir=$dir \
+		-Dxml_filename=$xml_filename \
+		-Dresave_angle=$resave_angle \
+		-Dresave_channel=$resave_channel \
+		-Dresave_illumination=$resave_illumination \
+		-Dresave_timepoint=$resave_timepoint \
+		-Dsubsampling_factors=$subsampling_factors \
+		-Dhdf5_chunk_sizes=$hdf5_chunk_sizes \
+		-Dtimepoints_per_partition=$timepoints_per_partition \
+		-Dsetups_per_partition=$setups_per_partition \
+		-Drun_only_job_number=$i \
+			-- --no-splash $export" >> "$job"
+	chmod a+x "$job"
+done
+
+

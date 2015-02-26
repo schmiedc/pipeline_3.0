@@ -1,0 +1,17 @@
+#!/bin/bash
+dir="/projects/tribolium/Stefan/15-02-17_VW_inj_GAPYFP+H2Bmcherry_32C_PBS_3min_15h_4angles/"
+jobs="$dir/jobs/make_python_projections"
+
+mkdir -p $jobs
+
+for i in 15 44 46 57 74 88 90 `seq 101 125`
+#for i in 100
+
+do
+	job="$jobs/make-projection-$i.job"
+		echo $job
+		echo "#!/bin/bash" > "$job"
+		echo ". /etc/profile"  >> "$job"
+		echo "/sw/bin/xvfb-run -a /sw/bin/python ${jobs}/project_stacks.py $i" >> "$job"
+		chmod a+x "$job"
+ 	done

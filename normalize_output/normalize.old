@@ -1,0 +1,21 @@
+import ij.IJ;
+import ij.ImagePlus;
+import ij.Plugins;
+import java.lang.Runtime;
+import java.io.File;
+import java.io.FilenameFilter;
+
+runtime = Runtime.getRuntime();
+
+dir = System.getProperty( "dir" );
+timepoint = System.getProperty( "timepoint" );
+
+IJ.run("Image Sequence...", "open=[/projects/tribolium/Dreamteam/14-02-18_eGFP_H1A_mounted_right_before_imaging/output/"+timepoint+"/DC(l=6.0E-4)_t"+timepoint+"_ch0_z000.tif] number=512 starting=1 increment=1 scale=100 file=[] convert sort");
+IJ.run("Enhance Contrast...", "saturated=0.1 normalize process_all");
+IJ.File.makeDirectory("/projects/tribolium/Dreamteam/14-02-18_eGFP_H1A_mounted_right_before_imaging/norm_output/" +timepoint + "/")
+IJ.run("Image Sequence... ", "format=TIFF name=norm_tl"+timepoint+"_ start=0 digits=4 save=/projects/tribolium/Dreamteam/14-02-18_eGFP_H1A_mounted_right_before_imaging/norm_output/" + timepoint + "/norm_DC_tl"+ timepoint + "_0000.tif");
+//close();
+
+
+/* shutdown */
+runtime.exit(0);

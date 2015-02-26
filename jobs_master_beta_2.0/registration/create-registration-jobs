@@ -1,0 +1,44 @@
+#!/bin/bash
+source /projects/tomancak_lightsheet/Valia/Valia/new_pipeline/master
+ 
+mkdir -p $jobs_registration
+ 
+for i in $timepoint
+ 
+do
+    job="$jobs_registration/register-$i.job"
+    echo $job
+    echo "#!/bin/bash" > "$job"
+    echo "$XVFB_RUN -a $Fiji -Dxml_path=$dir \
+	-Dxml_filename=$xml_filename \
+	-Dprocess_timepoint=$process_timepoint \
+	-Dprocess_illumination=$process_illumination \
+	-Dprocess_angle=$process_angle \
+	-Dlabel_interest_points=$label_interest_points \
+	-Dtype_of_registration=$type_of_registration \
+        -Dtype_of_detection=$type_of_detection \
+	-Ddir=$dir \
+	-Dpattern=$channel_pattern_beads \
+        -Dtimepoint=$i \
+	-Dangles=$angles \
+        -Dsubpixel_localization=$subpixel_localization \
+	-Dxy_resolution=$xy_resolution \
+        -Dz_scaling=$z_scaling \
+	-Dtransformation=$transformation \
+        -Dimglib_container=$imglib_container \
+	-Dradius1=$radius1 -Dradius2=$radius2 \
+        -Dthreshold=$threshold \
+	-Dinitial_sigma=$initial_sigma \
+        -Dthreshold_gaussian=$threshold_gaussian \
+	-Dregistration_algorithm=$registration_algorithm \
+	-Dtype_of_registration=$type_of_registration \
+	-Dinterest_points_channel_0=$interest_points_channel_0 \
+	-Dfix_tiles=$fix_tiles \
+	-Dmap_back_tiles=$map_back_tiles \
+	-Dmodel_to_regularize_with=$model_to_regularize_with \
+	-Dlambda=$lambda \
+	-Dallowed_error_for_ransac=$allowed_error_for_ransac \
+        	-- --no-splash $registration" >> "$job"
+    chmod a+x "$job"
+done
+

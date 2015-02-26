@@ -1,0 +1,25 @@
+#!/bin/bash
+source /projects/tomancak_lightsheet/Valia/Valia/new_pipeline/master
+
+mkdir -p $jobs_xml
+
+job="$jobs_xml/create-dataset.job"
+echo $job
+echo "#!/bin/bash" > "$job"
+echo "$XVFB_RUN -a $Fiji \
+	-Ddir=$dir \
+	-Dpattern=$channel_pattern_beads \
+	-Dtimepoint=$timelapse_timepoint \
+	-Dangles=$angles \
+	-Dxy_resolution=$xy_resolution \
+	-Dz_scaling=$z_scaling \
+	-Dimglib_container=$imglib_container \
+	-Dtype_of_dataset=$type_of_dataset \
+	-Dxml_filename=$xml_filename \
+	-Dmultiple_timepoints=$multiple_timepoints \
+	-Dmultiple_channels=$multiple_channels \
+	-Dmultiple_illumination_directions=$multiple_illumination_directions \
+	-Dmultiple_angles=$multiple_angles \
+		-- --no-splash $define_xml" >> "$job"
+chmod a+x "$job"
+

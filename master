@@ -1,0 +1,428 @@
+#!/bin/bash
+#===============================================================================
+#
+#	  FILE: master 
+#
+#  DESCRIPTION: source file for cluster processing scripts
+#
+#       AUTHOR: Christopher Schmied, schmied@mpi-cbg.de
+#    INSTITUTE: Max Planck Institute for Molecular Cell Biology and Genetics
+#         BUGS: ---
+#        NOTES: ---
+#      Version: 2.2
+#      CREATED: 2014-04-02
+#     REVISION: 2014-06-05
+#===============================================================================
+ 
+#------------------------------------------------------------------------------- 
+#                           General Parameters 
+#
+# Dataset: 2014-08-11_Stock5_Stock26
+#
+# Select single or multi channel:
+# 	single channel: pattern_of_spim="spim_TL{tt}_Angle{a}.tif" 
+# 	multi channel: pattern_of_spim="spim_TL{tt}_Angle{a}_Channel{c}.tif"
+#
+# type_of_dataset:
+#	Image Stacks (ImageJ Opener)	
+#	Image Stacks (LOCI Bioformats)
+#	Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats)
+#-------------------------------------------------------------------------------
+
+dir="/projects/tribolium/Stefan/14-09-07_Dm_sqh-GFP_40sec_3angl_vent/" 			# Data 
+job_directory="/projects/tomancak_lightsheet/Valia/Valia/new_pipeline/jobs_master_beta_2.0/" #directory
+timepoint="`seq 1 179`"                          # timepoints format: "`seq 1 3`" 
+angles="1,2,3"                            # angles format: "1,2,3" or "1-3"
+num_angles="5" 					# number of angles
+pattern_of_spim="spim_TL{t}_Angle{a}.tif" 	# pattern of spim
+						# for padded zeros use tt
+select_channel="Single-channel"     	# "Single-channel" or "Multi-channel" 
+Channel_beads="1"			# Channel that contains the beads						      
+pad="2"						      	# For padded zeros
+referencetp="300"					# reference timepoint 
+xy_resolution="1"				      	# Manual calibration xy
+z_scaling="3.260262129"   			        # Manual calibration z
+
+type_of_dataset="\"Image Stacks (ImageJ Opener)\""              	# raw fileformat
+xml_filename="\"dataset.xml\""                                  	# filename
+multiple_timepoints="\"YES (one file per time-point)\""         	# or NO (one time-point) 
+multiple_channels="\"NO (one channel)\""				# or YES (one file per channel)
+multiple_illumination_directions="\"NO (one illumination direction)\"" 	# or YES (one file per illumination direction)
+multiple_angles="\"YES (one file per angle)\"" 				# or NO (one angle)
+ 
+#-------------------------------------------------------------------------------
+#                           Preprocessing 
+# 
+# Use czi_resave for .czi files and ometiff files for .ometiff files
+#
+# split.bsh for multi-channel data):
+# Outputs channls as: spim_TL{tt}_Angle{a}_Channel0
+#                     spim_TL{tt}_Angle{a}_Channel1
+# saves into dir
+#-------------------------------------------------------------------------------
+
+#--- Renaming czi files --------------------------------------------------------
+
+first_index="0"                                 # First index of czi files
+last_index="279"					# Last index
+first_timepoint="9"                          	# The first timepoint 
+angles_renaming=(1 2 3 4 5)                         # Angles format: (1 2 3)
+						      						      
+source_pattern=/2014-08-11_Stock5_Stock26_5\(\{index\}\).czi 	# Change name of file
+target_pattern=/spim_TL\{timepoint\}_Angle\{angle\}.czi
+ 
+#--- Resaving and splitting  ---------------------------------------------------
+
+angle_prep="1 2 3 4 5"  # angles format: "1 2 3"
+
+#=== Function ==================================================================
+# 	 NAME: channel switch
+# DESCRIPTION: changes the pattern to multichannel and uses padding
+# Parameter 1: pattern_of_spim
+# Parameter 2: select_channel
+# Parameter 3: Channel_beads
+#===============================================================================
+
+padding="$( cut -d '_' -f 2 <<<$pattern_of_spim )";
+
+if [ "$select_channel" == "Multi-channel" ]; then
+
+        c2="_Channel${Channel_beads}"
+
+                else
+                        c2=""
+fi
+
+pattern_switch="\"spim_"$padding"_Angle{a}${c2}.tif\""
+
+#-------------------------------------------------------------------------------
+# 			   Multi-view registration 
+#
+# Specify the method for Detection of beads: 
+#     Difference of mean: Comment out Difference of Gaussian in registration.bsh 
+#     Difference of Gaussian: Comment out Differnce of Mean in registration.bsh
+#-------------------------------------------------------------------------------
+
+process_timepoint="\"Single Timepoint (Select from List)\""   		# or
+process_channel="\"All channels\""                                	# or 
+process_illumination="\"All illuminations\""  		# or
+process_angle="\"All angles\""                          		# or
+
+type_of_detection="\"Difference-of-Mean (Integral image based)\"" # Difference
+radius1="2"							  # of Mean 
+radius2="3"
+threshold="0.001"
+
+# type_of_detection="\"Difference-of-Gaussian\""		  # Difference 	
+# initial_sigma="1.8000"					  # of Gaussian
+# threshold_gaussian="0.0080"
+ 
+#-------------------------------------------------------------------------------
+#			  Timelapse registration 
+#-------------------------------------------------------------------------------
+
+timelapse_timepoint="1-74"
+ 
+#------------------------------------------------------------------------------- 
+#		      Dublicate Registration files 
+#
+# Only for multi-channel data
+#-------------------------------------------------------------------------------
+
+channel_source="1" 			# Channel that contains the beads
+channel_target="0"			
+ 
+#------------------------------------------------------------------------------- 
+#		    Multi-view content based fusion 
+# 
+#  single channel: comment out 2nd fusion command in fusion.bsh
+#   multi channel: comment in registration_fusion1
+#
+# Select timelapse registration or individual registration:
+#  timelapse: 
+#  registration_fusion="\"Time-point registration (reference=${referencetp}) of channel 0\""
+#  
+#  Individual:
+#  registration_fusion="\"Individual registration of channel 0\""
+#
+#-------------------------------------------------------------------------------
+  
+registration_fusion="\"Time-point registration (reference=${referencetp}) of channel 0\""	
+registration_fusion1="\"Time-point registration (reference=${referencetp}) of channel 1\""
+
+downsample_output="2"                   # Downsampling
+x="668"		                        # Cropping parameters of full resolution
+y="24"
+z="580"
+w="796"
+h="1888"
+d="780"
+ 
+#------------------------------------------------------------------------------- 
+#          External transformation for multi-view deconvolution
+#
+# Only single channel, use external transformation for each individual channel
+# Cation! make a copy of the registration files befor external transformation
+# 
+#-------------------------------------------------------------------------------
+
+external_transformation_timepoint="1-79" 	  # Timepoints
+m00="0.5" 					  # Downsampling 
+m11="0.5"                                         # For downsampling 2x use 0.5
+m22="0.5"
+ 
+#------------------------------------------------------------------------------- 
+#			  Multi-view deconvolution 
+#
+# Only for single channel, use deconvolution for each individual channel
+# For multichannel data specify correct pattern:
+# single: pattern_deconvo="spim_TL{t}_Angle{a}.tif"
+# multi: pattern_deconvo="spim_TL{tt}_Angle{a}_Channel1.tif"
+#
+# For Multi channel: specify channel that is deconvolved 
+# registration_deco=""\"Time-point registration (reference=${referencetp}) of channel 0\""
+# registration_deco=""\"Time-point registration (reference=${referencetp}) of channel 1\""
+#-------------------------------------------------------------------------------
+	
+pattern_deconvo="spim_TL{tt}_Angle{a}_Channel0.tif"   	# Pattern
+registration_deco="\"Time-point registration (reference=${referencetp}) of channel 0\""
+
+iter="10"					# Number of iterations
+psf_estimation="\"Extract from beads\""     	# PSF parameters 
+# psf_estimation=                           	# Does not work yet!
+decox="167" 				    	# Cropping parameters: 
+decoy="3"				       	# if downsampled divide 
+decoz="142"				       	# fusion cropping parameters 
+decow="387"				       	# by this factor
+decoh="935"
+decod="448"
+ 
+#------------------------------------------------------------------------------- 
+#				    Rendering 
+# 
+# Different file names of fused or deconvolved data
+#
+# name_rendering="img"  Content based fusion data
+# name_rendering="DC"   Deconvolved data
+#
+# One working scripts for single channel and one for multi-channel: 
+# 	single: single-render-mov.bsh
+# 	multi: multi-render-mov.bsh
+#
+# Different settings for single or for multi channel
+#-------------------------------------------------------------------------------
+
+#--- General settings ----------------------------------------------------------
+
+name_rendering="img"					# fused="img" deconvo="DC"
+jobs_rendering=${job_directory}"/3d_rendering_cpu"  	# directory
+rendering=${jobs_rendering}"/single-render-mov.bsh" 	# script single or 
+						    	# multi-channel
+source_rendering="/fusion_output"                   	# source
+target_rendering="/fusion_rendering"                	# target directory
+nframes="6"                                  		# nframes for rotation 
+
+#--- Settings single channel ---------------------------------------------------
+
+minimum_rendering="0.5"                      		# Min single channel
+maximum_rendering="0.005"                    		# Max single channel
+
+#--- Settings multi channel ----------------------------------------------------
+
+min_ch0=0.9 				     	# Min channel 0 multi channel
+max_ch0=0.01				     	# Max channel 0 multi channel
+min_ch1=0.9			             	# Min channel 1 multi channel
+max_ch1=0.01                               	# Max channel 1 multi channel
+zSlices="369" 			     		# For multi-channel rendering
+ 
+#--- Orientation or rotation ---------------------------------------------------
+# rotation_lateral: 3d-affine: (0.9736341, -0.090486586, 0.2094066, 0.0, 
+#				-0.18908852, -0.8336387, 0.51894456, 0.0, 
+#				0.12761092, -0.5448576, -0.8287677, 0.0)
+# still needs to be put into the script directly
+# under construction
+ 
+#------------------------------------------------------------------------------- 
+#				hdf5 export 
+#
+# Single or multi channel:
+#                  single: channels_export="\"0\""
+#                   multi: channels_export="\"0,1\""
+#
+# Content based fusion (fusion) or deconvolution (decon) output file pattern:
+# fusion: filepattern="\"%1\\\$d/img_tl%1\\\$d_ch%2\\\$d_z%3\\\$03d.tif\""
+# decon: filepattern="\"%1\\\$d/DC(l=6.0E-4)_t%1\\\$d_ch%2\\\$d_%3\\\$03d.tif\""
+#
+# Scale for deconvolution output is always 1! Since the downsampling is in the
+# Registration files. Use Downsampled crop values as for deconvolution.
+#-------------------------------------------------------------------------------
+
+target_hdf5="/hdf5/"				             # Target directory
+num_export_job="`seq 0 33`"			             # Number of jobs
+exportXmlFilename="\"${target_hdf5}2014-08-11_Stock5_Stock26\"" 	# xml file
+									# name
+channels_export="\"0,1\""			# Channels
+timepoint_export="\"1-64\""		# timepoints
+filepath="\"/output/\""			# directory of fused data
+filepattern="\"%1\\\$d/img_tl%1\\\$d_ch%2\\\$d_z%3\\\$03d.tif\"" # fused data pattern
+#filepattern="\"%1\\\$d/DC(l=6.0E-4)_t%1\\\$d_ch%2\\\$d_%3\\\$03d.tif\""  # deconvolved data pattern
+
+sliceValueMin="0"			# Minimal intensity histogram
+sliceValueMax="65000"			# Maximal intensity histogram 
+					#	fused=65000 deconvolved=2
+cropOffsetX="668"			# x crop
+cropOffsetY="24"				# y crop
+cropOffsetZ="580" 			# z crop
+export_numSlices="389"                  # Number of slices of output
+scale="2"				# downsample factor. 
+					# For deconvolution =1
+
+#===============================================================================
+# Directories for scripts and advanced settings for processing 
+#===============================================================================
+
+#-------------------------------------------------------------------------------
+# Fiji settings 
+#-------------------------------------------------------------------------------
+ 
+XVFB_RUN="/sw/bin/xvfb-run"				  # virtual frame buffer
+Fiji="/sw/users/tomancak/packages/fiji_for_new_pipeline/Fiji.app/ImageJ-linux64" 
+									  # Fiji
+#Fiji="/sw/users/schmied/lifeline/Fiji.app.lifeline2/ImageJ-linux64" # Fiji 
+
+#-------------------------------------------------------------------------------
+# Pre-processing 
+#-------------------------------------------------------------------------------
+
+#--- Resaving .czi into .tif files----------------------------------------------
+
+Fiji_resave="/sw/users/schmied/lifeline/Fiji.app.lifeline2/ImageJ-linux64" 
+						# Fiji that works for resaving
+jobs_resaving=${job_directory}"/czi_resave/" 			# directory
+resaving=${jobs_resaving}"/resaving.bsh" 			# script
+ 
+#--- Resaving ome.tiff into .tif files -----------------------------------------
+
+jobs_resaving_ometiff=${job_directory}"/ometiff_resave/" 	 # directory
+resaving_ometiff=${jobs_resaving_ometiff}"/resaving-ometiff.bsh" # script
+ 
+#--- Split channels-------------------------------------------------------------
+
+jobs_split=${job_directory}"/split_channels/" 			# directory
+split=${jobs_split}"/split.bsh" 				# script
+
+#--------------------------------------------------------------------------------
+# XML definition and manipulation
+#--------------------------------------------------------------------------------
+jobs_xml=${job_directory}"/define_xml/"				# directory
+define_xml=${job_directory}"define_xml/define_xml.bsh"		# script
+merge_xml=${job_directory}"define_xml/merge_xml.bsh"			# script
+ 
+#------------------------------------------------------------------------------- 
+# Multi-view Registration 
+#-------------------------------------------------------------------------------
+
+jobs_registration=${job_directory}"/registration/" 		# directory
+registration=${jobs_registration}"/registration.bsh" 		# script
+channel_pattern_beads=${pattern_switch}				# Pattern
+type_of_registration="Single-channel" 			# registration parameters
+label_interest_points="beads"
+subpixel_localization="\"3-dimensional quadratic fit\""
+transformation_model="Affine"
+imglib_container="\"Array container (images smaller ~2048x2048x450 px)\""
+registration_algorithm="\"Fast 3d geometric hashing (rotation invariant)\""
+type_of_registration="\"Register timepoints individually\""
+interest_points_channel_0="beads"
+fix_tiles="\"Do not fix tiles\""
+map_back_tiles="\"Map back to first tile using rigid model\""
+transformation="Affine"
+model_to_regularize_with="Rigid"
+lambda="0.10" 
+allowed_error_for_ransac="5"
+ 
+#-------------------------------------------------------------------------------
+# Timelapse registration
+#-------------------------------------------------------------------------------
+
+jobs_timelapse=${job_directory}"/timelapse_registration/" 	# directory
+timelapse_registration=${jobs_timelapse}"/time-lapse.bsh" 	# script
+
+#-------------------------------------------------------------------------------
+# Multi-view fusion
+#-------------------------------------------------------------------------------
+
+jobs_fusion=${job_directory}"/fusion/" 				# directory
+fusion=${jobs_fusion}"/fusion.bsh" 				# script
+ 
+fusion_method="\"Fuse into a single image\"" 		    # Fusion parameters
+process_views_in_paralell="All" 
+blending="blending"
+weights="\"content_based_weights_(fast,\""
+fused_image_output="\"Save 2d-slices, one directory per time-point\""
+
+#-------------------------------------------------------------------------------
+# External transformation
+#-------------------------------------------------------------------------------
+
+jobs_external_transformation=${job_directory}"/external_transformation/"
+external_transformation=${jobs_external_transformation}"/external_transformation.bsh"
+pattern_extrans=${pattern_switch}
+
+#-------------------------------------------------------------------------------
+# Multi-view deconvolution 
+#-------------------------------------------------------------------------------
+
+jobs_deconvolution=${job_directory}"/deconvolution/"            # directory
+deconvolution=${jobs_deconvolution}"/deconvolution.bsh" 	# script
+type_of_iteration="\"Efficient Bayesian - Optimization I (fast, precise)\""
+osem_acceleration="\"1 (balanced)\""
+use_tikhonov_regularization="use_tikhonov_regularization"
+Tikhonov_parameter="0.0006"
+compute="\"in 512x512x512 blocks\""
+compute_on="\"CPU (Java)\""
+ 
+psf_display="\"Do not show PSF's\""
+load_input_images_sequentially="load_input_images_sequentially"
+fused_image_output="\"Save 2d-slices, one directory per time-point\""
+
+#-------------------------------------------------------------------------------
+# Rendering
+#-------------------------------------------------------------------------------
+
+Fiji_rendering="/sw/users/schmied/packages/Fiji.app.render/ImageJ-linux64" 
+
+#-------------------------------------------------------------------------------
+# hdf5 export
+#-------------------------------------------------------------------------------
+
+Fiji_export="/sw/users/schmied/packages/Fiji.app.hdf5/ImageJ-linux64" # Fiji_tobias
+path="\"${dir}\"" 					     # data directory
+jobs_export=${job_directory}"/hdf5/" 				# directory
+export=${jobs_export}"/export.bsh" 				# script
+inputFilePattern="\"${pattern_of_spim}\""    # Spim pattern 
+angles_export="\"${angles}\""       	     # angles form general
+referencetp_export="\"${referencetp}\""      # reference timepoint from general
+
+# overrideImageZStretching does not work
+# overrideImageZStretching="true" 
+
+# Not implemented yet
+# spimresolutions="{ { 1, 1, 1 }, { 2, 2, 1 }, { 4, 4, 2 }, { 8, 8, 4 } }"
+# spimsubdivisions="{ { 32, 32, 4 }, { 16, 16, 8 }, { 8, 8, 8 }, { 8, 8, 8 } }"
+
+# fusionresolutions = "{ { 1, 1, 1 }, { 2, 2, 2 }, { 4, 4, 4 }, { 8, 8, 8 } }"
+# fusionsubdivisions = "{ { 16, 16, 16 }, { 16, 16, 16 }, { 8, 8, 8 }, { 8, 8, 8 } }"
+
+#-------------------------------------------------------------------------------
+# hdf5 export
+#-------------------------------------------------------------------------------
+Fiji_export="/sw/users/tomancak/packages/fiji_for_new_pipeline/Fiji.app/ImageJ-linux64" # Fiji
+jobs_export=${job_directory}"/hdf5/"                            # directory 
+resave_angle="\"All angles\""
+resave_channel="\"All channels\""
+resave_illumination="\"All illuminations\""
+resave_timepoint="\"All Timepoints\""
+subsampling_factors="\"{ {1,1,1}, {2,2,1}, {4,4,1}, {8,8,1} }\""
+hdf5_chunk_sizes="\"{ {32,32,4}, {32,32,4}, {16,16,16}, {16,16,16} }\""
+timepoints_per_partition="1"
+setups_per_partition="0"

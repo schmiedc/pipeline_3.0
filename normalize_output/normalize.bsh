@@ -1,0 +1,46 @@
+import ij.IJ;
+import ij.ImagePlus;
+import ij.Plugins;
+import ij.process.*;
+import java.lang.Runtime;
+import java.io.File;
+import java.io.FilenameFilter;
+
+runtime = Runtime.getRuntime();
+
+dir = System.getProperty( "dir" );
+timepoint = System.getProperty( "timepoint" );
+
+
+//IJ.run("Image Sequence...", "open=[/projects/tribolium/Stefan/15-02-17_VW_inj_GAPYFP+H2Bmcherry_32C_PBS_3min_15h_4angles/output/"+timepoint+"/img_tl"+timepoint+"_ch0_z000.tif] number=512 starting=1 increment=1 scale=100 file=[] sort");
+IJ.run("Image Sequence...", "open=[/projects/tribolium/Stefan/15-02-17_VW_inj_GAPYFP+H2Bmcherry_32C_PBS_3min_15h_4angles/output/"+timepoint+"/img_tl"+timepoint+"_ch0_z000.tif] number=512 starting=1 increment=1 scale=100 file=[] sort");
+imp=IJ.getImage();
+//IJ.run(imp, "Enhance Contrast...", "saturated=0.0000001 normalize process_all use");
+//IJ.setMinAndMax(imp, 0.0, 0.15);
+IJ.setMinAndMax(imp, 0.0, 900);
+IJ.run(imp, "8-bit", "");
+
+//IJ.run(imp, "TransformJ Rotate", "z-angle=2.5 y-angle=0.0 x-angle=0.0 interpolation=[cubic B-spline] background=0.0 adjust");
+//IJ.run(imp, "Rotate... ", "angle=3 grid=1 interpolation=Bicubic fill enlarge stack");
+//imp.show();
+
+//double[] values = new double[] {0.99863005, 1.8623615E-9, 0.052335963, 0.0, 0.0, 1.0000001, -5.820766E-11, 0.0, -0.052335963, -3.250764E-11, 0.99862987, 0.0};
+double[] values = new double[] {0.99923885, -0.033240337, -0.020427233, 0.0, 0.03393886, 0.99881685, 0.03485726, 0.0, 0.019244391, -0.035523966, 0.9991845, 0.0};
+
+																
+result = muenster.StackRotation.run( imp, values );
+
+result2 = result.duplicate();
+
+IJ.run(result2, "Slice Remover", "first=461 last=471 increment=1");
+//IJ.run(result2, "Slice Remover", "first=1 last=20 increment=1");
+//result2.setRoi(9, 3, 893, 407);
+//IJ.run(result2, "Crop", "");
+
+
+
+IJ.save(result2,"/projects/tribolium/Stefan/15-02-17_VW_inj_GAPYFP+H2Bmcherry_32C_PBS_3min_15h_4angles/output/normalized8bit_900/norm_ch0_"+timepoint+".tif");
+
+
+/* shutdown */
+runtime.exit(0);
