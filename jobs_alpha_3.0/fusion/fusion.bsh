@@ -38,21 +38,21 @@ IJ.run("Fuse/Deconvolve Dataset",
 	"type_of_image_fusion=[Weighted-average fusion] " +
 	"bounding_box=[Define manually] " + 
 	"xml_output=[Save every XML with user-provided unique id]" + " " +
-	"fused_image=[Append to current XML Project] " +
-	"minimal_x=176 " +
-	"minimal_y=-28 " +
-	"minimal_z=-268 " +
-	"maximal_x=988 " +
-	"maximal_y=1916 " +
-	"maximal_z=428 " +
-	"downsample=2 " +
+	"fused_image=[Save as TIFF stack] " +
+	"minimal_x=140 " +
+	"minimal_y=4 " +
+	"minimal_z=-348 " +
+	"maximal_x=1004 " +
+	"maximal_y=1888 " +
+	"maximal_z=460 " +
+	"downsample=1 " +
 	"pixel_type=[16-bit unsigned integer] " + 
-	"imglib2_container=ArrayImg " + 
+	"imglib2_container=PlanarImg (large images, easy to display " + 
 	"process_views_in_paralell=All " + 
 	"interpolation=[Linear Interpolation] " +
 	"blend " +
 	"content-based " +
-	"select=" + xml_path + xml_filename);
+	"select=/Volumes/Christopher/2015-02-21_LZ1_Stock68/");
 
 /* shutdown */
 runtime.exit(0);

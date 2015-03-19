@@ -1,0 +1,73 @@
+#!/bin/bash
+#===============================================================================
+#
+#	  FILE: master 
+#
+#  DESCRIPTION: source file for cluster processing scripts
+#
+#       AUTHOR: Christopher Schmied, schmied@mpi-cbg.de
+#    INSTITUTE: Max Planck Institute for Molecular Cell Biology and Genetics
+#         BUGS: ---
+#        NOTES: ---
+#      Version: 3.0
+#      CREATED: 2014-04-02
+#     REVISION: 2015-03-19
+#===============================================================================
+
+#------------------------------------------------------------------------------- 
+#                           General Parameters 
+#
+# Dataset: 	Dpse Dip3 GFP attP2 
+#		2015-02-21_LZ1_Stock68
+#
+# Select single or multi channel:
+# 	single channel: pattern_of_spim="spim_TL{tt}_Angle{a}.tif" 
+# 	multi channel: pattern_of_spim="spim_TL{tt}_Angle{a}_Channel{c}.tif"
+#
+# type_of_dataset:
+#	Image Stacks (ImageJ Open
+#	Image Stacks (LOCI Bioformats)
+#	Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats)
+#-------------------------------------------------------------------------------
+dir="/projects/pilot_spim/Christopher/2015-02-21_LZ1_Stock68/" 				# Data directory
+job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_master_beta_2.0/" 	# jobs directory
+timepoint="`seq 1 71`"                         	 					# timepoints format: "`seq 1 3`" 
+angles="1,2,3,4,5"                            						# angles format: "1,2,3" or "1-3"
+num_angles="5" 										# number of angles
+pattern_of_spim="spim_TL{tt}_Angle{a}.tif" 						# pattern of spim
+											# for padded zeros use tt
+select_channel="Single-channel"     							# "Single-channel" or "Multi-channel" 
+Channel_beads="1"									# Channel that contains the beads						      
+pad="2"						      					# For padded zeros
+referencetp="9"										# reference timepoint 
+xy_resolution="1"				      					# Manual calibration xy
+z_scaling="5.21641917038124"   			        				# Manual calibration z
+
+type_of_dataset="\"Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats)\""              	# raw fileformat
+xml_filename="\"Dpse-Dip3-GFP-attP2.xml\""                                  		# filename
+multiple_timepoints="\"YES (one file per time-point)\""         			# or NO (one time-point) 
+multiple_channels="\"NO (one channel)\""						# or YES (one file per channel)
+multiple_illumination_directions="\"NO (one illumination direction)\"" 			# or YES (one file per illumination direction)
+multiple_angles="\"YES (one file per angle)\"" 						# or NO (one angle)
+
+
+
+#===============================================================================
+# Directories for scripts and advanced settings for processing 
+#===============================================================================
+
+#-------------------------------------------------------------------------------
+# Fiji settings 
+#-------------------------------------------------------------------------------
+ 
+XVFB_RUN="/sw/bin/xvfb-run"				  				# virtual frame buffer
+Fiji="/sw/users/tomancak/packages/fiji_for_new_pipeline/Fiji.app/ImageJ-linux64"	# Fiji
+									  
+
+#--------------------------------------------------------------------------------
+# XML definition and manipulation
+#--------------------------------------------------------------------------------
+jobs_xml=${job_directory}"/define_xml/"							# directory
+define_xml=${job_directory}"define_xml/define_xml.bsh"					# script
+merge_xml=${job_directory}"define_xml/merge_xml.bsh"					# script
+

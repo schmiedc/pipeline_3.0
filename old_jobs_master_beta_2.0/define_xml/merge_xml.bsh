@@ -1,0 +1,24 @@
+import ij.IJ;
+import ij.ImagePlus;
+import java.lang.Runtime;
+import java.io.File;
+import java.io.FilenameFilter;
+ 
+runtime = Runtime.getRuntime();
+System.out.println(runtime.availableProcessors() + " cores available for multi-threading");
+
+xml_path = System.getProperty( "xml_path" );
+xml_filename = System.getProperty( "xml_filename" );
+
+System.out.println( "directory=" + xml_path );
+
+IJ.run("Merge Cluster Jobs", 
+	"directory=" + xml_path + " " + 	
+	"filename_contains=job_ " + 
+	"filename_also_contains=.xml " +
+	"display " +
+//	"delete_xml's " + 
+	"merged_xml=registered_" + xml_filename);
+ 
+/* shutdown */
+runtime.exit(0);

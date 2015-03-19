@@ -1,0 +1,11 @@
+#!/bin/bash
+source /projects/pilot_spim/Christopher/pipeline_3.0/master
+ 
+job="$jobs_xml/merge.job"
+echo $job
+echo "#!/bin/bash" > "$job"
+echo "$XVFB_RUN -a $Fiji \
+	-Dxml_path=$dir \
+	-Dxml_filename=$xml_filename \
+		-- --no-splash $merge_xml" >> "$job"
+chmod a+x "$job"

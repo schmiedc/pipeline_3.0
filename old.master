@@ -17,7 +17,8 @@
 #------------------------------------------------------------------------------- 
 #                           General Parameters 
 #
-# Dataset: 2014-08-11_Stock5_Stock26
+# Dataset: 	Dpse Dip3 GFP attP2 
+#		2015-02-21_LZ1_Stock68
 #
 # Select single or multi channel:
 # 	single channel: pattern_of_spim="spim_TL{tt}_Angle{a}.tif" 
@@ -29,9 +30,9 @@
 #	Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats)
 #-------------------------------------------------------------------------------
 
-dir="/projects/tomancak_lightsheet/fTRG_project/2015-01-21_LZ2_fTRG155_SoxN/fused/" 			# Data 
-job_directory="/projects/tomancak_lightsheet/Valia/Valia/new_pipeline/jobs_master_beta_2.0/" #directory
-timepoint="`seq 1 87`"                          # timepoints format: "`seq 1 3`" 
+dir="/projects/pilot_spim/Christopher/2015-02-21_LZ1_Stock68/" 	# Data 
+job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_master_beta_2.0/" #directory
+timepoint="`seq 1 71`"                          # timepoints format: "`seq 1 3`" 
 angles="1,2,3,4,5"                            # angles format: "1,2,3" or "1-3"
 num_angles="5" 					# number of angles
 pattern_of_spim="spim_TL{tt}_Angle{a}.tif" 	# pattern of spim
@@ -41,10 +42,10 @@ Channel_beads="1"			# Channel that contains the beads
 pad="2"						      	# For padded zeros
 referencetp="9"					# reference timepoint 
 xy_resolution="1"				      	# Manual calibration xy
-z_scaling="4.918659393"   			        # Manual calibration z
+z_scaling="5.21641917038124"   			        # Manual calibration z
 
-type_of_dataset="\"Image Stacks (ImageJ Opener)\""              	# raw fileformat
-xml_filename="\"fused_SoxN.xml\""                                  	# filename
+type_of_dataset="\"Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats)\""              	# raw fileformat
+xml_filename="\"Dpse-Dip3-GFP-attP2.xml\""                                  	# filename
 multiple_timepoints="\"YES (one file per time-point)\""         	# or NO (one time-point) 
 multiple_channels="\"NO (one channel)\""				# or YES (one file per channel)
 multiple_illumination_directions="\"NO (one illumination direction)\"" 	# or YES (one file per illumination direction)
@@ -111,7 +112,7 @@ process_angle="\"All angles\""                          		# or
 type_of_detection="\"Difference-of-Mean (Integral image based)\"" # Difference
 radius1="2"							  # of Mean 
 radius2="3"
-threshold="0.005"
+threshold="0.003"
 
 # type_of_detection="\"Difference-of-Gaussian\""		  # Difference 	
 # initial_sigma="1.8000"					  # of Gaussian
@@ -121,7 +122,7 @@ threshold="0.005"
 #			  Timelapse registration 
 #-------------------------------------------------------------------------------
 
-timelapse_timepoint="1-87"
+timelapse_timepoint="1-71"
  
 #------------------------------------------------------------------------------- 
 #		      Dublicate Registration files 
@@ -150,13 +151,13 @@ channel_target="0"
 registration_fusion="\"Time-point registration (reference=${referencetp}) of channel 0\""	
 registration_fusion1="\"Time-point registration (reference=${referencetp}) of channel 1\""
 
-downsample_output="2"                   # Downsampling
-x="668"		                        # Cropping parameters of full resolution
-y="24"
-z="580"
-w="796"
+downsample_output="1"                   # Downsampling
+x="140"		                        # Cropping parameters of full resolution
+y="4"
+z="-348"
+w="1004"
 h="1888"
-d="780"
+d="460"
  
 #------------------------------------------------------------------------------- 
 #          External transformation for multi-view deconvolution
@@ -190,12 +191,12 @@ registration_deco="\"Time-point registration (reference=${referencetp}) of chann
 iter="10"					# Number of iterations
 psf_estimation="\"Extract from beads\""     	# PSF parameters 
 # psf_estimation=                           	# Does not work yet!
-decox="167" 				    	# Cropping parameters: 
-decoy="3"				       	# if downsampled divide 
-decoz="142"				       	# fusion cropping parameters 
-decow="387"				       	# by this factor
-decoh="935"
-decod="448"
+decox="140" 				    	# Cropping parameters: 
+decoy="4"				       	# if downsampled divide 
+decoz="-348"				       	# fusion cropping parameters 
+decow="1004"				       	# by this factor
+decoh="1888"
+decod="460"
  
 #------------------------------------------------------------------------------- 
 #				    Rendering 

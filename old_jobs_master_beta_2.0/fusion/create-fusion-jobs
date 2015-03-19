@@ -1,0 +1,22 @@
+#!/bin/bash
+source /projects/pilot_spim/Christopher/pipeline_3.0/master
+ 
+mkdir -p $jobs_fusion
+ 
+for i in $timepoint
+#for i in 4 26 35 45 47 52
+ 
+do
+    job="$jobs_fusion/fusion-$i.job"
+    echo $job
+    echo "#!/bin/bash" > "$job"
+    echo "$XVFB_RUN -a $Fiji -Dxml_path=$dir \
+	-Dxml_filename=$xml_filename \
+	-Dprocess_timepoint=$process_timepoint \
+	-Dprocess_illumination=$process_illumination \
+	-Dprocess_angle=$process_angle \
+        -Dtimepoint=$i \
+        	-- --no-splash $fusion" >> "$job"
+    chmod a+x "$job"
+done
+

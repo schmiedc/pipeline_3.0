@@ -108,7 +108,7 @@ IJ.run("Detect Interest Points for Registration",
 
 //registration based on interest point detection
 IJ.run("Register Dataset based on Interest Points",
-	"select_xml=" + xml_path + "dataset.job_" + timepoint + ".xml " +
+	"select_xml=" + xml_path + "Dpse-Dip3-GFP-attP2.job_" + timepoint + ".xml " +
         "process_angle=[" + process_angle + "] " +
         "process_illumination=[" + process_illumination + "] " +
         "process_timepoint=[" + process_timepoint + "] " +

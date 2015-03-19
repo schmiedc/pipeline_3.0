@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /projects/tomancak_lightsheet/Valia/Valia/new_pipeline/master
+source /projects/pilot_spim/Christopher/pipeline_3.0/master
 
 job="$jobs_export/hdf5-0.job"
 echo $job
