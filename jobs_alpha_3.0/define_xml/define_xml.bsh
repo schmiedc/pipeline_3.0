@@ -7,54 +7,63 @@ import java.io.FilenameFilter;
 runtime = Runtime.getRuntime();
 System.out.println(runtime.availableProcessors() + " cores available for multi-threading");
 
-type_of_dataset = System.getProperty( "type_of_dataset" );
+image_file_directory = System.getProperty( "image_file_directory" );
+timepoints = System.getProperty( "timepoints" );
+acquisition_angles = System.getProperty( "acquisition_angles" );
+pattern = System.getProperty( "pattern" );
+
+float pixel_distance_x = Float.parseFloat( System.getProperty( "pixel_distance_x" ) );
+float pixel_distance_y = Float.parseFloat( System.getProperty( "pixel_distance_y" ) );
+float pixel_distance_z = Float.parseFloat( System.getProperty( "pixel_distance_z" ) );
+pixel_unit = System.getProperty( "pixel_unit" );
+
+//int xy_resolution = Integer.parseInt(System.getProperty( "xy_resolution" ));
+//float z_scaling = Float.parseFloat( System.getProperty( "z_scaling" ) );
+
 xml_filename = System.getProperty( "xml_filename" );
+type_of_dataset = System.getProperty( "type_of_dataset" );
 multiple_timepoints = System.getProperty( "multiple_timepoints" );
 multiple_channels = System.getProperty( "multiple_channels" );
 multiple_illumination_directions = System.getProperty( "multiple_illumination_directions" );
 multiple_angles = System.getProperty( "multiple_angles" );
-
-dir = System.getProperty( "dir" );
-pattern = System.getProperty( "pattern" );
-timepoint = System.getProperty( "timepoint" );
-angles = System.getProperty( "angles" );
- 
-int xy_resolution = Integer.parseInt(System.getProperty( "xy_resolution" ));
-float z_scaling = Float.parseFloat( System.getProperty( "z_scaling" ) );
 imglib_container = System.getProperty( "imglib_container" );
- 
-System.out.println( "type of dataset=" + type_of_dataset );
-System.out.println( "xml filename=" + xml_filename );
+
+
+System.out.println( "image_file_directory=" + image_file_directory );
+System.out.println( "timepoints=" + timepoints );
+System.out.println( "acquisition_angles=" + acquisition_angles );
+System.out.println( "pattern_of_spim=" + pattern );
+
+System.out.println( "pixel_distance_x=" + pixel_distance_x );
+System.out.println( "pixel_distance_y=" + pixel_distance_y );
+System.out.println( "pixel_distance_z=" + pixel_distance_z );
+System.out.println( "pixel_unit=" + pixel_unit );
+
+System.out.println( "xml_filename=" + xml_filename );
+System.out.println( "type_of_dataset=" + type_of_dataset );
 System.out.println( "multiple_timepoints=" + multiple_timepoints );
 System.out.println( "multiple_channels=" + multiple_channels );
 System.out.println( "multiple_illumination_directions=" + multiple_illumination_directions );
 System.out.println( "multiple_angles=" + multiple_angles );
-System.out.println( "dir=" + dir );
-System.out.println( "pattern_of_spim=" + pattern );
-System.out.println( "timepoint=" + timepoint );
-System.out.println( "angles=" + angles );
-System.out.println( "xy_resolution=" + xy_resolution );
-System.out.println( "z_resolution=" + z_scaling );
 System.out.println( "imglib_container=" + imglib_container );
 
 IJ.run("Define Multi-View Dataset", 
 	"type_of_dataset=[" + type_of_dataset + "] " +
-	"xml_filename=[" + xml_filename + "] " +
+	"xml_filename=[" + xml_filename + ".xml] " +
 	"multiple_timepoints=[" + multiple_timepoints + "] " +
 	"multiple_channels=[" + multiple_channels + "] " +
 	"_____multiple_illumination_directions=[" + multiple_illumination_directions + "] " + 
 	"multiple_angles=[" + multiple_angles + "] " +
-	"image_file_directory=" + dir + " " +
+	"image_file_directory=" + image_file_directory + " " +
 	"image_file_pattern=" + pattern + " " + 
-	"timepoints_=" + timepoint + " " +
-	"acquisition_angles_=" + angles + " " +  
+	"timepoints_=" + timepoints + " " +
+	"acquisition_angles_=" + acquisition_angles + " " +  
 	"calibration_type=[Same voxel-size for all views] calibration_definition=[User define voxel-size(s)]" + " " + 
 	"imglib2_data_container=[" + imglib_container + "] " + 
-	"pixel_distance_x=" + xy_resolution + " " + 
-	"pixel_distance_y=" + xy_resolution + " " + 
-	"pixel_distance_z=" + z_scaling + " " +
-	"pixel_unit=um"
-	);
+	"pixel_distance_x=" + pixel_distance_x + " " + 
+	"pixel_distance_y=" + pixel_distance_y + " " + 
+	"pixel_distance_z=" + pixel_distance_z + " " +
+	"pixel_unit=" + pixel_unit + "");
  
 /* shutdown */
 runtime.exit(0);
