@@ -1,0 +1,73 @@
+import ij.IJ;
+import ij.ImagePlus;
+import java.lang.Runtime;
+import java.io.File;
+import java.io.FilenameFilter;
+ 
+runtime = Runtime.getRuntime();
+System.out.println(runtime.availableProcessors() + " cores available for multi-threading");
+
+System.out.println("Start loading parameters");
+
+// general parameters
+xml_path = System.getProperty( "image_file_directory" );
+merged_xml = System.getProperty( "merged_xml" );
+process_timepoint_timelapse = System.getProperty( "process_timepoint_timelapse" );
+process_channel_timelapse = System.getProperty( "process_channel_timelapse" );
+process_illumination = System.getProperty( "process_illumination" );
+process_angle = System.getProperty( "process_angle" ); 
+
+reference_timepoint = System.getProperty( "reference_timepoint" );
+
+type_of_registration_timelapse = System.getProperty( "type_of_registration_timelapse" );
+registration_algorithm = System.getProperty( "registration_algorithm" );
+interest_points_channel_0 = System.getProperty( "interest_points_channel_0" );
+
+transformation_model = System.getProperty( "transformation_model" );
+model_to_regularize_with = System.getProperty( "model_to_regularize_with" );
+float lambda = Float.parseFloat( System.getProperty( "lambda" ) );
+int allowed_error_for_ransac = Integer.parseInt( System.getProperty( "allowed_error_for_ransac" ) );
+
+// registration parameters
+registration_algorithm = System.getProperty( "registration_algorithm" );
+interest_points_channel_0 = System.getProperty( "interest_points_channel_0" );
+
+// Write parameters into output file
+System.out.println( "General parameters: " );
+System.out.println( "selected_xml=" + xml_path + merged_xml + ".xml");
+System.out.println( "process_timepoints=" + process_timepoint_timelapse ); 
+System.out.println( "process_channel=" + process_channel_timelapse );
+System.out.println( "process_illumination=" + process_illumination );
+System.out.println( "process_angle=" + process_angle );
+
+System.out.println( "reference_timepoint=" + reference_timepoint );
+
+System.out.println( "type_of_registration=" + type_of_registration_timelapse );
+System.out.println( "registration_algorithm=" + registration_algorithm );
+System.out.println( "interest_points_channel_0=" + interest_points_channel_0 );
+
+System.out.println( "transformation=" + transformation );
+System.out.println( "model_to_regularize_with=" + model_to_regularize_with );
+System.out.println( "lambda=" + lambda );
+System.out.println( "allowed_error_for_ransac=" + allowed_error_for_ransac );
+
+System.out.println( "=======================================================" );
+System.out.println( "Starting Timelapse Registration" );
+IJ.run("Register Dataset based on Interest Points", 
+	"select_xml=" + xml_path + merged_xml + ".xml " + 
+	"process_angle=[" + process_angle + "] " + 
+	"process_channel=[" + process_channel_timelapse + "] " +
+	"process_illumination=[" + process_illumination + "] " +  
+	"process_timepoint=[" + process_timepoint_timelapse + "] " +
+	"registration_algorithm=[" + registration_algorithm + "] " + 
+	"type_of_registration=[" + type_of_registration_timelapse + "] " +
+	"interest_points_channel_0=" + interest_points_channel_0 + " " +
+	"reference=" + reference_timepoint + " " +
+	"transformation=" + transformation_model + " " +
+	"regularize_model " +
+	"model_to_regularize_with=" + model_to_regularize_with + " " +
+	"lamba=" + lambda + " " +
+	"allowed_error_for_ransac=" + allowed_error_for_ransac);
+
+/* shutdown */
+runtime.exit(0);

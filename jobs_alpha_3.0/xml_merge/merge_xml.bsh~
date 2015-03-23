@@ -7,18 +7,19 @@ import java.io.FilenameFilter;
 runtime = Runtime.getRuntime();
 System.out.println(runtime.availableProcessors() + " cores available for multi-threading");
 
-xml_path = System.getProperty( "xml_path" );
-xml_filename = System.getProperty( "xml_filename" );
+image_file_directory = System.getProperty( "image_file_directory" );
+xml_filename = System.getProperty( "merged_xml" );
 
 System.out.println( "directory=" + xml_path );
-
+System.out.println( "merged_xml=" + merged_xml );
+	
 IJ.run("Merge Cluster Jobs", 
-	"directory=" + xml_path + " " + 	
+	"directory=" + image_file_directory + " " + 	
 	"filename_contains=job_ " + 
 	"filename_also_contains=.xml " +
 	"display " +
 //	"delete_xml's " + 
-	"merged_xml=registered_" + xml_filename);
+	"merged_xml=" + merged_xml);
  
 /* shutdown */
 runtime.exit(0);

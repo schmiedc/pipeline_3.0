@@ -1,0 +1,27 @@
+#!/bin/bash
+source /projects/pilot_spim/Christopher/pipeline_3.0/master_3.0
+
+mkdir -p $jobs_timelapse
+
+job="$jobs_timelapse/timelapse.job"
+echo $job
+echo "#!/bin/bash" > "$job"
+echo "$XVFB_RUN -a $Fiji \
+    -Dimage_file_directory=$image_file_directory \
+    -Dmerged_xml=$merged_xml \
+    -Dprocess_timepoint_timelapse=$process_timepoint_timelapse \
+    -Dprocess_channel_timelapse=$process_channel_timelapse \
+    -Dprocess_illumination=$process_illumination \
+    -Dprocess_angle=$process_angle \
+    -Dreference_timepoint=$reference_timepoint \
+    -Dtype_of_registration_timelapse=$type_of_registration_timelapse \
+    -Dregistration_algorithm=$registration_algorithm \
+    -Dinterest_points_channel_0=$interest_points_channel_0 \
+    -Dtransformation_model=$transformation_model \
+    -Dmodel_to_regularize_with=$model_to_regularize_with \
+    -Dlambda=$lambda \
+    -Dallowed_error_for_ransac=$allowed_error_for_ransac \
+        -- --no-splash $timelapse_registration" >> "$job"
+
+chmod a+x "$job"
+

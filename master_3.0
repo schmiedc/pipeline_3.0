@@ -29,44 +29,122 @@
 #	Image Stacks (LOCI Bioformats)
 #	Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats)
 #-------------------------------------------------------------------------------
-image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/tif/" # Data directory
+image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/tif/" 	# Data directory
+
 job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.0/" 	# jobs directory
 						      					
-xml_filename="\"His-YFP_Test\""                                  		# filename
+xml_filename="\"His-YFP_Test\""							# filename
 
-#timepoint="`seq 1 71`"                         	 					# timepoints format: "`seq 1 3`" 
-#num_angles="5" 										# number of angles
-#select_channel="Single-channel"     							# "Single-channel" or "Multi-channel" 
-#Channel_beads="1"									# Channel that contains the beads	
-#pad="2"
-#x_y_resolution="1"				      					# Manual calibration xy
-#z_scaling="5.21641917038124"  
+parallel_timepoints="`seq 1 2`"  						# timepoints format: "`seq 1 3`" 
 
-first_czi="/home/schmied/Desktop/Test_Pipeline_3.0//2015-02-21_LZ1_Stock68_3.czi"
+process_timepoint="\"Single Timepoint (Select from List)\""   			# or
+process_channel="\"All channels\""                                		# or 
+process_illumination="\"All illuminations\""  					# or
+process_angle="\"All angles\""                          			# or
 
+merged_xml="\"His-YFP_Test_merged\""
+
+#===============================================================================
+# Preprocessing
+#===============================================================================
 
 #-------------------------------------------------------------------------------
-# Define dataset for xml file for ImagJ Opener
+# Define dataset: ImagJ Opener
 # 
 # Calibration Type = Same voxel-size for all views
 #-------------------------------------------------------------------------------
 timepoints="1-2"								# Timepoints format: "1-2"
 acquisition_angles="1,2,3,4,5"                            			# angles format: "1,2,3" or "1-3"
 image_file_pattern="spim_TL{t}_Angle{a}.tif" 					# pattern of spim for padded zeros use tt
+
 pixel_distance_x="0.28755" 							# Manual calibration x
 pixel_distance_y="0.28755" 							# Manual calibration y
 pixel_distance_z="1.50000" 							# Manual calibration z
 pixel_unit="um"									# unit of manual calibration
 
 type_of_dataset="\"Image Stacks (ImageJ Opener)\"" # raw fileformat
-multiple_timepoints="\"YES (one file per time-point)\""         			# or NO (one time-point) 
-multiple_channels="\"NO (one channel)\""						# or YES (one file per channel)
-multiple_illumination_directions="\"NO (one illumination direction)\"" 			# or YES (one file per illumination direction)
-multiple_angles="\"YES (one file per angle)\"" 						# or NO (one angle)
-imglib_container="\"ArrayImg (faster)\""						# options:
+multiple_timepoints="\"YES (one file per time-point)\""         		# or NO (one time-point) 
+multiple_channels="\"NO (one channel)\""					# or YES (one file per channel)
+multiple_illumination_directions="\"NO (one illumination direction)\"" 		# or YES (one file per illumination direction)
+multiple_angles="\"YES (one file per angle)\"" 					# or NO (one angle)
+imglib_container="\"ArrayImg (faster)\""					# options:
 
-referencetp="9"										# reference timepoint 
+#-------------------------------------------------------------------------------
+# Define dataset: 
+# 
+# Calibration Type = Same voxel-size for all views
+#-------------------------------------------------------------------------------
 
+first_czi="/home/schmied/Desktop/Test_Pipeline_3.0//2015-02-21_LZ1_Stock68_3.czi"
+
+#===============================================================================
+# Detection, Registration, Fusion, resave as hdf5
+#===============================================================================
+
+#-------------------------------------------------------------------------------
+# 		Detect Interest Points for Registration 
+#		Register Dataset based on Interest Points
+#
+# Specify the method for Detection of beads: 
+#     Difference of mean: Comment out Difference of Gaussian in registration.bsh 
+#     Difference of Gaussian: Comment out Differnce of Mean in registration.bsh
+#-------------------------------------------------------------------------------
+
+label_interest_points="beads"
+
+type_of_detection="\"Difference-of-Mean (Integral image based)\"" 		# Difference
+radius_1="2"							  		# of Mean 
+radius_2="3"
+threshold="0.003"
+
+# type_of_detection="\"Difference-of-Gaussian\""		 		# Difference 	
+# initial_sigma="1.8000"					  		# of Gaussian
+# threshold_gaussian="0.0080"
+
+#-------------------------------------------------------------------------------
+# Merge .xml after registration
+#-------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------
+# timelapse registration
+#-------------------------------------------------------------------------------
+
+process_channel_timelapse="0"
+interest_points_channel_0="beads"
+reference_timepoint="1"								# reference timepoint 
+
+#------------------------------------------------------------------------------- 
+#		    Multi-view content based fusion 
+# 
+#  single channel: comment out 2nd fusion command in fusion.bsh
+#   multi channel: comment in registration_fusion1
+#
+# Select timelapse registration or individual registration:
+#  timelapse: 
+#  registration_fusion="\"Time-point registration (reference=${referencetp}) of channel 0\""
+#  
+#  Individual:
+#  registration_fusion="\"Individual registration of channel 0\""
+#
+#-------------------------------------------------------------------------------
+
+registration_fusion="\"Time-point registration (reference=${referencetp}) of channel 0\""	
+registration_fusion1="\"Time-point registration (reference=${referencetp}) of channel 1\""
+
+
+minimal_x="0"		                        # Cropping parameters of full resolution
+minimal_y="-5"
+minimal_z="0"
+maximal_x="1199"
+maximal_y="1926"
+maximal_z="453"
+downsample="1"
+
+output_file_directory="\"/projects/pilot_spim/Christopher/Test_pipeline_3.0/tif/\""
+
+#-------------------------------------------------------------------------------
+# Merge .xml after fusion
+#-------------------------------------------------------------------------------
 
 #===============================================================================
 # Directories for scripts and advanced settings for processing 
@@ -76,15 +154,88 @@ referencetp="9"										# reference timepoint
 # Fiji settings 
 #-------------------------------------------------------------------------------
  
-XVFB_RUN="/sw/bin/xvfb-run"				  				# virtual frame buffer
-Fiji="/sw/users/schmied/packages/Fiji.app.cuda_new/ImageJ-linux64"	# Fiji
-									  
+XVFB_RUN="/sw/bin/xvfb-run"				  			# virtual frame buffer
+Fiji="/sw/users/schmied/packages/Fiji.app.cuda_new/ImageJ-linux64"		# Fiji									  
 
-#--------------------------------------------------------------------------------
-# XML definition and manipulation
-#--------------------------------------------------------------------------------
-jobs_xml=${job_directory}"define_xml/"							# directory
-define_xml=${job_directory}"define_xml/define_xml.bsh"					# script
-merge_xml=${job_directory}"merge_xml/merge_xml.bsh"					# script
+#-------------------------------------------------------------------------------
+# Define dataset
+#-------------------------------------------------------------------------------
+
+jobs_xml=${job_directory}"define_xml/"						# directory
+define_xml=${jobs_xml}"define_xml.bsh"						# script
+
+#------------------------------------------------------------------------------- 
+#		Detect Interest Points for Registration 
+#		Register Dataset based on Interest Points
+#-------------------------------------------------------------------------------
+
+jobs_registration=${job_directory}"registration/" 				# directory
+registration=${jobs_registration}"registration.bsh" 				# script
+
+type_of_registration="\"Register timepoints individually\""
+subpixel_localization="\"3-dimensional quadratic fit\""
+transformation_model="Affine"
+
+registration_algorithm="\"Fast 3d geometric hashing (rotation invariant)\""
+fix_tiles="\"Do not fix tiles\""
+map_back_tiles="\"Map back to first tile using rigid model\""
+model_to_regularize_with="Rigid"
+lambda="0.10" 
+allowed_error_for_ransac="5"
+detection_min_max="find_maxima"
+
+#-------------------------------------------------------------------------------
+# merge .xml
+#-------------------------------------------------------------------------------
+
+jobs_xml_merge=${job_directory}"xml_merge"
+xml_merge=${jobs_xml_merge}"/xml_merge.bsh"					# script
+
+#-------------------------------------------------------------------------------
+# timelapse registration
+#-------------------------------------------------------------------------------
+
+process_timepoint_timelapse="\"All Timepoints\""
+type_of_registration_timelapse="\"Match against one reference timepoint (no global optimization)\""
+jobs_timelapse=${job_directory}"timelapse_registration" 				# directory
+timelapse_registration=${jobs_timelapse}"/timelapse_registration.bsh" 			# script
+
+#-------------------------------------------------------------------------------
+# Multi-view fusion
+#-------------------------------------------------------------------------------
+
+jobs_fusion=${job_directory}"fusion" 				# directory
+fusion=${jobs_fusion}"/fusion.bsh" 				# script
+ 
+
+type_of_image_fusion="\"Weighted-average fusion\""
+fused_image="\"Save as TIFF stack\""
+pixel_type="\"16-bit unsigned integer\""
+imglib_container_fusion="ArrayImg"
+process_views_in_paralell="All" 
+interpolation="\"Linear Interpolation\""
+blending="blend"
+content_based_fusion="\"content-based\""
 
 
+#fusion_method="\"Fuse into a single image\"" 		    # Fusion parameters
+#blending="blending"
+#weights="\"content_based_weights_(fast,\""
+#fused_image_output="\"Save 2d-slices, one directory per time-point\""
+
+
+
+#=============================================================================== 
+# Not needed:
+#downsample_output="4"                   # Downsampling
+# transformation="Affine"
+# imglib_container="\"Array container (images smaller ~2048x2048x450 px)\""
+# type_of_registration="Single-channel" 			# registration parameters
+# channel_pattern_beads=${pattern_switch}				# Pattern
+#timepoint="`seq 1 71`"                         	 					# timepoints format: "`seq 1 3`" 
+#num_angles="5" 										# number of angles
+#select_channel="Single-channel"     							# "Single-channel" or "Multi-channel" 
+#Channel_beads="1"									# Channel that contains the beads	
+#pad="2"
+#x_y_resolution="1"				      					# Manual calibration xy
+#z_scaling="5.21641917038124"  
