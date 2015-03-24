@@ -29,11 +29,14 @@
 #	Image Stacks (LOCI Bioformats)
 #	Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats)
 #-------------------------------------------------------------------------------
-image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/tif/" 	# Data directory
+
+image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/" 	# Data directory
 
 job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.0/" 	# jobs directory
-						      					
-xml_filename="\"His-YFP_Test\""							# filename
+
+first_czi="2015-02-21_LZ1_Stock68_3.czi" 					# if dataset is .czi 
+
+xml_filename="\"Test_68\""							# filename
 
 parallel_timepoints="`seq 1 2`"  						# timepoints format: "`seq 1 3`" 
 
@@ -49,18 +52,31 @@ merged_xml="\"His-YFP_Test_merged\""
 #===============================================================================
 
 #-------------------------------------------------------------------------------
-# Define dataset: ImagJ Opener
-# 
-# Calibration Type = Same voxel-size for all views
+# Compress dataset; does not work yet problem with the fact that first czi file
+# has not index! But becomes unreadable with index
 #-------------------------------------------------------------------------------
-timepoints="1-2"								# Timepoints format: "1-2"
-acquisition_angles="1,2,3,4,5"                            			# angles format: "1,2,3" or "1-3"
-image_file_pattern="spim_TL{t}_Angle{a}.tif" 					# pattern of spim for padded zeros use tt
+
+index_czi="`seq 1 9`"
+angles_compress="1-5"
+
+#-------------------------------------------------------------------------------
+# Define dataset: General
+#-------------------------------------------------------------------------------
 
 pixel_distance_x="0.28755" 							# Manual calibration x
 pixel_distance_y="0.28755" 							# Manual calibration y
 pixel_distance_z="1.50000" 							# Manual calibration z
 pixel_unit="um"									# unit of manual calibration
+
+##------------------------------------------------------------------------------
+## Define dataset: ImageJ Opener
+##
+## Calibration Type = Same voxel-size for all views
+##------------------------------------------------------------------------------
+
+timepoints="1-2"								# Timepoints format: "1-2"
+acquisition_angles="1,2,3,4,5"                            			# angles format: "1,2,3" or "1-3"
+image_file_pattern="spim_TL{t}_Angle{a}.tif" 					# pattern of spim for padded zeros use tt
 
 type_of_dataset="\"Image Stacks (ImageJ Opener)\"" # raw fileformat
 multiple_timepoints="\"YES (one file per time-point)\""         		# or NO (one time-point) 
@@ -69,13 +85,20 @@ multiple_illumination_directions="\"NO (one illumination direction)\"" 		# or YE
 multiple_angles="\"YES (one file per angle)\"" 					# or NO (one angle)
 imglib_container="\"ArrayImg (faster)\""					# options:
 
-#-------------------------------------------------------------------------------
-# Define dataset: 
-# 
-# Calibration Type = Same voxel-size for all views
-#-------------------------------------------------------------------------------
+##------------------------------------------------------------------------------
+## Define dataset: Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats)
+## 
+## Calibration Type = Same voxel-size for all views
+##------------------------------------------------------------------------------
 
-first_czi="/home/schmied/Desktop/Test_Pipeline_3.0//2015-02-21_LZ1_Stock68_3.czi"
+angle_1="0"
+angle_2="72"
+angle_3="144"
+angle_4="216"
+angle_5="288"
+channel_1="0"
+illumination_1="0"
+rotation_around="X-Axis"
 
 #===============================================================================
 # Detection, Registration, Fusion, resave as hdf5
@@ -158,11 +181,20 @@ XVFB_RUN="/sw/bin/xvfb-run"				  			# virtual frame buffer
 Fiji="/sw/users/schmied/packages/Fiji.app.cuda_new/ImageJ-linux64"		# Fiji									  
 
 #-------------------------------------------------------------------------------
-# Define dataset
+# Compress dataset; does not work yet problem with the fact that first czi file
+# has not index! But becomes unreadable with index
+#-------------------------------------------------------------------------------
+jobs_compress=${jobs_directory}"compress"
+czi_compress=${jobs_compress}"/for_czi.bsh"
+tif_compress=${jobs_compress}"/for_tif.bsh"
+
+#-------------------------------------------------------------------------------
+# Define dataset 
 #-------------------------------------------------------------------------------
 
-jobs_xml=${job_directory}"define_xml/"						# directory
-define_xml=${jobs_xml}"define_xml.bsh"						# script
+jobs_xml=${job_directory}"define_xml"						# directory
+define_tif_xml=${jobs_xml}"/define_tif_xml.bsh"						# script
+define_czi_xml=${jobs_xml}"/define_czi_xml.bsh"
 
 #------------------------------------------------------------------------------- 
 #		Detect Interest Points for Registration 
@@ -204,8 +236,8 @@ timelapse_registration=${jobs_timelapse}"/timelapse_registration.bsh" 			# scrip
 # Multi-view fusion
 #-------------------------------------------------------------------------------
 
-jobs_fusion=${job_directory}"fusion" 				# directory
-fusion=${jobs_fusion}"/fusion.bsh" 				# script
+jobs_fusion=${job_directory}"fusion" 						# directory
+fusion=${jobs_fusion}"/fusion_new.bsh" 						# script
  
 
 type_of_image_fusion="\"Weighted-average fusion\""
@@ -218,24 +250,8 @@ blending="blend"
 content_based_fusion="\"content-based\""
 
 
-#fusion_method="\"Fuse into a single image\"" 		    # Fusion parameters
+#fusion_method="\"Fuse into a single image\"" 		    			# Fusion parameters
 #blending="blending"
 #weights="\"content_based_weights_(fast,\""
 #fused_image_output="\"Save 2d-slices, one directory per time-point\""
 
-
-
-#=============================================================================== 
-# Not needed:
-#downsample_output="4"                   # Downsampling
-# transformation="Affine"
-# imglib_container="\"Array container (images smaller ~2048x2048x450 px)\""
-# type_of_registration="Single-channel" 			# registration parameters
-# channel_pattern_beads=${pattern_switch}				# Pattern
-#timepoint="`seq 1 71`"                         	 					# timepoints format: "`seq 1 3`" 
-#num_angles="5" 										# number of angles
-#select_channel="Single-channel"     							# "Single-channel" or "Multi-channel" 
-#Channel_beads="1"									# Channel that contains the beads	
-#pad="2"
-#x_y_resolution="1"				      					# Manual calibration xy
-#z_scaling="5.21641917038124"  

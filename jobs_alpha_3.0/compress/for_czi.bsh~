@@ -1,0 +1,27 @@
+import ij.IJ;
+import ij.ImagePlus;
+import java.lang.Runtime;
+import java.io.File;
+import java.io.FilenameFilter;
+ 
+runtime = Runtime.getRuntime();
+System.out.println(runtime.availableProcessors() + " cores available for multi-threading");
+
+first_czi = "/home/schmied/Desktop/Test_Pipeline_3.0//2015-02-21_LZ1_Stock68_3.czi";
+compress_angles = "1";
+
+IJ.run("Bio-Formats Importer", 
+"open=" + first_czi + " " +
+"autoscale " + 
+"color_mode=Default " + 
+"open_files " + 
+"specify_range " + 
+"view=Hyperstack " +
+"stack_order=XYCZT " + 
+"series_" + compress_angles + " " + 
+// z_begin_1=1 z_end_1=88 z_step_1=1 
+t_begin_1=1 t_end_1=1 t_step_1=1");
+
+
+IJ.saveAs(imp, "ZIP", "/home/schmied/Desktop/Test_Pipeline_3.0/2015-02-21_LZ1_Stock68_3.czi.zip");
+

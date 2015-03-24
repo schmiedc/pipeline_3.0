@@ -7,8 +7,6 @@ import java.io.FilenameFilter;
 runtime = Runtime.getRuntime();
 System.out.println(runtime.availableProcessors() + " cores available for multi-threading");
 
-System.out.println( "Start to load Parameters:" );
-
 //select xml
 image_file_directory = System.getProperty( "image_file_directory" );
 merged_xml = System.getProperty( "merged_xml" );
@@ -26,28 +24,23 @@ System.out.println( "timepoint=" + parallel_timepoints);
 System.out.println( "illuminations=" + process_illumination );
 System.out.println( "angles=" + process_angle );
 
-
-//activate cluster processing
-System.out.println( "=======================================================" );
-IJ.run("Toggle Cluster Processing", "display_cluster");
-System.out.println( "Activated Cluster Processing" );
-
-
 // Execute Fiji Plugin
 System.out.println( "=======================================================" );
 System.out.println( "Starting Fusion" );
+
 IJ.run("Fuse/Deconvolve Dataset", 
-	"select_xml="  + image_file_directory + merged_xml + ".xml " +
-	"unique_id=fused" + parallel_timepoints + " " + 
-	"process_angle=[" + process_angle + "] " +	
-        "process_illumination=[" + process_illumination + "] " +
-        "process_timepoint=[" + process_timepoint + "] " +
-	"processing_timepoint=[Timepoint " + parallel_timepoints + "] " + 
+	"select_xml=" + image_file_directory + merged_xml + ".xml " +
+	"process_angle=[All angles] " +
+	"process_channel=[All channels] " + 
+	"process_illumination=[All illuminations] " + 
+	"process_timepoint=[Single Timepoint (Select from List)] " + 
+	"xml_output=[Do not process on cluster] " +
+	"processing_timepoint=[Timepoint "+ parallel_timepoints +"] " +
 	"type_of_image_fusion=[Weighted-average fusion] " +
-	"bounding_box=[Define manually] " + 
-	"xml_output=[Save every XML with user-provided unique id]" + " " +
-	"fused_image=[Save as new XML Project (TIFF)] " +
-//	"fused_image=[Append to current XML Project] " +
+	"bounding_box=[Define manually] " +
+//	"fused_image=[Save as TIFF stack] " + // works but does not create xml file
+//	"fused_image=[Save as new XML Project (TIFF)] " + // needs seletct; does not work, overwrites xml and outpufile files of finished jobs; with individual .xml files only fused tp gets made
+//	"fused_image=[Append to current XML Project] " + // needs select; writes own output file but does not write into xml correctly overwrites or omits fused output
 	"minimal_x=0 " +
 	"minimal_y=-5 " +
 	"minimal_z=0 " +
@@ -55,16 +48,12 @@ IJ.run("Fuse/Deconvolve Dataset",
 	"maximal_y=1926 " +
 	"maximal_z=453 " +
 	"downsample=4 " +
-	"pixel_type=[16-bit unsigned integer] " + 
-	"imglib2_container=ArrayImg " + 
-	"process_views_in_paralell=All " + 
-	"interpolation=[Linear Interpolation] " + 
-//	"blend " +
-//	"content-based " +
-	"select=/projects/pilot_spim/Christopher/Test_pipeline_3.0/tif/His-YFP_Test_fusion.xml " +
-	"lossless " +
-	"imglib2_data_container=[ArrayImg (faster)]");
-
+	"pixel_type=[16-bit unsigned integer] " +
+	"imglib2_container=ArrayImg " +
+	"process_views_in_paralell=All " +
+	"blend interpolation=[Linear Interpolation] " + 
+//	"output_file_directory=" + image_file_directory );
+	"select=/projects/pilot_spim/Christopher/Test_pipeline_3.0/tif/His-YFP_Test_fused.xml" );
 
 /* shutdown */
 runtime.exit(0);
