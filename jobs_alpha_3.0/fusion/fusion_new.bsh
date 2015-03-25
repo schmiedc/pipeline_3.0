@@ -12,9 +12,9 @@ System.out.println( "Start to load Parameters:" );
 //select xml
 image_file_directory = System.getProperty( "image_file_directory" );
 merged_xml = System.getProperty( "merged_xml" );
-parallel_timepoints = System.getProperty( "parallel_timepoints" );
 
 //parameters concerning what to process
+parallel_timepoints = System.getProperty( "parallel_timepoints" );
 process_timepoint = System.getProperty( "process_timepoint" );
 process_channel = System.getProperty( "process_channel" );
 process_illumination = System.getProperty( "process_illumination" );

@@ -9,16 +9,18 @@ System.out.println(runtime.availableProcessors() + " cores available for multi-t
 
 System.out.println("Start loading parameters");
 
-// general parameters
+// select xml
 xml_path = System.getProperty( "image_file_directory" );
 xml_filename = System.getProperty( "xml_filename" );
+
+// Load general Parameters
 parallel_timepoints = System.getProperty( "parallel_timepoints" );
 process_timepoint = System.getProperty( "process_timepoint" );
 process_channel = System.getProperty( "process_channel" );
 process_illumination = System.getProperty( "process_illumination" );
 process_angle = System.getProperty( "process_angle" ); 
 
-// interest point detection parameters
+// Interest point detection parameters
 label_interest_points= System.getProperty( "label_interest_points" );
 type_of_registration = System.getProperty( "type_of_registration" );
 type_of_detection = System.getProperty( "type_of_detection" );
@@ -35,7 +37,7 @@ float threshold = Float.parseFloat( System.getProperty( "threshold" ) );
 //float initial_sigma = Float.parseFloat( System.getProperty( "initial_sigma" ) );
 //float threshold_gaussian = Float.parseFloat( System.getProperty( "threshold_gaussian" ) );
 
-// registration parameters
+// Registration parameters
 registration_algorithm = System.getProperty( "registration_algorithm" );
 interest_points_channel_0 = System.getProperty( "interest_points_channel_0" );
 fix_tiles = System.getProperty( "fix_tiles" );
@@ -48,9 +50,11 @@ detection_min_max = System.getProperty( "detection_min_max" );
 
 
 // Write parameters into output file
-
-System.out.println( "General parameters: " );
+System.out.println( "-------------------------------------------------------" );
+System.out.println( "Load xml file: " );
 System.out.println( "selected_xml=" + xml_path + xml_filename + ".xml");
+System.out.println( "-------------------------------------------------------" );
+System.out.println( "General parameters: " );
 System.out.println( "label_interest_points=" + label_interest_points );
 System.out.println( "parallel_timepoints=" + parallel_timepoints );
 System.out.println( "process_timepoints=" + process_timepoint ); 

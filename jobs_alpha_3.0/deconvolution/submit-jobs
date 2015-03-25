@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for file in `ls ${1} | grep ".job$"`
+do
+	bsub -q gpu -o "out.%J" -e "err.%J" ${1}/$file
+done
