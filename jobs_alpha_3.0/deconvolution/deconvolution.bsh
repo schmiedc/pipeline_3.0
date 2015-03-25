@@ -1,0 +1,36 @@
+IJ.run("Fuse/Deconvolve Dataset", 
+	"select_xml=/home/schmied/Desktop/Test_Pipeline_3.0/hdf5//His-YFP_Test_merged.xml " + 
+	"process_angle=[All angles] " +
+	"process_channel=[All channels] " + 
+	"process_illumination=[All illuminations] " +
+	"process_timepoint=[All Timepoints] " +
+	"type_of_image_fusion=[Multi-view deconvolution] " +
+	"bounding_box=[Define manually] " +
+	"fused_image=[Save as TIFF stack] " +
+	"minimal_x=56 " +
+	"minimal_y=8 " +
+	"minimal_z=-220 " +
+	"maximal_x=504 " + 
+	"maximal_y=960 " + 
+	"maximal_z=236 " +
+	"imglib2_container=ArrayImg " +
+	"type_of_iteration=[Efficient Bayesian - Optimization I (fast, precise)] " +
+	"osem_acceleration=[1 (balanced)] " +
+	"number_of_iterations=20 " +
+//	"adjust_blending_parameters " +
+	"use_tikhonov_regularization " +
+	"tikhonov_parameter=0.0060 " +
+	"compute=[in 512x512x512 blocks] " +
+	"compute_on=[GPU (Nvidia CUDA via JNA)] " +
+	"psf_estimation=[Extract from beads] " +
+	"psf_display=[Do not show PSFs] " +
+	"output_file_directory=/home/schmied/Desktop/Test_Pipeline_3.0/hdf5/ " +
+	"directory=[/home/schmied/Desktop/Fiji (copy).app.cuda/lib] " +
+	"select_native_library_for_cudafourierconvolution=libFourierConvolutionCUDALib.so" + 
+	"gpu_1 " +
+//	"gpu_2 " + 
+	"detections_to_extract_psf_for_channel_0=beads " +
+	"psf_size_x=19 " +
+	"psf_size_y=19 " +
+	"psf_size_z=25");
+
