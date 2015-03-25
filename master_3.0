@@ -188,7 +188,7 @@ psf_size_x="19"
 psf_size_y="19"
 psf_size_z="25"
 
-iter="10"					# Number of iterations
+iterations="10"					# Number of iterations
 
 
 #===============================================================================
@@ -325,6 +325,7 @@ define_mode_transform="\"Matrix\""
 # bounding_box=[Define manually]
 # fused_image=[Save as TIFF stack]
 # use_tikhonov_regularization
+# Do not show PSFs
 # library_for_cuda=libFourierConvolutionCUDALib.so
 # gpu_1
 #-------------------------------------------------------------------------------
@@ -342,38 +343,7 @@ Tikhonov_parameter="0.0006"
 compute="\"in 512x512x512 blocks\""
 compute_on="\"GPU (Nvidia CUDA via JNA)\""
 psf_estimation="\"Extract from beads\""
-psf_display="\"Do not show PSF's\""
 
 directory_cuda="/sw/users/schmied/packages/Fiji.app.cuda_new/lib/"
 
-#===============================================================================
-# Select single or multi channel:
-# 	single channel: pattern_of_spim="spim_TL{tt}_Angle{a}.tif" 
-# 	multi channel: pattern_of_spim="spim_TL{tt}_Angle{a}_Channel{c}.tif"
-#
-# output_file_directory="\"/projects/pilot_spim/Christopher/Test_pipeline_3.0/tif/\""
-# type_of_image_fusion="\"Weighted-average fusion\""
-# fusion_method="\"Fuse into a single image\"" 		    			# Fusion parameters
-# blending="blending"
-# weights="\"content_based_weights_(fast,\""
-# fused_image_output="\"Save 2d-slices, one directory per time-point\""
-# content_based_fusion="\"content-based\""
-# process_views_in_paralell="All" 
 
-#  single channel: comment out 2nd fusion command in fusion.bsh
-#   multi channel: comment in registration_fusion1
-#
-# Select timelapse registration or individual registration:
-#  timelapse: 
-#  registration_fusion="\"Time-point registration (reference=${referencetp}) of channel 0\""
-#  
-#  Individual:
-#  registration_fusion="\"Individual registration of channel 0\""
-##Fiji_export="/sw/users/tomancak/packages/fiji_for_new_pipeline/Fiji.app/ImageJ-linux64" # Fiji
-
-# psf_estimation=                           	# Does not work yet!
-
-#pattern_deconvo="spim_TL{tt}_Angle{a}_Channel0.tif"   	# Pattern
-#registration_deco="\"Time-point registration (reference=${referencetp}) of channel 0\""
-#fused_image_output="\"Save 2d-slices, one directory per time-point\""
-#load_input_images_sequentially="load_input_images_sequentially"
