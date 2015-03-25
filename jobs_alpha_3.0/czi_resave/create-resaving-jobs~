@@ -1,0 +1,18 @@
+#!/bin/bash
+
+source /projects/pilot_spim/Christopher/pipeline/master
+
+mkdir -p $jobs_resaving
+
+for i in $timepoint
+
+do
+	for a in $angle_prep
+	do
+		job="$jobs_resaving/resave-$i-$a.job"
+		echo $job
+		echo "$XVFB_RUN -a $Fiji_resave -Ddir=$dir -Dtimepoint=$i -Dangle=$a \
+			-Dpad=$pad -- --no-splash $resaving" >> "$job"
+		chmod a+x "$job"
+	done
+done

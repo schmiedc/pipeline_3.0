@@ -4,7 +4,7 @@ import java.lang.Runtime;
 import java.io.File;
 import java.io.FilenameFilter;
 
-dir = System.getProperty( "dir" );
+image_file_directory = System.getProperty( "image_file_directory" );
 xml_filename = System.getProperty( "xml_filename" );
 resave_angle = System.getProperty( "resave_angle" );
 resave_channel = System.getProperty( "resave_channel" );
@@ -16,7 +16,7 @@ timepoints_per_partition = System.getProperty( "timepoints_per_partition" );
 setups_per_partition = System.getProperty( "setups_per_partition" );
 run_only_job_number = System.getProperty( "run_only_job_number" );
 
-System.out.println( "dir=" + dir );
+System.out.println( "dir=" + image_file_directory );
 System.out.println( "xml_filename=" + xml_filename);
 System.out.println( "resave_angle=" + resave_angle );
 System.out.println( "resave_channel=" + resave_channel );
@@ -33,7 +33,7 @@ System.out.println( "run_only_job_number=" + run_only_job_number );
 IJ.run("Toggle Cluster Processing", "display_cluster");
 
 IJ.run("As HDF5", 
-	"select_xml=" + dir + xml_filename + " " +
+	"select_xml=" + image_file_directory + xml_filename + ".xml " +
 	"resave_angle=[" + resave_angle + "] " + 
 	"resave_channel=[" + resave_channel + "] " +
 	"resave_illumination=[" + resave_illumination + "] " +
@@ -45,7 +45,7 @@ IJ.run("As HDF5",
 	"setups_per_partition=" + setups_per_partition + " " +
 	"run_only_job_number=" + run_only_job_number + " " +
 	"use_deflate_compression " + 
-	"export_path=" + dir + "hdf5_" + xml_filename );
+	"export_path=" + image_file_directory + "hdf5_" + xml_filename );
 
 /* shutdown */
 System.exit(0);
