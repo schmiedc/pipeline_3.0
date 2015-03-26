@@ -9,10 +9,10 @@
 #    INSTITUTE: Max Planck Institute for Molecular Cell Biology and Genetics
 #         BUGS: Single Channel > Channel name is always 0
 #        NOTES: Works for Single Channel Data
-#		Outputfile directory is the image file directory
+#		Output file directory is the image file directory
 #      Version: 3.0
 #      CREATED: 2014-04-02
-#     REVISION: 2015-03-24
+#     REVISION: 2015-03-26
 #===============================================================================
 
 #------------------------------------------------------------------------------- 
@@ -23,7 +23,7 @@
 #  	Created: 
 #
 # --- Data directory -----------------------------------------------------------
-image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/"   
+image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/hdf5/"   
 
 # --- jobs directory -----------------------------------------------------------
 job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.0/" 	
@@ -66,9 +66,9 @@ target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of r
 #	4) Multiview Fusion
 #===============================================================================
 
-xml_filename="\"Test1_ZIP\""		# filename of xml file without ".xml"
+xml_filename="\"hdf5_Test1_ZIP\""		# filename of xml file without ".xml"
 
-merged_xml="\"His-YFP_Test_merged\"" 	# filename of merged xml without ".xml"
+merged_xml="\"hdf5_Test1_ZIP_merged\"" 	# filename of merged xml without ".xml"
 
 #-------------------------------------------------------------------------------
 # Define dataset: General
@@ -89,7 +89,7 @@ image_file_pattern="spim_TL{tt}_Angle{a}.zip"	# pattern of spim for padded zeros
 #--- Define dataset: Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats) ------------
 # Usable for 5 view datasets 1 channel
 
-first_czi="2015-02-21_LZ1_Stock68_3.czi"	# if dataset is .czi 
+first_czi="2015-02-21_LZ1_Stock68_3.czi"	
 angle_1="0"
 angle_2="72"
 angle_3="144"
@@ -99,30 +99,25 @@ channel_1="0"
 illumination_1="0"
 rotation_around="X-Axis"
 
-
 #-------------------------------------------------------------------------------
 # Resave as hdf5
 #-------------------------------------------------------------------------------
+
+# Creates new .xml file resave to xml_filename and backup original xml file
 
 #-------------------------------------------------------------------------------
 # 		Detect Interest Points for Registration 
 #		Register Dataset based on Interest Points
 #
-# Specify the method for Detection of beads: 
-#     Difference of mean: Comment out Difference of Gaussian in registration.bsh 
-#     Difference of Gaussian: Comment out Differnce of Mean in registration.bsh
+# Supported Detection: Differnce of Mean on Maximum
 #-------------------------------------------------------------------------------
 
 label_interest_points="beads"
 
-type_of_detection="\"Difference-of-Mean (Integral image based)\"" 		# Difference
-radius_1="2"							  		# of Mean 
+type_of_detection="\"Difference-of-Mean (Integral image based)\"" # Difference
+radius_1="2"							  # of Mean 
 radius_2="3"
 threshold="0.003"
-
-# type_of_detection="\"Difference-of-Gaussian\""		 		# Difference 	
-# initial_sigma="1.8000"					  		# of Gaussian
-# threshold_gaussian="0.0080"
 
 #-------------------------------------------------------------------------------
 # Merge .xml after registration
@@ -150,6 +145,9 @@ downsample="2"
 
 #------------------------------------------------------------------------------- 
 #			  Multi-view deconvolution 
+#
+# Select GPU or CPU processing
+# When submitting to deconvolution select correct submit command for GPU or CPU
 #-------------------------------------------------------------------------------
 
 #--- External transformation for multi-view deconvolution----------------------- 
@@ -158,15 +156,20 @@ downsample="2"
 matrix_transform="\"0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0\""
 
 #--- Multi-view deconvolution --------------------------------------------------
+jobs_deconvolution=${job_directory}"deconvolution"		# directory for deconvolution
+
+# select: "/deconvolution_GPU.bsh" or "/deconvolution_CPU.bsh"
+deconvolution=${jobs_deconvolution}"/deconvolution_CPU.bsh"		# script for CPU deconvolution
+# deconvolution=${jobs_deconvolution}"/deconvolution_GPU.bsh"		# script for GPU deconvolution
 
 deco_output_file_directory=${image_file_directory}
 
-minimal_x_deco="112" 	# Cropping parameters adjusted for transformation
-minimal_y_deco="16"
-minimal_z_deco="-440"
-maximal_x_deco="1008"
-maximal_y_deco="1920"
-maximal_z_deco="472"
+minimal_x_deco="56" 	# Cropping parameters adjusted for transformation
+minimal_y_deco="8"
+minimal_z_deco="-220"
+maximal_x_deco="504"
+maximal_y_deco="960"
+maximal_z_deco="236"
 	
 iterations="10"						# Number of iterations
 
@@ -211,8 +214,8 @@ process_angle="\"All angles\""
 # Define dataset: General
 #-------------------------------------------------------------------------------
 jobs_xml=${job_directory}"define_xml"		# directory for define data set
-define_tif_xml=${jobs_xml}"/define_tif_xml.bsh"	# script for defining .tif data
-define_czi_xml=${jobs_xml}"/define_czi_xml.bsh" # script for defining .czi data
+define_tif_xml=${jobs_xml}"/define_tif_zip.bsh"	# script for defining .tif data
+define_czi_xml=${jobs_xml}"/define_czi.bsh" # script for defining .czi data
 #--- Define dataset: ImageJ Opener or Image Stacks (LOCI Bioformats) -----------
 # Calibration Type = Same voxel-size for all views
 type_of_dataset="\"Image Stacks (ImageJ Opener)\"" 		# raw fileformat
@@ -223,6 +226,9 @@ multiple_angles="\"YES (one file per angle)\"" 			# or NO (one angle)
 imglib_container="\"ArrayImg (faster)\""			# options:
 #-------------------------------------------------------------------------------
 # hdf5 export
+#
+# split_hdf5
+# use_deflate_compression
 #-------------------------------------------------------------------------------
 jobs_export=${job_directory}"/hdf5/"	# directory for hdf5 export
 export=${jobs_export}"/export.bsh" 	# script for hdf5 export
@@ -242,10 +248,16 @@ setups_per_partition="0"
 jobs_registration=${job_directory}"registration/"	# directory for registration
 registration=${jobs_registration}"registration.bsh" 	# script for registration
 
+# Specify the method for Detection of beads: 
+# Difference of mean: Comment out Difference of Gaussian in registration.bsh 
+# Difference of Gaussian: Comment out  in registration.bsh
+# type_of_detection="\"Difference-of-Gaussian\""		 		# Difference 	
+# initial_sigma="1.8000"					  		# of Gaussian
+# threshold_gaussian="0.0080"
+
 type_of_registration="\"Register timepoints individually\""
 subpixel_localization="\"3-dimensional quadratic fit\""
 transformation_model="Affine"
-
 registration_algorithm="\"Fast 3d geometric hashing (rotation invariant)\""
 fix_tiles="\"Do not fix tiles\""
 map_back_tiles="\"Map back to first tile using rigid model\""
@@ -310,16 +322,11 @@ define_mode_transform="\"Matrix\""
 # library_for_cuda=libFourierConvolutionCUDALib.so
 # gpu_1
 #-------------------------------------------------------------------------------
-jobs_deconvolution=${job_directory}"deconvolution"		# directory for deconvolution
-deconvolution=${jobs_deconvolution}"/deconvolution.bsh"		# script for deconvolution
-
 imglib2_container_deco="\"ArrayImg \""
 type_of_iteration="\"Efficient Bayesian - Optimization I (fast, precise)\""
 osem_acceleration="\"1 (balanced)\""
-
 Tikhonov_parameter="0.0006"
 compute="\"in 512x512x512 blocks\""
 compute_on="\"GPU (Nvidia CUDA via JNA)\""
 psf_estimation="\"Extract from beads\""
-
 directory_cuda="/sw/users/schmied/packages/Fiji.app.cuda_new/lib/"

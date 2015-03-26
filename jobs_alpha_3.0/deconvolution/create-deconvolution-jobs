@@ -27,7 +27,6 @@ do
 	-Dosem_acceleration=$osem_acceleration \
 	-DTikhonov_parameter=$Tikhonov_parameter \
 	-Dcompute=$compute \
-	-Dcompute_on=$compute_on \
 	-Dpsf_estimation=$psf_estimation \
 	-Ddeco_output_file_directory=$deco_output_file_directory \
 	-Ddirectory_cuda=$directory_cuda \

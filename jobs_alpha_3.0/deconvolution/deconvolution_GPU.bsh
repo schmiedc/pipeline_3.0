@@ -57,7 +57,6 @@ osem_acceleration = System.getProperty( "osem_acceleration" );
 Tikhonov_parameter = System.getProperty( "Tikhonov_parameter" );
 //float Tikhonov_parameter = Float.parseFloat( System.getProperty( "Tikhonov_parameter" ) );
 compute = System.getProperty( "compute" );
-compute_on = System.getProperty( "compute_on" );
 psf_estimation = System.getProperty( "psf_estimation" );
 iterations = System.getProperty( "iterations" );
 deco_output_file_directory = System.getProperty( "deco_output_file_directory" );
@@ -70,7 +69,6 @@ System.out.println( "type_of_iteration = "+ type_of_iteration );
 System.out.println( "osem_acceleration = " + osem_acceleration );
 System.out.println( "Tikhonov_parameter = " + Tikhonov_parameter );
 System.out.println( "compute = " + compute );
-System.out.println( "compute_on = " + compute_on );
 System.out.println( "psf_estimation = " + psf_estimation );
 System.out.println( "number_of_iterations = " + number_of_iterations );
 System.out.println( "deco_output_file_directory = " + deco_output_file_directory );
@@ -122,7 +120,7 @@ IJ.run("Fuse/Deconvolve Dataset",
 	"use_tikhonov_regularization " +
 	"tikhonov_parameter=" + Tikhonov_parameter + " " +
 	"compute=[" + compute + "] " +
-	"compute_on=[" + compute_on + "] " +
+	"compute_on=[GPU (Nvidia CUDA via JNA)] " +
 	"psf_estimation=[" + psf_estimation + "] " +
 	"psf_display=[Do not show PSFs] " +
 	"output_file_directory=" + deco_output_file_directory + " " +

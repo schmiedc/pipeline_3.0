@@ -1,8 +1,12 @@
 #!/bin/bash
+
+# path of master file
 source /projects/pilot_spim/Christopher/pipeline_3.0/master_3.0
 
+# creates directory for job files if not present
 mkdir -p $jobs_xml
 
+# creates job for defining dataset
 job="$jobs_xml/xml_tif.job"
 echo $job
 echo "#!/bin/bash" > "$job"
