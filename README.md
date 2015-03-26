@@ -15,9 +15,19 @@ Zeiss Lightsheet Z.1 Dataset (LOCI): currently for 5 angle data set but can easi
     Multiple angles: YES (one file per angle)
 
 Resave as .zip (Compression) gives a compression factor of 1.7x.
-CPU time for compression was about 80sec .
+
+CPU time for compression was about 80sec.
+
 CPU time for resave to .tif was about 22sec.
 
-GPU Deconvolution 10 Iterations 2x downsampled takes 1h 10min for 1 time point.
-There are 4 nodes available for GPU processing.
-Compare processing to CPU Deconvolution. 
+Resaving as hdf5 comes with compression factor of 1.5x.
+
+CPU time of 3 min.
+
+GPU Deconvolution 10 Iterations 2x downsampled with cropping: about 14 min for 1 time point.
+
+There are 4 nodes available for GPU processing. GPU queue has priority and was very fast on the queue.
+
+CPU Deconvolution 10 Iterations 2x downsampled with cropping:
+
+Uses one node and its memory. Takes time until it gets to the node. 
