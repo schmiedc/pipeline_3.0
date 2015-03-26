@@ -46,6 +46,7 @@ parallel_timepoints="`seq 1 2`"  # format: "`seq 1 3`"
 #-------------------------------------------------------------------------------
 
 pad="2"		# for padded zeros 
+angle_prep="1 2 3 4 5" # angles format: "1 2 3"
 	
 #--- Renaming ------------------------------------------------------------------
 
@@ -56,10 +57,6 @@ angles_renaming=(1 2 3 4 5)	# Angles format: (1 2 3)
 						      						      
 source_pattern=2015-02-21_LZ1_Stock68_3\(\{index\}\).czi # Name of .czi files
 target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of renaming
-
-#--- Resave or Compress .czi files / Resave ome.tiff ---------------------------
-
-angle_prep="1 2 3 4 5" # angles format: "1 2 3"
 
 #===============================================================================
 # Multiview Reconstruction:
@@ -85,21 +82,14 @@ pixel_unit="um"			# unit of manual calibration
 #--- Define dataset: ImageJ Opener or Image Stacks (LOCI Bioformats) -----------
 # Calibration Type = Same voxel-size for all views
 
-timepoints="1-2"								# Timepoints format: "1-2"
-acquisition_angles="1,2,3,4,5"                            			# angles format: "1,2,3" or "1-3"
-image_file_pattern="spim_TL{tt}_Angle{a}.zip" 					# pattern of spim for padded zeros use tt
-
-type_of_dataset="\"Image Stacks (ImageJ Opener)\"" 				# raw fileformat
-multiple_timepoints="\"YES (one file per time-point)\""         		# or NO (one time-point) 
-multiple_channels="\"NO (one channel)\""					# or YES (one file per channel)
-multiple_illumination_directions="\"NO (one illumination direction)\"" 		# or YES (one file per illumination direction)
-multiple_angles="\"YES (one file per angle)\"" 					# or NO (one angle)
-imglib_container="\"ArrayImg (faster)\""					# options:
+timepoints="1-2"			# Timepoints format: "1-2"
+acquisition_angles="1,2,3,4,5"		# angles format: "1,2,3" or "1-3"
+image_file_pattern="spim_TL{tt}_Angle{a}.zip"	# pattern of spim for padded zeros use tt
 
 #--- Define dataset: Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats) ------------
 # Usable for 5 view datasets 1 channel
 
-first_czi="2015-02-21_LZ1_Stock68_3.czi" 					# if dataset is .czi 
+first_czi="2015-02-21_LZ1_Stock68_3.czi"	# if dataset is .czi 
 angle_1="0"
 angle_2="72"
 angle_3="144"
@@ -110,7 +100,9 @@ illumination_1="0"
 rotation_around="X-Axis"
 
 
-#--- resave as hdf5 ------------------------------------------------------------
+#-------------------------------------------------------------------------------
+# Resave as hdf5
+#-------------------------------------------------------------------------------
 
 #-------------------------------------------------------------------------------
 # 		Detect Interest Points for Registration 
@@ -148,7 +140,7 @@ reference_timepoint="1"								# reference timepoint
 #		    Multi-view content based fusion 
 #-------------------------------------------------------------------------------
 
-minimal_x="112"		                        # Cropping parameters of full resolution
+minimal_x="112" 	# Cropping parameters of full resolution
 minimal_y="16"
 minimal_z="-440"
 maximal_x="1008"
@@ -160,96 +152,82 @@ downsample="2"
 #			  Multi-view deconvolution 
 #-------------------------------------------------------------------------------
 
-
 #--- External transformation for multi-view deconvolution----------------------- 
 # Caution! Make copy of .xml file before application of transformation
 
-
 matrix_transform="\"0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0\""
-
 
 #--- Multi-view deconvolution --------------------------------------------------
 
-minimal_x_deco="112"		                        # Cropping parameters of full resolution
+deco_output_file_directory=${image_file_directory}
+
+minimal_x_deco="112" 	# Cropping parameters adjusted for transformation
 minimal_y_deco="16"
 minimal_z_deco="-440"
 maximal_x_deco="1008"
 maximal_y_deco="1920"
 maximal_z_deco="472"
+	
+iterations="10"						# Number of iterations
 
-deco_output_file_directory=${image_file_directory}
-
-detections_to_extract_psf_for_channel_0="\"beads\""
-
-psf_size_x="19"
+detections_to_extract_psf_for_channel_0="\"beads\"" 	# type of detection
+psf_size_x="19"						# Dimensions of PSF
 psf_size_y="19"
 psf_size_z="25"
-
-iterations="10"					# Number of iterations
-
 
 #===============================================================================
 # Directories for scripts and advanced settings for processing 
 #===============================================================================
-
 #-------------------------------------------------------------------------------
 # Fiji settings 
 #-------------------------------------------------------------------------------
-
-XVFB_RUN="/sw/bin/xvfb-run"				  			# virtual frame buffer
-Fiji="/sw/users/schmied/packages/Fiji.app.cuda_new/ImageJ-linux64"		# General Fiji	
+XVFB_RUN="/sw/bin/xvfb-run"				 # virtual frame buffer
+Fiji="/sw/users/schmied/packages/Fiji.app.cuda_new/ImageJ-linux64" 		# General Fiji	
 Fiji_resave="/sw/users/schmied/lifeline/Fiji.app.lifeline2/ImageJ-linux64" 	# Fiji that works for resaving
-Fiji_Deconvolution=${Fiji}							# Fiji that works for deconvolution
-
+Fiji_Deconvolution=${Fiji}		# Fiji that works for deconvolution
 #-------------------------------------------------------------------------------
 # Pre-processing 
 #-------------------------------------------------------------------------------
-
 #--- Resaving .czi into .tif files----------------------------------------------
-						
-jobs_resaving=${job_directory}"czi_resave" 			# directory
-resaving=${jobs_resaving}"/resaving.bsh" 			# script
-
+jobs_resaving=${job_directory}"czi_resave"  	# directory .czi resaving
+resaving=${jobs_resaving}"/resaving.bsh" 	# script .czi resaving
 #--- Resaving ome.tiff into .tif files -----------------------------------------
-
-jobs_resaving_ometiff=${job_directory}"ometiff_resave" 	 # directory
-resaving_ometiff=${jobs_resaving_ometiff}"/resaving-ometiff.bsh" # script
-
+jobs_resaving_ometiff=${job_directory}"ometiff_resave" 	 # directory .ome.tiff resaving
+resaving_ometiff=${jobs_resaving_ometiff}"/resaving-ometiff.bsh" # script .ome.tiff resaving
 #--- Compress dataset;----------------------------------------------------------
-
-jobs_compress=${job_directory}"compress"
-czi_compress=${jobs_compress}"/for_czi.bsh"
-
+jobs_compress=${job_directory}"compress" 	# directory .czi to .zip resaving
+czi_compress=${jobs_compress}"/for_czi.bsh" 	# script .czi to .zip resaving
 #===============================================================================
 # Multiview Reconstruction:
-#	1) Define Dataset using .tif or .czi files
-#	2) resave hdf5
-#	3) Detection and Registration of Interest Points
-#	4) Multiview Fusion
 #===============================================================================
-
-#--- Define dataset ------------------------------------------------------------
-
-jobs_xml=${job_directory}"define_xml"						# directory
-define_tif_xml=${jobs_xml}"/define_tif_xml.bsh"						# script
-define_czi_xml=${jobs_xml}"/define_czi_xml.bsh"
-
-
-#--- Parallel Processing settings ----------------------------------------------
-
+# General parallel processing settings
+# Time points are processed in parallel. The time point is specified in the 
+# job script using the parallel_timepoints variable (see dataset description)
 process_timepoint="\"Single Timepoint (Select from List)\""   			
 process_channel="\"All channels\""                                		 
 process_illumination="\"All illuminations\""  					
 process_angle="\"All angles\""       
-
+#-------------------------------------------------------------------------------
+# Define dataset: General
+#-------------------------------------------------------------------------------
+jobs_xml=${job_directory}"define_xml"		# directory for define data set
+define_tif_xml=${jobs_xml}"/define_tif_xml.bsh"	# script for defining .tif data
+define_czi_xml=${jobs_xml}"/define_czi_xml.bsh" # script for defining .czi data
+#--- Define dataset: ImageJ Opener or Image Stacks (LOCI Bioformats) -----------
+# Calibration Type = Same voxel-size for all views
+type_of_dataset="\"Image Stacks (ImageJ Opener)\"" 		# raw fileformat
+multiple_timepoints="\"YES (one file per time-point)\""    	# or NO (one time-point) 
+multiple_channels="\"NO (one channel)\""			# or YES (one file per channel)
+multiple_illumination_directions="\"NO (one illumination direction)\"" 	# or YES (one file per illumination direction)
+multiple_angles="\"YES (one file per angle)\"" 			# or NO (one angle)
+imglib_container="\"ArrayImg (faster)\""			# options:
 #-------------------------------------------------------------------------------
 # hdf5 export
 #-------------------------------------------------------------------------------
+jobs_export=${job_directory}"/hdf5/"	# directory for hdf5 export
+export=${jobs_export}"/export.bsh" 	# script for hdf5 export
 
-jobs_export=${job_directory}"/hdf5/"                            # directory 
-export=${jobs_export}"/export.bsh" 				# script
-
-resave_angle="\"All angles\""
+resave_angle="\"All angles\""		
 resave_channel="\"All channels\""
 resave_illumination="\"All illuminations\""
 resave_timepoint="\"All Timepoints\""
@@ -257,14 +235,12 @@ subsampling_factors="\"{ {1,1,1}, {2,2,1}, {4,4,1}, {8,8,1} }\""
 hdf5_chunk_sizes="\"{ {32,32,4}, {32,32,4}, {16,16,16}, {16,16,16} }\""
 timepoints_per_partition="1"
 setups_per_partition="0"
-
 #------------------------------------------------------------------------------- 
 #		Detect Interest Points for Registration 
 #		Register Dataset based on Interest Points
 #-------------------------------------------------------------------------------
-
-jobs_registration=${job_directory}"registration/" 				# directory
-registration=${jobs_registration}"registration.bsh" 				# script
+jobs_registration=${job_directory}"registration/"	# directory for registration
+registration=${jobs_registration}"registration.bsh" 	# script for registration
 
 type_of_registration="\"Register timepoints individually\""
 subpixel_localization="\"3-dimensional quadratic fit\""
@@ -277,23 +253,19 @@ model_to_regularize_with="Rigid"
 lambda="0.10" 
 allowed_error_for_ransac="5"
 detection_min_max="find_maxima"
-
 #-------------------------------------------------------------------------------
 # merge .xml
 #-------------------------------------------------------------------------------
-
-jobs_xml_merge=${job_directory}"xml_merge"
-xml_merge=${jobs_xml_merge}"/xml_merge.bsh"					# script
-
+jobs_xml_merge=${job_directory}"xml_merge"	# directory for merge
+xml_merge=${jobs_xml_merge}"/xml_merge.bsh"	# script for merge
 #-------------------------------------------------------------------------------
 # timelapse registration
 #-------------------------------------------------------------------------------
+jobs_timelapse=${job_directory}"timelapse_registration" 		# directory for timelapse registration
+timelapse_registration=${jobs_timelapse}"/timelapse_registration.bsh" 	# script for timelapse registration
 
 process_timepoint_timelapse="\"All Timepoints\""
 type_of_registration_timelapse="\"Match against one reference timepoint (no global optimization)\""
-jobs_timelapse=${job_directory}"timelapse_registration" 				# directory
-timelapse_registration=${jobs_timelapse}"/timelapse_registration.bsh" 			# script
-
 #-------------------------------------------------------------------------------
 # Multi-view fusion
 #
@@ -305,24 +277,21 @@ timelapse_registration=${jobs_timelapse}"/timelapse_registration.bsh" 			# scrip
 # with blending
 # with content-based fusion
 #-------------------------------------------------------------------------------
-
-jobs_fusion=${job_directory}"fusion" 						# directory
-fusion=${jobs_fusion}"/fusion.bsh" 						# script
+jobs_fusion=${job_directory}"fusion"	# directory for content based fusion
+fusion=${jobs_fusion}"/fusion.bsh" 	# script for content based fusion
 
 pixel_type="\"16-bit unsigned integer\""
 imglib2_container_fusion="\"ArrayImg\""
 interpolation="\"Linear Interpolation\""
 imglib2_data_container="\"ArrayImg (faster)\""
-
 #-------------------------------------------------------------------------------
 # External transformation
 #
 # same_transformation_for_all_timepoints
 # same_transformation_for_all_angles
 #-------------------------------------------------------------------------------
-
-jobs_external_transformation=${job_directory}"external_transformation"
-external_transformation=${jobs_external_transformation}"/transform.bsh"
+jobs_external_transformation=${job_directory}"external_transformation" 	# directory for transformation
+external_transformation=${jobs_external_transformation}"/transform.bsh" # script for transformation
 
 transform_angle="\"All angles\""
 transform_channel="\"All channels\""
@@ -331,7 +300,6 @@ transform_timepoint="\"All Timepoints\""
 transformation="\"Rigid\""
 apply_transformation="\"Current view transformations (appends to current transforms)\""
 define_mode_transform="\"Matrix\""
-
 #-------------------------------------------------------------------------------
 # Multi-view deconvolution 
 #
@@ -342,11 +310,8 @@ define_mode_transform="\"Matrix\""
 # library_for_cuda=libFourierConvolutionCUDALib.so
 # gpu_1
 #-------------------------------------------------------------------------------
-
-
-
-jobs_deconvolution=${job_directory}"deconvolution"            # directory
-deconvolution=${jobs_deconvolution}"/deconvolution.bsh" 	# script
+jobs_deconvolution=${job_directory}"deconvolution"		# directory for deconvolution
+deconvolution=${jobs_deconvolution}"/deconvolution.bsh"		# script for deconvolution
 
 imglib2_container_deco="\"ArrayImg \""
 type_of_iteration="\"Efficient Bayesian - Optimization I (fast, precise)\""
@@ -358,8 +323,3 @@ compute_on="\"GPU (Nvidia CUDA via JNA)\""
 psf_estimation="\"Extract from beads\""
 
 directory_cuda="/sw/users/schmied/packages/Fiji.app.cuda_new/lib/"
-
-#-------------------------------------------------------------------------------
-
-#registration_fusion="\"Time-point registration (reference=${referencetp}) of channel 0\""	
-#registration_fusion1="\"Time-point registration (reference=${referencetp}) of channel 1\""
