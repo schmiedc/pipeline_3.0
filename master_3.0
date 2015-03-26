@@ -16,24 +16,20 @@
 #===============================================================================
 
 #------------------------------------------------------------------------------- 
-#                           General Parameters 
+# Data set description 
 #
-# Dataset: 2015-02-21_LZ1_Stock68	 
+# 	Dataset: 2015-02-21_LZ1_Stock68
+#	  Owner:	
+#  	Created: 
 #
-#-------------------------------------------------------------------------------
+# --- Data directory -----------------------------------------------------------
+image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/"   
 
-image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/" 	# Data directory
-job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.0/" 	# jobs directory
+# --- jobs directory -----------------------------------------------------------
+job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.0/" 	
 
-parallel_timepoints="`seq 1 2`"  						# timepoints format: "`seq 1 3`" 
-
-xml_filename="\"Test1_ZIP\""							# filename
-process_timepoint="\"Single Timepoint (Select from List)\""   			# or
-process_channel="\"All channels\""                                		# or 
-process_illumination="\"All illuminations\""  					# or
-process_angle="\"All angles\""                          			# or
-
-merged_xml="\"His-YFP_Test_merged\""
+# --- Number of timepoints in dataset ------------------------------------------
+parallel_timepoints="`seq 1 2`"  # format: "`seq 1 3`" 
 
 #===============================================================================
 # Preprocessing
@@ -44,25 +40,26 @@ merged_xml="\"His-YFP_Test_merged\""
 
 #-------------------------------------------------------------------------------
 # Resaving and Renaming files: General 
-#-------------------------------------------------------------------------------
-# Hint: For renaming and resaving .czi files the first .czi file has to 
+#
+# Important: For renaming and resaving .czi files the first .czi file has to 
 # carry the index (0)
+#-------------------------------------------------------------------------------
 
-pad="2"										# For padded zeros
+pad="2"		# for padded zeros 
 	
 #--- Renaming ------------------------------------------------------------------
 
-first_index="0"                                 				# First index of czi files
-last_index="9"									# Last index
-first_timepoint="1"                          					# The first timepoint 
-angles_renaming=(1 2 3 4 5)                         				# Angles format: (1 2 3)
+first_index="0"		# First index of czi files
+last_index="9"		# Last index of czi files
+first_timepoint="1"	# The first timepoint 
+angles_renaming=(1 2 3 4 5)	# Angles format: (1 2 3)
 						      						      
-source_pattern=2015-02-21_LZ1_Stock68_3\(\{index\}\).czi 			# Change name of file
-target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi
+source_pattern=2015-02-21_LZ1_Stock68_3\(\{index\}\).czi # Name of .czi files
+target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of renaming
 
 #--- Resave or Compress .czi files / Resave ome.tiff ---------------------------
 
-angle_prep="1 2 3 4 5"  							# angles format: "1 2 3"
+angle_prep="1 2 3 4 5" # angles format: "1 2 3"
 
 #===============================================================================
 # Multiview Reconstruction:
@@ -72,14 +69,18 @@ angle_prep="1 2 3 4 5"  							# angles format: "1 2 3"
 #	4) Multiview Fusion
 #===============================================================================
 
+xml_filename="\"Test1_ZIP\""		# filename of xml file without ".xml"
+
+merged_xml="\"His-YFP_Test_merged\"" 	# filename of merged xml without ".xml"
+
 #-------------------------------------------------------------------------------
 # Define dataset: General
 #-------------------------------------------------------------------------------
 
-pixel_distance_x="0.28755" 							# Manual calibration x
-pixel_distance_y="0.28755" 							# Manual calibration y
-pixel_distance_z="1.50000" 							# Manual calibration z
-pixel_unit="um"									# unit of manual calibration
+pixel_distance_x="0.28755" 	# Manual calibration x
+pixel_distance_y="0.28755" 	# Manual calibration y
+pixel_distance_z="1.50000" 	# Manual calibration z
+pixel_unit="um"			# unit of manual calibration
 
 #--- Define dataset: ImageJ Opener or Image Stacks (LOCI Bioformats) -----------
 # Calibration Type = Same voxel-size for all views
@@ -146,10 +147,6 @@ reference_timepoint="1"								# reference timepoint
 #------------------------------------------------------------------------------- 
 #		    Multi-view content based fusion 
 #-------------------------------------------------------------------------------
-
-registration_fusion="\"Time-point registration (reference=${referencetp}) of channel 0\""	
-registration_fusion1="\"Time-point registration (reference=${referencetp}) of channel 1\""
-
 
 minimal_x="112"		                        # Cropping parameters of full resolution
 minimal_y="16"
@@ -223,11 +220,27 @@ resaving_ometiff=${jobs_resaving_ometiff}"/resaving-ometiff.bsh" # script
 jobs_compress=${job_directory}"compress"
 czi_compress=${jobs_compress}"/for_czi.bsh"
 
+#===============================================================================
+# Multiview Reconstruction:
+#	1) Define Dataset using .tif or .czi files
+#	2) resave hdf5
+#	3) Detection and Registration of Interest Points
+#	4) Multiview Fusion
+#===============================================================================
+
 #--- Define dataset ------------------------------------------------------------
 
 jobs_xml=${job_directory}"define_xml"						# directory
 define_tif_xml=${jobs_xml}"/define_tif_xml.bsh"						# script
 define_czi_xml=${jobs_xml}"/define_czi_xml.bsh"
+
+
+#--- Parallel Processing settings ----------------------------------------------
+
+process_timepoint="\"Single Timepoint (Select from List)\""   			
+process_channel="\"All channels\""                                		 
+process_illumination="\"All illuminations\""  					
+process_angle="\"All angles\""       
 
 #-------------------------------------------------------------------------------
 # hdf5 export
@@ -346,4 +359,7 @@ psf_estimation="\"Extract from beads\""
 
 directory_cuda="/sw/users/schmied/packages/Fiji.app.cuda_new/lib/"
 
+#-------------------------------------------------------------------------------
 
+#registration_fusion="\"Time-point registration (reference=${referencetp}) of channel 0\""	
+#registration_fusion1="\"Time-point registration (reference=${referencetp}) of channel 1\""
