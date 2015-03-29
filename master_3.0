@@ -23,13 +23,13 @@
 #  	Created: 2015-03-26
 #
 # --- Data directory -----------------------------------------------------------
-image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/ome_tiff/"   
+image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/Dual_Channel/"   
 
 # --- jobs directory -----------------------------------------------------------
 job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.0/" 	
 
 # --- Number of timepoints in dataset ------------------------------------------
-parallel_timepoints="`seq 1 11`"  # format: "`seq 1 3`" 
+parallel_timepoints="`seq 1 2`"  # format: "`seq 1 3`" 
 
 #===============================================================================
 # Preprocessing
@@ -39,14 +39,14 @@ parallel_timepoints="`seq 1 11`"  # format: "`seq 1 3`"
 #===============================================================================
 
 #-------------------------------------------------------------------------------
-# Resaving and Renaming files: General 
+# Resaving, Renaming files and Splitting: General 
 #
 # Important: For renaming and resaving .czi files the first .czi file has to 
 # carry the index (0)
 #-------------------------------------------------------------------------------
 
 pad="2"		# for padded zeros 
-angle_prep="0 1 2 3 4 5" # angles format: "1 2 3"
+angle_prep="1 2 3 4 5" # angles format: "1 2 3"
 	
 #--- Renaming ------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ last_index="9"		# Last index of czi files
 first_timepoint="1"	# The first timepoint 
 angles_renaming=(1 2 3 4 5)	# Angles format: (1 2 3)
 						      						      
-source_pattern=2015-02-21_LZ1_Stock68_3\(\{index\}\).czi # Name of .czi files
+source_pattern=2015-02-20_LZ2_Stock48_Stock58\(\{index\}\).czi # Name of .czi files
 target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of renaming
 
 #===============================================================================
@@ -200,6 +200,9 @@ resaving_ometiff=${jobs_resaving_ometiff}"/resaving-ometiff.bsh" # script .ome.t
 #--- Compress dataset;----------------------------------------------------------
 jobs_compress=${job_directory}"compress" 	# directory .czi to .zip resaving
 czi_compress=${jobs_compress}"/for_czi.bsh" 	# script .czi to .zip resaving
+#--- Split channels-------------------------------------------------------------
+jobs_split=${job_directory}"split_channels" 			# directory
+split=${jobs_split}"/split.bsh" 				# script
 #===============================================================================
 # Multiview Reconstruction:
 #===============================================================================

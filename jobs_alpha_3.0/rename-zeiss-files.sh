@@ -19,11 +19,11 @@ while [ $i -le $last_index ]; do
         	source=${source_pattern/\{index\}/${i}}
                 tmp=${target_pattern/\{timepoint\}/${t}}
                 target=${tmp/\{angle\}/${a}}
-
-                echo ${source} ${target}
+	
+                echo ${source} ${target} # displays source file and target file with path
                 
-               	mv ${source} ${target}
-                #cp ${source} ${target}
+                mv ${source} ${target} # renames source file into target pattern
+                #cp ${source} ${target} # alternatively copy source file and resave into target pattern
                 let i=i+1
 
         done
