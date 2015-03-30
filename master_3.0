@@ -7,7 +7,8 @@
 #
 #       AUTHOR: Christopher Schmied, schmied@mpi-cbg.de
 #    INSTITUTE: Max Planck Institute for Molecular Cell Biology and Genetics
-#         BUGS: Single Channel > Channel name is always 0
+#         BUGS: Single Channel > Channel name is always 0 (single channel) or 
+#		0,1 for Dual Channel
 #        NOTES: Works for Single Channel Data
 #		Output file directory is the image file directory
 #      Version: 3.0
@@ -23,7 +24,7 @@
 #  	Created: 2015-03-26
 #
 # --- Data directory -----------------------------------------------------------
-image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/Dual_Channel/"   
+image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/Dual_Channel/czi/"   
 
 # --- jobs directory -----------------------------------------------------------
 job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.0/" 	
@@ -66,9 +67,9 @@ target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of r
 #	4) Multiview Fusion
 #===============================================================================
 
-xml_filename="\"hdf5_Test1_ZIP\""		# filename of xml file without ".xml"
+xml_filename="\"Dual_Channel_Test\""		# filename of xml file without ".xml"
 
-merged_xml="\"hdf5_Test1_ZIP_merged\"" 	# filename of merged xml without ".xml"
+merged_xml="\"Dual_Channel_Test_merged\"" 	# filename of merged xml without ".xml"
 
 #-------------------------------------------------------------------------------
 # Define dataset: General
@@ -81,22 +82,30 @@ pixel_unit="um"			# unit of manual calibration
 
 #--- Define dataset: ImageJ Opener or Image Stacks (LOCI Bioformats) -----------
 # Calibration Type = Same voxel-size for all views
+# Comment out "channels_=" in define_tif_zip.bsh if single channel
 
+multiple_timepoints="\"YES (one file per time-point)\""    	# or NO (one time-point) 
+multiple_channels="\"YES (one file per channel)\""			# or "\"NO (one channel)\""
+multiple_illumination_directions="\"NO (one illumination direction)\"" 	# or YES (one file per illumination direction)
+multiple_angles="\"YES (one file per angle)\"" 			# or NO (one angle)
 timepoints="1-2"			# Timepoints format: "1-2"
 acquisition_angles="1,2,3,4,5"		# angles format: "1,2,3" or "1-3"
-image_file_pattern="spim_TL{tt}_Angle{a}.zip"	# pattern of spim for padded zeros use tt
-
+image_file_pattern="spim_TL{tt}_Angle{a}_Channel{c}.tif"	# pattern of spim for padded zeros use tt, for dual channel give spim_TL0{tt}_Angle{a}_Channel{c}.tif
+channels="0,1"					# for dual channel 
+						
 #--- Define dataset: Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats) ------------
 # Usable for 5 view datasets 1 channel
+# Comment out line: "channel_2=" define_czi.bsh if single channel
 
-first_czi="2015-02-21_LZ1_Stock68_3.czi"	
+first_czi="2015-02-20_LZ2_Stock48_Stock58.czi"	
 angle_1="0"
 angle_2="72"
 angle_3="144"
 angle_4="216"
 angle_5="288"
 channel_1="0"
-illumination_1="0"
+channel_2="1" 	# For Dual Channel 
+illumination_1="0" # For one illumination side = 0
 rotation_around="X-Axis"
 
 #-------------------------------------------------------------------------------
@@ -222,10 +231,6 @@ define_czi_xml=${jobs_xml}"/define_czi.bsh" # script for defining .czi data
 #--- Define dataset: ImageJ Opener or Image Stacks (LOCI Bioformats) -----------
 # Calibration Type = Same voxel-size for all views
 type_of_dataset="\"Image Stacks (ImageJ Opener)\"" 		# raw fileformat
-multiple_timepoints="\"YES (one file per time-point)\""    	# or NO (one time-point) 
-multiple_channels="\"NO (one channel)\""			# or YES (one file per channel)
-multiple_illumination_directions="\"NO (one illumination direction)\"" 	# or YES (one file per illumination direction)
-multiple_angles="\"YES (one file per angle)\"" 			# or NO (one angle)
 imglib_container="\"ArrayImg (faster)\""			# options:
 #-------------------------------------------------------------------------------
 # hdf5 export

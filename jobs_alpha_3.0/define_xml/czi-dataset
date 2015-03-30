@@ -19,6 +19,7 @@ echo "$XVFB_RUN -a $Fiji \
         -Dangle_4=$angle_4 \
         -Dangle_5=$angle_5 \
         -Dchannel_1=$channel_1 \
+        -Dchannel_2=$channel_2 \
         -Dillumination_1=$illumination_1 \
         -Drotation_around=$rotation_around \
         -Dpixel_distance_x=$pixel_distance_x \

@@ -11,6 +11,7 @@ System.out.println(runtime.availableProcessors() + " cores available for multi-t
 
 image_file_directory = System.getProperty( "image_file_directory" );
 timepoints = System.getProperty( "timepoints" );
+channels = System.getProperty( "channels" ); 
 acquisition_angles = System.getProperty( "acquisition_angles" );
 image_file_pattern = System.getProperty( "image_file_pattern" );
 float pixel_distance_x = Float.parseFloat( System.getProperty( "pixel_distance_x" ) );
@@ -27,21 +28,22 @@ imglib_container = System.getProperty( "imglib_container" );
 
 // Writes parameters into output file
 
-System.out.println( "image_file_directory=" + image_file_directory );
-System.out.println( "timepoints=" + timepoints );
-System.out.println( "acquisition_angles=" + acquisition_angles );
-System.out.println( "image_file_pattern=" + image_file_pattern );
-System.out.println( "pixel_distance_x=" + pixel_distance_x );
-System.out.println( "pixel_distance_y=" + pixel_distance_y );
-System.out.println( "pixel_distance_z=" + pixel_distance_z );
-System.out.println( "pixel_unit=" + pixel_unit );
-System.out.println( "xml_filename=" + xml_filename );
-System.out.println( "type_of_dataset=" + type_of_dataset );
-System.out.println( "multiple_timepoints=" + multiple_timepoints );
-System.out.println( "multiple_channels=" + multiple_channels );
-System.out.println( "multiple_illumination_directions=" + multiple_illumination_directions );
-System.out.println( "multiple_angles=" + multiple_angles );
-System.out.println( "imglib_container=" + imglib_container );
+System.out.println( "image_file_directory = " + image_file_directory );
+System.out.println( "timepoints = " + timepoints );
+System.out.println( "channels = " + channels );
+System.out.println( "acquisition_angles = " + acquisition_angles );
+System.out.println( "image_file_pattern = " + image_file_pattern );
+System.out.println( "pixel_distance_x = " + pixel_distance_x );
+System.out.println( "pixel_distance_y = " + pixel_distance_y );
+System.out.println( "pixel_distance_z = " + pixel_distance_z );
+System.out.println( "pixel_unit = " + pixel_unit );
+System.out.println( "xml_filename = " + xml_filename );
+System.out.println( "type_of_dataset = " + type_of_dataset );
+System.out.println( "multiple_timepoints = " + multiple_timepoints );
+System.out.println( "multiple_channels = " + multiple_channels );
+System.out.println( "multiple_illumination_directions = " + multiple_illumination_directions );
+System.out.println( "multiple_angles = " + multiple_angles );
+System.out.println( "imglib_container = " + imglib_container );
 
 // Executes Fiji plugin
 
@@ -55,6 +57,7 @@ IJ.run("Define Multi-View Dataset",
 	"image_file_directory=" + image_file_directory + " " +
 	"image_file_pattern=" + image_file_pattern + " " + 
 	"timepoints_=" + timepoints + " " +
+	"channels_=" + channels	+ " " +		// for dual channel comment out if single channel
 	"acquisition_angles_=" + acquisition_angles + " " +  
 	"calibration_type=[Same voxel-size for all views] calibration_definition=[User define voxel-size(s)]" + " " + 
 	"imglib2_data_container=[" + imglib_container + "] " + 
