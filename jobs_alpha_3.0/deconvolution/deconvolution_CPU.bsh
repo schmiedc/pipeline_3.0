@@ -61,7 +61,7 @@ psf_estimation = System.getProperty( "psf_estimation" );
 iterations = System.getProperty( "iterations" );
 deco_output_file_directory = System.getProperty( "deco_output_file_directory" );
 detections_to_extract_psf_for_channel_0 = System.getProperty( "detections_to_extract_psf_for_channel_0" );
-
+detections_to_extract_psf_for_channel_1 = System.getProperty( " detections_to_extract_psf_for_channel_1" );
 System.out.println( "-------------------------------------------------------" );
 System.out.println( "Deconvolution settings: " );
 System.out.println( "imglib2_container = " + imglib2_container_deco );
@@ -70,9 +70,10 @@ System.out.println( "osem_acceleration = " + osem_acceleration );
 System.out.println( "Tikhonov_parameter = " + Tikhonov_parameter );
 System.out.println( "compute = " + compute );
 System.out.println( "psf_estimation = " + psf_estimation );
-System.out.println( "number_of_iterations = " + number_of_iterations );
+System.out.println( "number_of_iterations = " + iterations );
 System.out.println( "deco_output_file_directory = " + deco_output_file_directory );
 System.out.println( "detections_to_extract_psf_for_channel_0 = " + detections_to_extract_psf_for_channel_0 );
+System.out.println( "detections_to_extract_psf_for_channel_1 = " + detections_to_extract_psf_for_channel_1 );
 
 // Search for CUDA
 directory_cuda = System.getProperty( "directory_cuda" );
@@ -125,6 +126,7 @@ IJ.run("Fuse/Deconvolve Dataset",
 	"psf_display=[Do not show PSFs] " +
 	"output_file_directory=" + deco_output_file_directory + " " +
 	"detections_to_extract_psf_for_channel_0=" + detections_to_extract_psf_for_channel_0 + " " +
+	"detections_to_extract_psf_for_channel_1=" + detections_to_extract_psf_for_channel_1 + " " + // Dual Channel
 	"psf_size_x=" + psf_size_x + " " +
 	"psf_size_y=" + psf_size_y + " " +
 	"psf_size_z=" + psf_size_z + "");

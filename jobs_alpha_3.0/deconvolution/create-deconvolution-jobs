@@ -8,7 +8,7 @@ do
 	job="$jobs_deconvolution/deconvolution-$parallel_timepoints.job"
 	echo $job
 	echo "#!/bin/bash" > "$job"
-	echo "$XVFB_RUN -a $Fiji -Xms110g -Xmx110g \
+	echo "$XVFB_RUN -a $Fiji -Xms50g -Xmx50g \
 	-Dimage_file_directory=$image_file_directory \
 	-Dmerged_xml=$merged_xml \
 	-Dparallel_timepoints=$parallel_timepoints \
@@ -31,6 +31,7 @@ do
 	-Ddeco_output_file_directory=$deco_output_file_directory \
 	-Ddirectory_cuda=$directory_cuda \
 	-Ddetections_to_extract_psf_for_channel_0=$detections_to_extract_psf_for_channel_0 \
+	-Ddetections_to_extract_psf_for_channel_1=$detections_to_extract_psf_for_channel_1 \
 	-Dpsf_size_x=$psf_size_x \
 	-Dpsf_size_y=$psf_size_y \
 	-Dpsf_size_z=$psf_size_z \

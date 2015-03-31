@@ -149,6 +149,8 @@ reg_interest_points_channel_1="\"beads\""				# Dual Channel: Channel 1 contains 
 
 #--- Merge .xml after registration ---------------------------------------------
 
+# Creates merged_xml
+
 #--- timelapse registration ----------------------------------------------------	
 
 reference_timepoint="1"	# reference timepoint 	
@@ -169,12 +171,12 @@ process_angle="\"All angles\""
 
 #--- Multi-view content based fusion -------------------------------------------
 
-minimal_x="112" 	# Cropping parameters of full resolution
-minimal_y="16"
-minimal_z="-440"
-maximal_x="1008"
-maximal_y="1920"
-maximal_z="472"
+minimal_x="168" 	# Cropping parameters of full resolution
+minimal_y="52"
+minimal_z="-340"
+maximal_x="1036"
+maximal_y="1836"
+maximal_z="464"
 downsample="2"
 
 #--- External transformation for multi-view deconvolution----------------------- 
@@ -189,21 +191,22 @@ matrix_transform="\"0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0\"
 jobs_deconvolution=${job_directory}"deconvolution"		# directory for deconvolution
 
 # select: "/deconvolution_GPU.bsh" or "/deconvolution_CPU.bsh"
-deconvolution=${jobs_deconvolution}"/deconvolution_CPU.bsh"		# script for CPU deconvolution
-# deconvolution=${jobs_deconvolution}"/deconvolution_GPU.bsh"		# script for GPU deconvolution
+# deconvolution=${jobs_deconvolution}"/deconvolution_CPU.bsh"		# script for CPU deconvolution
+deconvolution=${jobs_deconvolution}"/deconvolution_GPU.bsh"		# script for GPU deconvolution
 
 deco_output_file_directory=${image_file_directory}
 
-minimal_x_deco="56" 	# Cropping parameters adjusted for transformation
-minimal_y_deco="8"
-minimal_z_deco="-220"
-maximal_x_deco="504"
-maximal_y_deco="960"
-maximal_z_deco="236"
+minimal_x_deco="84" 	# Cropping parameters adjusted for transformation
+minimal_y_deco="26"
+minimal_z_deco="-170"
+maximal_x_deco="518"
+maximal_y_deco="918"
+maximal_z_deco="232"
 	
 iterations="10"						# Number of iterations
 
-detections_to_extract_psf_for_channel_0="\"beads\"" 	# type of detection
+detections_to_extract_psf_for_channel_0="\"[Same PSF as channel 1]\""	# type of detection
+detections_to_extract_psf_for_channel_1="\"beads\""
 psf_size_x="19"						# Dimensions of PSF
 psf_size_y="19"
 psf_size_z="25"
