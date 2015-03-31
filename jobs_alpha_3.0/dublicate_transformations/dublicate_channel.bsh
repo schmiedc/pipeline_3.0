@@ -1,0 +1,24 @@
+import ij.IJ;
+import ij.ImagePlus;
+import java.lang.Runtime;
+import java.io.File;
+import java.io.FilenameFilter;
+ 
+runtime = Runtime.getRuntime();
+System.out.println(runtime.availableProcessors() + " cores available for multi-threading");
+
+
+
+
+
+
+IJ.run("Duplicate Transformations", 
+"apply=[One channel to other channels] " +
+"select_xml=/home/schmied/Desktop/Test_Pipeline_3.0/Dual_Channel/czi/Dual_Channel_1Channelwithbeads.xml " +
+"apply_to_angle=[All angles] " +
+"apply_to_illumination=[All illuminations] " +
+"apply_to_timepoint=[All Timepoints] " +
+"source=1 " +
+"target=[Single Channel (Select from List)] " +
+"processing_channel=0 " +
+"duplicate_which_transformations=[Replace all transformations]");

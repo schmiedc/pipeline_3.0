@@ -13,10 +13,11 @@ do
     	-Dparallel_timepoints=$parallel_timepoints \
     	-Dimage_file_directory=$image_file_directory \
 	-Dxml_filename=$xml_filename \
-	-Dprocess_timepoint=$process_timepoint \
-	-Dprocess_channel=$process_channel \
-	-Dprocess_illumination=$process_illumination \
-	-Dprocess_angle=$process_angle \
+	-Dprocess_timepoint=$reg_process_timepoint \
+	-Dprocess_channel=$reg_process_channel \
+	-Dprocess_illumination=$reg_process_illumination \
+	-Dprocess_angle=$reg_process_angle \
+	-Dprocessing_channel=$reg_processing_channel \
 	-Dlabel_interest_points=$label_interest_points \
 	-Dtype_of_registration=$type_of_registration \
         -Dtype_of_detection=$type_of_detection \
@@ -28,7 +29,8 @@ do
 	-Dinitial_sigma=$initial_sigma \
         -Dthreshold_gaussian=$threshold_gaussian \
 	-Dregistration_algorithm=$registration_algorithm \
-	-Dinterest_points_channel_0=$interest_points_channel_0 \
+	-Dinterest_points_channel_0=$reg_interest_points_channel_0 \
+	-Dinterest_points_channel_1=$reg_interest_points_channel_1 \
 	-Dfix_tiles=$fix_tiles \
 	-Dmap_back_tiles=$map_back_tiles \
 	-Dtransformation_model=$transformation_model \
