@@ -155,6 +155,9 @@ reference_timepoint="1"	# reference timepoint
 
 #--- Dublicate Transformations -------------------------------------------------
 
+source_dublication="1"
+target_dublication="0"
+
 #-------------------------------------------------------------------------------
 # Fusion General Settings
 #-------------------------------------------------------------------------------
@@ -302,6 +305,16 @@ timelapse_registration=${jobs_timelapse}"/timelapse_registration.bsh" 	# script 
 
 process_timepoint_timelapse="\"All Timepoints\""
 type_of_registration_timelapse="\"Match against one reference timepoint (no global optimization)\""
+#-------------------------------------------------------------------------------
+# Dublicate transformation
+#
+# One channel to other channels
+# Single Channel (Select from List)
+#-------------------------------------------------------------------------------
+jobs_dublication=${job_directory}"dublicate_transformations"
+dublicate_transformations=${jobs_dublication}"/dublicate_channel.bsh"
+
+duplicate_which_transformations="\"Replace all transformations\""
 #-------------------------------------------------------------------------------
 # Multi-view fusion
 #
