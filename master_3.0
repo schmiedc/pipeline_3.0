@@ -68,7 +68,7 @@ target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of r
 #	4) Multiview Fusion
 #===============================================================================
 
-xml_filename="\"hdf5_Dual_Channel_Test\""		# filename of xml file without ".xml"
+xml_filename="\"Dual_Channel_Test\""		# filename of xml file without ".xml"
 
 merged_xml="\"hdf5_Dual_Channel_Test_merged\"" 	# filename of merged xml without ".xml"
 
@@ -76,8 +76,8 @@ merged_xml="\"hdf5_Dual_Channel_Test_merged\"" 	# filename of merged xml without
 # Define dataset: General
 #-------------------------------------------------------------------------------
 
-pixel_distance_x="0.28755" 	# Manual calibration x
-pixel_distance_y="0.28755" 	# Manual calibration y
+pixel_distance_x="0.28590" 	# Manual calibration x
+pixel_distance_y="0.28590" 	# Manual calibration y
 pixel_distance_z="1.50000" 	# Manual calibration z
 pixel_unit="um"			# unit of manual calibration
 

@@ -20,10 +20,12 @@ echo "$XVFB_RUN -a $Fiji -Xmx10g \
                  -- --no-splash $export" >> "$job"
 chmod a+x "$job"
 
-for i in $parallel_timepoints
-do
+for i in ${parallel_timepoints}
+do		
+	#x=$((${i} + 1))	# Fixes bug were the job of the first timepoint overwrites the job that writes the dataset.h5 file
+	# echo ${x}
 	job="$jobs_export/hdf5-$i.job"
-	echo $job
+	echo $job 
 	echo "#!/bin/bash" > "$job"
 	echo "$XVFB_RUN -a $Fiji -Xmx10g \
 		-Dimage_file_directory=$image_file_directory \
