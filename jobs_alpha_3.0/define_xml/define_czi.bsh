@@ -13,8 +13,8 @@ Prefs.setThreads(1); 	// defines the number of threads allowed
 print("Threads: "+Prefs.getThreads()); // prints thread setting in output
 
 System.out.println("Start loading parameters");
-// Directory, and first .czi
 
+// Directory, and first .czi
 System.out.println("=========================================================");
 System.out.println("Directory:");
 image_file_directory = System.getProperty( "image_file_directory" );
