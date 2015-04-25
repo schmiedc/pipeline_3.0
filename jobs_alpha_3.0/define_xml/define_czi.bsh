@@ -56,7 +56,7 @@ IJ.run("Define Multi-View Dataset",
 	"angle_4=" + angle_4 + " " + 
 	"angle_5=" + angle_5 + " " +
 	"channel_1=" + channel_1 + " " +
-	"channel_2=" + channel_2 + " " + // for dual channel comment out if single channel
+//	"channel_2=" + channel_2 + " " + // for dual channel comment out if single channel
  	"_______illumination_1=" + illumination_1 + " " +
 	"modify_calibration " + 
 	"modify_rotation_axis " +

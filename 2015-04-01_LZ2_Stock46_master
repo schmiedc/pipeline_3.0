@@ -19,19 +19,19 @@
 #------------------------------------------------------------------------------- 
 # Data set description 
 #
-# 	Dataset: test
+# 	Dataset: 2015-04-01_LZ2_Stock46
 #	  Owner: Christopher Schmied	
 #  	Created: 2015-04-23
 #
 # --- Data directory -----------------------------------------------------------
-image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/czi/"   
+image_file_directory="/projects/pilot_spim/Christopher/2015-04-01_LZ2_Stock46/"   
 
 # --- jobs directory -----------------------------------------------------------
 job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.0/" 	
 
 # --- Number of timepoints in dataset ------------------------------------------
 # IMPORTANT for processing .czi files timepoints always start with 0
-parallel_timepoints="`seq 0 1`"  # format: "`seq 1 3`" 
+parallel_timepoints="`seq 0 71`"  # format: "`seq 1 3`" 
 
 #===============================================================================
 # Preprocessing
@@ -68,16 +68,16 @@ target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of r
 #	4) Multiview Fusion
 #===============================================================================
 
-xml_filename="\"czi\""		# filename of xml file without ".xml"
+xml_filename="\"hdf5_Dpse_Dip3_GFP_VK33\""		# filename of xml file without ".xml"
 
-merged_xml="\"hdf5_test\"" 	# filename of merged xml without ".xml"
+merged_xml="\"hdf5_Dpse_Dip3_GFP_VK33_merge\"" 	# filename of merged xml without ".xml"
 
 #-------------------------------------------------------------------------------
 # Define dataset: General
 #-------------------------------------------------------------------------------
 
-pixel_distance_x="0.28755" 	# Manual calibration x
-pixel_distance_y="0.28755" 	# Manual calibration y
+pixel_distance_x="0.28590" 	# Manual calibration x
+pixel_distance_y="0.28590" 	# Manual calibration y
 pixel_distance_z="1.50000" 	# Manual calibration z
 pixel_unit="um"			# unit of manual calibration
 
@@ -98,7 +98,7 @@ channels="0,1"							# for dual channel give spim_TL0{tt}_Angle{a}_Channel{c}.ti
 # Usable for 5 view datasets 1 channel
 # Comment out line: "channel_2=" define_czi.bsh if single channel
 
-first_czi="2015-02-21_LZ1_Stock68_3.czi"	
+first_czi="2015-04-01_LZ2_Stock46.czi"	
 angle_1="0"
 angle_2="72"
 angle_3="144"
@@ -218,10 +218,7 @@ psf_size_z="25"
 # Fiji settings 
 #-------------------------------------------------------------------------------
 XVFB_RUN="/sw/bin/xvfb-run"				 # virtual frame buffer
-#Fiji="/sw/users/schmied/packages/2015-03-19_Fiji.app.cuda/ImageJ-linux64" 		# old Fiji
-Fiji="/sw/users/schmied/packages/2015-04-25_Fiji.app.cuda/ImageJ-linux64"			# New Fiji
-
-
+Fiji="/sw/users/schmied/packages/Fiji.app.cuda_new/ImageJ-linux64" 		# General Fiji	
 Fiji_resave="/sw/users/schmied/lifeline/Fiji.app.lifeline2/ImageJ-linux64" 	# Fiji that works for resaving
 Fiji_Deconvolution=${Fiji}		# Fiji that works for deconvolution
 #-------------------------------------------------------------------------------

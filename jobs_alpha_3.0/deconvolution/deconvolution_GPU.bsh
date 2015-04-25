@@ -104,8 +104,8 @@ IJ.run("Fuse/Deconvolve Dataset",
 	"process_channel=[All channels] " + 
 	"process_illumination=[All illuminations] " +
 	"process_timepoint=[" + process_timepoint + "] " +
-//	"processing_timepoint=[Timepoint " + parallel_timepoints + "] " +
-	"processing_timepoint=[Timepoint 0] " + 
+	"processing_timepoint=[Timepoint " + parallel_timepoints + "] " +
+//	"processing_timepoint=[Timepoint 0] " + 
 	"type_of_image_fusion=[Multi-view deconvolution] " +
 	"bounding_box=[Define manually] " +
 	"fused_image=[Save as TIFF stack] " +
@@ -133,7 +133,7 @@ IJ.run("Fuse/Deconvolve Dataset",
 	"gpu_1 " +
 //	"gpu_2 " + 
 	"detections_to_extract_psf_for_channel_0=" + detections_to_extract_psf_for_channel_0 + " " +
-	"detections_to_extract_psf_for_channel_1=" + detections_to_extract_psf_for_channel_1 + " " + // Dual Channel
+//	"detections_to_extract_psf_for_channel_1=" + detections_to_extract_psf_for_channel_1 + " " + // Dual Channel
 	"psf_size_x=" + psf_size_x + " " +
 	"psf_size_y=" + psf_size_y + " " +
 	"psf_size_z=" + psf_size_z + "");

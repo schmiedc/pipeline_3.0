@@ -121,8 +121,8 @@ IJ.run("Detect Interest Points for Registration",
 	"type_of_interest_point_detection=[" + type_of_detection + "] " + 
 	"label_interest_points=" + label_interest_points + " " + 
 	"subpixel_localization=[" + subpixel_localization + "] " + 
-//	"interest_point_specification_(channel_0)=[Advanced ...] " +
-	"interest_point_specification_(channel_1)=[Advanced ...] " + // Dual Channel
+	"interest_point_specification_(channel_0)=[Advanced ...] " +
+//	"interest_point_specification_(channel_1)=[Advanced ...] " + // Dual Channel
 	"radius_1=" + radius_1 + " " + 
 	"radius_2=" + radius_2 + " " + 
 	"threshold=" + threshold + " " +
@@ -134,16 +134,16 @@ System.out.println( "Starting Registration" );
 IJ.run("Register Dataset based on Interest Points",
 	"select_xml=" + xml_path + xml_filename + ".job_" + parallel_timepoints + ".xml " +
         "process_angle=[" + process_angle + "] " +
-//        "process_channel=[" + process_channel + "] " +
+        "process_channel=[" + process_channel + "] " +
         "process_illumination=[" + process_illumination + "] " +
         "process_timepoint=[" + process_timepoint + "] " +
 	"xml_output=[Do not process on cluster] " + 
 	"processing_timepoint=[Timepoint " + parallel_timepoints + "] " +
         "registration_algorithm=[" + registration_algorithm + "] " +
         "type_of_registration=[" + type_of_registration + "] " +
-//        "interest_points_channel_0=" + interest_points_channel_0 + " " +
-	"interest_points_channel_0=[[DO NOT register this channel]] " +
-        "interest_points_channel_1=" + interest_points_channel_1 + " " + // Dual Channel
+        "interest_points_channel_0=" + interest_points_channel_0 + " " +
+// check? "interest_points_channel_0=[[DO NOT register this channel]] " +
+//      "interest_points_channel_1=" + interest_points_channel_1 + " " + // Dual Channel
         "fix_tiles=[" + fix_tiles + "] " +
         "map_back_tiles=[" + map_back_tiles + "] " +
         "transformation=" + transformation_model + " " +
