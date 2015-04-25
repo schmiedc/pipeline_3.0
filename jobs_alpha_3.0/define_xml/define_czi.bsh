@@ -60,11 +60,9 @@ System.out.println( "pixel_distance_y = " + pixel_distance_y );
 System.out.println( "pixel_distance_z = " + pixel_distance_z );
 System.out.println( "pixel_unit = " + pixel_unit );
 
-
 // Executes Fiji plugin
 System.out.println("=========================================================");
 System.out.println("Start plugin:");
-
 IJ.run("Define Multi-View Dataset", 
 	"type_of_dataset=[Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats)] " +
 	"xml_filename=" + xml_filename + ".xml " +

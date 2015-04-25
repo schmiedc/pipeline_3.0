@@ -24,7 +24,7 @@
 #  	Created: 2015-04-23
 #
 # --- Data directory -----------------------------------------------------------
-image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/czi/"   
+image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/tif/"   
 
 # --- jobs directory -----------------------------------------------------------
 job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.0/" 	
@@ -68,7 +68,7 @@ target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of r
 #	4) Multiview Fusion
 #===============================================================================
 
-xml_filename="\"czi\""		# filename of xml file without ".xml"
+xml_filename="\"tif\""		# filename of xml file without ".xml"
 
 merged_xml="\"hdf5_test\"" 	# filename of merged xml without ".xml"
 
