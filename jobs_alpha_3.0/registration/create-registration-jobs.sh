@@ -23,22 +23,26 @@ do
         -Dtype_of_detection=$type_of_detection \
         -Dsubpixel_localization=$subpixel_localization \
 	-Dimglib_container=$imglib_container \
-	-Dradius_1=$radius_1 \
-	-Dradius_2=$radius_2 \
-        -Dthreshold=$threshold \
+	-Dreg_1_radius_1=$reg_1_radius_1 \
+	-Dreg_1_radius_2=$reg_1_radius_2 \
+        -Dreg_1_threshold=$reg_1_threshold \
 	-Dinitial_sigma=$initial_sigma \
         -Dthreshold_gaussian=$threshold_gaussian \
 	-Dregistration_algorithm=$registration_algorithm \
-	-Dinterest_points_channel_0=$reg_interest_points_channel_0 \
-	-Dinterest_points_channel_1=$reg_interest_points_channel_1 \
+	-Dreg_1_interest_points_channel=$reg_1_interest_points_channel \
+	-Dreg_2_interest_points_channel=$reg_2_interest_points_channel \
 	-Dfix_tiles=$fix_tiles \
 	-Dmap_back_tiles=$map_back_tiles \
 	-Dtransformation_model=$transformation_model \
 	-Dmodel_to_regularize_with=$model_to_regularize_with \
 	-Dlambda=$lambda \
 	-Dallowed_error_for_ransac=$allowed_error_for_ransac \
-	-Ddetection_min_max=$detection_min_max \
+	-Dsignificance=$significance \
         	-- --no-splash $registration" >> "$job"
     chmod a+x "$job"
 done
 
+# Obsolet
+# -Ddetection_min_max=$detection_min_max \
+# -Dchannel_1_name=$channel_1_name \
+# -Dchannel_2_name=$channel_2_name \

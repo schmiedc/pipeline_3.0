@@ -7,10 +7,10 @@
 #
 #       AUTHOR: Christopher Schmied, schmied@mpi-cbg.de
 #    INSTITUTE: Max Planck Institute for Molecular Cell Biology and Genetics
-#         BUGS: Single Channel > Channel name is always 0 (single channel) or 
-#		0,1 for Dual Channel
+#         BUGS: 
 #        NOTES: Works for Single Channel Data
 #		Output file directory is the image file directory
+#		Channel name cannot contain spaces
 #      Version: 3.0
 #      CREATED: 2014-04-02
 #     REVISION: 2015-03-26
@@ -68,9 +68,12 @@ target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of r
 #	4) Multiview Fusion
 #===============================================================================
 
-xml_filename="\"czi\""		# filename of xml file without ".xml"
+xml_filename="\"hdf5_czi\""		# filename of xml file without ".xml"
 
 merged_xml="\"hdf5_czi\"" 	# filename of merged xml without ".xml"
+
+channel_1="green"		# general setting for channel names 
+channel_2="red"
 
 #-------------------------------------------------------------------------------
 # Define dataset: General
@@ -104,9 +107,7 @@ angle_2="72"
 angle_3="144"
 angle_4="216"
 angle_5="288"
-channel_1="0"
-channel_2="1" 	# For Dual Channel 
-illumination_1="0" # For one illumination side = 0
+illumination_1="0" 	# For one illumination side = 0
 rotation_around="X-Axis"
 
 #-------------------------------------------------------------------------------
@@ -134,20 +135,20 @@ reg_process_angle="\"All angles\""
 
 reg_process_channel="\"All channels\""  			# Single Channel
 # reg_process_channel="\"Single channel (Select from List)\""  # Dual Channel: 1 Channel contains the beads
-# reg_processing_channel="\"channel 1\""			# Dual Channel: 1 Channel contains the beads
+reg_processing_channel="\"channel 1\""			# Dual Channel: 1 Channel contains the beads
 
 #--- Detect Interest Points for Registration -----------------------------------
 
 label_interest_points="\"beads\""
 type_of_detection="\"Difference-of-Mean (Integral image based)\"" # Difference
-radius_1="2"							  # of Mean 
-radius_2="3"
-threshold="0.005"
+reg_1_radius_1="2"							  # of Mean 
+reg_1_radius_2="3"
+reg_1_threshold="0.005"
 
 #--- Register Dataset based on Interest Points ---------------------------------
 
-reg_interest_points_channel_0="\"beads\"" # Dual Channel: Channel does not contain the beads "\"[DO NOT register this channel]\""
-reg_interest_points_channel_1="\"beads\""				# Dual Channel: Channel 1 contains the beads
+reg_1_interest_points_channel="\"beads\"" # Dual Channel: Channel does not contain the beads "\"[DO NOT register this channel]\""
+reg_2_interest_points_channel="\"beads\""				# Dual Channel: Channel 1 contains the beads
 
 #--- Merge .xml after registration ---------------------------------------------
 
@@ -281,15 +282,18 @@ setups_per_partition="0"
 jobs_registration=${job_directory}"registration"	# directory for registration
 registration=${jobs_registration}"/registration.bsh" 	# script for registration
 
+#--- Detect Interest Points for Registration -----------------------------------
 # Specify the method for Detection of beads: 
 # Difference of mean: Comment out Difference of Gaussian in registration.bsh 
 # Difference of Gaussian: Comment out  in registration.bsh
 # type_of_detection="\"Difference-of-Gaussian\""		 		# Difference 	
 # initial_sigma="1.8000"					  		# of Gaussian
 # threshold_gaussian="0.0080"
-
-type_of_registration="\"Register timepoints individually\""
 subpixel_localization="\"3-dimensional quadratic fit\""
+# detection_min_max="find_maxima" obsolete?
+
+#--- Register Dataset based on Interest Points ---------------------------------
+type_of_registration="\"Register timepoints individually\""
 transformation_model="Affine"
 registration_algorithm="\"Fast 3d geometric hashing (rotation invariant)\""
 fix_tiles="\"Fix first tile\""		# "\"Do not fix tiles\""
@@ -297,7 +301,7 @@ map_back_tiles="\"Map back to first tile using rigid model\""
 model_to_regularize_with="Rigid"
 lambda="0.10" 
 allowed_error_for_ransac="5"
-detection_min_max="find_maxima"
+significance="10"
 #-------------------------------------------------------------------------------
 # merge .xml
 #-------------------------------------------------------------------------------
