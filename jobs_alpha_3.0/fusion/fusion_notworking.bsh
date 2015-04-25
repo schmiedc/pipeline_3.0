@@ -1,4 +1,6 @@
-import ij.IJ;
+// Load Fiji dependencies
+import ij.IJ; 		// calls imagej
+import ij.Prefs; 	// calls imagej settings
 import ij.ImagePlus;
 import java.lang.Runtime;
 import java.io.File;
@@ -7,8 +9,11 @@ import java.io.FilenameFilter;
 runtime = Runtime.getRuntime();
 System.out.println(runtime.availableProcessors() + " cores available for multi-threading");
 
-System.out.println( "Start to load Parameters:" );
+Prefs.setThreads(1); 	// defines the number of threads allowed 
+print("Threads: "+Prefs.getThreads()); // prints thread setting in output
 
+
+System.out.println( "Start to load Parameters:" );
 //select xml
 image_file_directory = System.getProperty( "image_file_directory" );
 merged_xml = System.getProperty( "merged_xml" );

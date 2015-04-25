@@ -94,8 +94,8 @@ int allowed_error_for_ransac = Integer.parseInt( System.getProperty( "allowed_er
 significance = System.getProperty( "significance" );
 
 System.out.println( "registration_algorithm = " + registration_algorithm );
-System.out.println( "reg_1_interest_points_channel = " + reg_1_interest_points_channel );
-System.out.println( "reg_2_interest_points_channel = " + reg_2_interest_points_channel );
+System.out.println( "interest_points_channel_" + channel_1 + " = " + reg_1_interest_points_channel );
+System.out.println( "interest_points_channel_" + channel_2 + " = " + reg_2_interest_points_channel );
 System.out.println( "fix_tiles = " + fix_tiles );
 System.out.println( "map_back_tiles = " + map_back_tiles );
 System.out.println( "transformation = " + transformation_model);

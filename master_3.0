@@ -156,7 +156,7 @@ reg_2_interest_points_channel="\"beads\""				# Dual Channel: Channel 1 contains 
 
 #--- timelapse registration ----------------------------------------------------	
 
-reference_timepoint="35"	# reference timepoint 	
+reference_timepoint="0"	# reference timepoint 	
 
 #--- Dublicate Transformations -------------------------------------------------
 
@@ -315,7 +315,7 @@ xml_merge=${jobs_xml_merge}"/xml_merge.bsh"	# script for merge
 jobs_timelapse=${job_directory}"timelapse_registration" 		# directory for timelapse registration
 timelapse_registration=${jobs_timelapse}"/timelapse_registration.bsh" 	# script for timelapse registration
 
-process_timepoint_timelapse="\"All Timepoints\""
+timelapse_process_timepoints="\"All Timepoints\""
 type_of_registration_timelapse="\"Match against one reference timepoint (no global optimization)\""
 #-------------------------------------------------------------------------------
 # Dublicate transformation

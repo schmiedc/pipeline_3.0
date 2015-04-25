@@ -42,7 +42,3 @@ do
     chmod a+x "$job"
 done
 
-# Obsolet
-# -Ddetection_min_max=$detection_min_max \
-# -Dchannel_1_name=$channel_1_name \
-# -Dchannel_2_name=$channel_2_name \
