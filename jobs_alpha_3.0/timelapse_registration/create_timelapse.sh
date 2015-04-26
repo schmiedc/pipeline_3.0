@@ -29,5 +29,3 @@ echo "$XVFB_RUN -a $Fiji \
 
 chmod a+x "$job"
 
-# obsolet
-#-Dprocess_timepoint_timelapse=$timelapse_process_timepoint \

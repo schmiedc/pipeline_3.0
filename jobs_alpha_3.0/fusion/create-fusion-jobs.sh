@@ -2,7 +2,7 @@
 source /projects/pilot_spim/Christopher/pipeline_3.0/master_3.0
  
 mkdir -p $jobs_fusion
- 
+
 for parallel_timepoints in $parallel_timepoints
  
 do
@@ -17,6 +17,8 @@ do
     	-Dprocess_channel=$process_channel \
     	-Dprocess_illumination=$process_illumination \
     	-Dprocess_angle=$process_angle \
+    	-Dxml_output=$xml_output \
+    	-Dfused_image=$fused_image \
     	-Dminimal_x=$minimal_x \
     	-Dminimal_y=$minimal_y \
     	-Dminimal_z=$minimal_z \
@@ -26,8 +28,13 @@ do
     	-Ddownsample=$downsample \
     	-Dpixel_type=$pixel_type \
     	-Dimglib2_container_fusion=$imglib2_container_fusion \
+    	-Dprocess_views_in_paralell=$process_views_in_paralell \
     	-Dinterpolation=$interpolation \
     	-Dimglib2_data_container=$imglib2_data_container \
+    	-Dsubsampling_factors=$subsampling_factors \
+    	-Dhdf5_chunk_sizes=$hdf5_chunk_sizes \
+    	-Dtimepoints_per_partition=$timepoints_per_partition \
+    	-Dsetups_per_partition=$setups_per_partition \
     		-- --no-splash $fusion" >> "$job"
     chmod a+x "$job"
 done

@@ -1,4 +1,6 @@
-import ij.IJ;
+// Load Fiji dependencies
+import ij.IJ; 		// calls imagej
+import ij.Prefs; 	// calls imagej settings
 import ij.ImagePlus;
 import java.lang.Runtime;
 import java.io.File;
@@ -7,39 +9,47 @@ import java.io.FilenameFilter;
 runtime = Runtime.getRuntime();
 System.out.println(runtime.availableProcessors() + " cores available for multi-threading");
 
-System.out.println( "Start to load Parameters:" );
+//Prefs.setThreads(1); 	// defines the number of threads allowed 
+//print("Threads: "+Prefs.getThreads()); // prints thread setting in output
 
-//select xml
+System.out.println( "Start to load Parameters:" );
+// select xml
+System.out.println( "-------------------------------------------------------" );
+System.out.println( "Load xml file: " );
 image_file_directory = System.getProperty( "image_file_directory" );
 merged_xml = System.getProperty( "merged_xml" );
-parallel_timepoints = System.getProperty( "parallel_timepoints" );
+
+System.out.println( "xml_path=" + image_file_directory + merged_xml + ".xml" );
 
 // Load general Parameters
+System.out.println( "-------------------------------------------------------" );
+System.out.println( "General parameters: " );
+parallel_timepoints = System.getProperty( "parallel_timepoints" );
 process_timepoint = System.getProperty( "process_timepoint" );
 process_channel = System.getProperty( "process_channel" );
 process_illumination = System.getProperty( "process_illumination" );
 process_angle = System.getProperty( "process_angle" ); 
+xml_output = System.getProperty( "xml_output" );
+fused_image = System.getProperty( "fused_image" );
+
+System.out.println( process_timepoint );
+System.out.println( "timepoint = " + parallel_timepoints);
+System.out.println( "channels = " + process_channel );
+System.out.println( "illuminations = " + process_illumination );
+System.out.println( "angles = " + process_angle );
+System.out.println( "xml_output = " + xml_output );
+System.out.println( "fused_image = " + fused_image ); 
 
 //Load bounding box
+System.out.println( "-------------------------------------------------------" );
+System.out.println( "Load bounding box: " );
 minimal_x = System.getProperty( "minimal_x" );
 minimal_y = System.getProperty( "minimal_y" );
 minimal_z = System.getProperty( "minimal_z" );
 maximal_x = System.getProperty( "maximal_x" );
 maximal_y = System.getProperty( "maximal_y" );
 maximal_z = System.getProperty( "maximal_z" );
-
 downsample = System.getProperty( "downsample" );
-pixel_type = System.getProperty( "pixel_type" );
-imglib2_container_fusion = System.getProperty( "imglib2_container_fusion" );
-interpolation = System.getProperty( "interpolation" );
-imglib2_data_container = System.getProperty( "imglib2_data_container" );
-
-// Print parameters into output file
-System.out.println( "xml_path=" + image_file_directory + merged_xml + ".xml" );
-System.out.println( process_timepoint );
-System.out.println( "timepoint = " + parallel_timepoints);
-System.out.println( "illuminations = " + process_illumination );
-System.out.println( "angles=" + process_angle );
 
 System.out.println( "minimal_x = " + minimal_x );
 System.out.println( "minimal_y = " + minimal_y );
@@ -49,27 +59,58 @@ System.out.println( "maximal_y = " + maximal_y );
 System.out.println( "maximal_z = " + maximal_z );
 System.out.println( "downsample = " + downsample );
 
+// Load fusion parameters
+System.out.println( "-------------------------------------------------------" );
+System.out.println( "Fusion parameters: " );
+pixel_type = System.getProperty( "pixel_type" );
+imglib2_container_fusion = System.getProperty( "imglib2_container_fusion" );
+interpolation = System.getProperty( "interpolation" );
+imglib2_data_container = System.getProperty( "imglib2_data_container" );
+process_views_in_paralell = System.getProperty( "process_views_in_paralell" );
+
 System.out.println( "pixel_type = " + pixel_type );
 System.out.println( "imglib2_container_fusion = " + imglib2_container_fusion );
 System.out.println( "interpolation = " + interpolation );
 System.out.println( "imglib2_data_container = " + imglib2_data_container );
+System.out.println( "process_views_in_paralell = " + process_views_in_paralell );
+
+// Load hdf5 parameters
+System.out.println( "-------------------------------------------------------" );
+System.out.println( "hdf5 parameters: " );
+
+subsampling_factors = System.getProperty( "subsampling_factors");
+hdf5_chunk_sizes = System.getProperty( "hdf5_chunk_sizes" );
+timepoints_per_partition = System.getProperty( "timepoints_per_partition" );
+setups_per_partition = System.getProperty( "setups_per_partition" );
+run_only_job_number = System.getProperty( "parallel_timepoints" );
+
+System.out.println( "subsampling_factors = " + subsampling_factors );
+System.out.println( "hdf5_chunk_sizes = " + hdf5_chunk_sizes );
+System.out.println( "timepoints_per_partition = " + timepoints_per_partition );
+System.out.println( "setups_per_partition = " + setups_per_partition );
+System.out.println( "run_only_job_number = " + run_only_job_number );
+
+	
+//activate cluster processing
+System.out.println( "=======================================================" );
+IJ.run("Toggle Cluster Processing", "display_cluster");
+System.out.println( "Activated Cluster Processing" );
 
 // Execute Fiji Plugin
 System.out.println( "=======================================================" );
 System.out.println( "Starting Fusion" );
-
 IJ.run("Fuse/Deconvolve Dataset", 
 	"select_xml=" + image_file_directory + merged_xml + ".xml " +
-	"unique_id=fused" + parallel_timepoints + " " + 
 	"process_angle=[" + process_angle + "] " +	
         "process_illumination=[" + process_illumination + "] " +
-        "process_timepoint=[" + process_timepoint + "] " +
-	"processing_timepoint=[Timepoint " + parallel_timepoints + "] " + 
-	"xml_output=[Do not process on cluster] " +
-	"processing_timepoint=[Timepoint "+ parallel_timepoints +"] " +
+        "process_timepoint=[All Timepoints] " +
+//   	"process_timepoint=[" + process_timepoint + "] " +
+	"xml_output=[" + xml_output + "] " +
+	"unique_id=fused_" + parallel_timepoints + " " + 
+//	"processing_timepoint=[Timepoint "+ parallel_timepoints +"] " +
 	"type_of_image_fusion=[Weighted-average fusion] " +
 	"bounding_box=[Define manually] " +
-	"fused_image=[Save as TIFF stack] " + // works but does not create xml file
+	"fused_image=[" + fused_image + "] " + 
 	"minimal_x=" + minimal_x + " " +
 	"minimal_y=" + minimal_y + " " +
 	"minimal_z=" + minimal_z + " " +
@@ -79,11 +120,20 @@ IJ.run("Fuse/Deconvolve Dataset",
 	"downsample=" + downsample + " " +
 	"pixel_type=[" + pixel_type + "] " + 
 	"imglib2_container=" + imglib2_container_fusion + " " + 
-	"process_views_in_paralell=All " +
+	"process_views_in_paralell=" + process_views_in_paralell + " " +
 	"interpolation=[" + interpolation + "] " + 
-	"blend " +
-	"content-based " +
-	"output_file_directory=" + image_file_directory );
+//	"blend " +
+//	"content-based " +
+	"manual_mipmap_setup " +
+	"subsampling_factors=[" + subsampling_factors + "] " +
+	"hdf5_chunk_sizes=[" + hdf5_chunk_sizes + "] " +
+	"split_hdf5 " +
+	"timepoints_per_partition=" + timepoints_per_partition + " " +
+	"setups_per_partition=" + setups_per_partition + " " +
+//	"run_only_job_number=" + run_only_job_number + " " +
+	"use_deflate_compression");
+	
+//	"output_file_directory=" + image_file_directory );
 
 /* shutdown */
 runtime.exit(0);

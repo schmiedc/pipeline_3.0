@@ -132,7 +132,6 @@ reg_process_illumination="\"All illuminations\""
 reg_process_angle="\"All angles\""  
 
 # Channel Settings:
-
 reg_process_channel="\"All channels\""  			# Single Channel
 # reg_process_channel="\"Single channel (Select from List)\""  # Dual Channel: 1 Channel contains the beads
 reg_processing_channel="\"channel 1\""			# Dual Channel: 1 Channel contains the beads
@@ -170,7 +169,9 @@ target_dublication="0"
 process_timepoint="\"Single Timepoint (Select from List)\""   			
 process_channel="\"All channels\""                                		 
 process_illumination="\"All illuminations\""  					
-process_angle="\"All angles\""  
+process_angle="\"All angles\""
+xml_output="\"Save every XML with user-provided unique id\"" # "\"Do not process on cluster\""
+fused_image="\"Append to current XML Project\"" # "\"Save as TIFF stack\""
 
 #--- Multi-view content based fusion -------------------------------------------
 
@@ -180,7 +181,7 @@ minimal_z="-316"
 maximal_x="1060"
 maximal_y="1852"
 maximal_z="484"
-downsample="2"
+downsample="1"
 
 #--- External transformation for multi-view deconvolution----------------------- 
 # Caution! Make copy of .xml file before application of transformation
@@ -245,7 +246,11 @@ split=${jobs_split}"/split.bsh" 				# script
 #===============================================================================
 # Multiview Reconstruction:
 #===============================================================================
-     
+#--- General settings ----------------------------------------------------------
+subsampling_factors="\"{ {1,1,1}, {2,2,1}, {4,4,1}, {8,8,1} }\""
+hdf5_chunk_sizes="\"{ {32,32,4}, {32,32,4}, {16,16,16}, {16,16,16} }\""
+timepoints_per_partition="1"
+setups_per_partition="0"
 #-------------------------------------------------------------------------------
 # Define dataset: General
 #-------------------------------------------------------------------------------
@@ -269,10 +274,6 @@ resave_angle="\"All angles\""
 resave_channel="\"All channels\""
 resave_illumination="\"All illuminations\""
 resave_timepoint="\"All Timepoints\""
-subsampling_factors="\"{ {1,1,1}, {2,2,1}, {4,4,1}, {8,8,1} }\""
-hdf5_chunk_sizes="\"{ {32,32,4}, {32,32,4}, {16,16,16}, {16,16,16} }\""
-timepoints_per_partition="1"
-setups_per_partition="0"
 #------------------------------------------------------------------------------- 
 #		Detect Interest Points for Registration 
 #		Register Dataset based on Interest Points
@@ -332,9 +333,6 @@ duplicate_which_transformations="\"Replace all transformations\""
 #
 # Weighted-average fusion
 # Define bounding box manually
-# Save every XML with user-provided unique id]
-# Append to current XML Project
-# process_views_in_paralell=All
 # with blending
 # with content-based fusion
 #-------------------------------------------------------------------------------
@@ -343,6 +341,7 @@ fusion=${jobs_fusion}"/fusion.bsh" 	# script for content based fusion
 
 pixel_type="\"16-bit unsigned integer\""
 imglib2_container_fusion="\"ArrayImg\""
+process_views_in_paralell="\"All\""
 interpolation="\"Linear Interpolation\""
 imglib2_data_container="\"ArrayImg (faster)\""
 #-------------------------------------------------------------------------------
