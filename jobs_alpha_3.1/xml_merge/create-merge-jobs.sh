@@ -1,5 +1,5 @@
 #!/bin/bash
-source /projects/pilot_spim/Christopher/pipeline_3.0/master_3.0
+source /projects/pilot_spim/Christopher/pipeline_3.0/master_3.1
  
 job="$jobs_xml_merge/merge.job"
 echo $job
