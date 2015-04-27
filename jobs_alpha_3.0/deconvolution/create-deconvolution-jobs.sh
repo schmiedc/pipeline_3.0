@@ -29,7 +29,7 @@ do
 	-Dcompute=$compute \
 	-Dpsf_estimation=$psf_estimation \
 	-Ddeco_output_file_directory=$deco_output_file_directory \
-	-Ddirectory_cuda=$directory_cuda \
+	-Dcuda_directory=$cuda_directory \
 	-Ddetections_to_extract_psf_for_channel_0=$detections_to_extract_psf_for_channel_0 \
 	-Ddetections_to_extract_psf_for_channel_1=$detections_to_extract_psf_for_channel_1 \
 	-Dpsf_size_x=$psf_size_x \
