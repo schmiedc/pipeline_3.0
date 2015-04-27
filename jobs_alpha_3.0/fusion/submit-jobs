@@ -1,6 +1,0 @@
-#!/bin/bash
- 
-for file in `ls ${1} | grep ".job$"`
-do
-    bsub -q short -n 6 -W 00:60 -R rusage[mem=50000] -R span[hosts=1] -o "out.%J" -e "err.%J" ${1}/$file
-done
