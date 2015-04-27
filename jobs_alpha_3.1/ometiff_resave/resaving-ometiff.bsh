@@ -1,0 +1,21 @@
+import ij.IJ;
+import ij.ImagePlus;
+import java.lang.Runtime;
+import java.io.File;
+import java.io.FilenameFilter;
+
+runtime = Runtime.getRuntime();
+
+dir = System.getProperty( "dir" );
+int timepoint = Integer.parseInt( System.getProperty( "timepoint" ) );
+angle = System.getProperty( "angle" );
+int pad = Integer.parseInt( System.getProperty( "pad" ) );
+
+//resave as tif
+
+IJ.open( dir + "spim_TL" + IJ.pad( timepoint, pad ) + "_Angle" + angle + ".ome.tiff" );
+IJ.saveAs("Tiff", dir + "spim_TL" + IJ.pad( timepoint, pad ) + "_Angle" + angle + ".tif");
+
+/* shutdown */
+runtime.exit(0);
+
