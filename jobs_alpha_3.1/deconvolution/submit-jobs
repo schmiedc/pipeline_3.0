@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for file in `ls ${1} | grep ".job$"`
+do
+	# for GPU processing 
+bsub -q gpu -n 7 -R span[hosts=1] -R rusage[mem=50000] -o "out.%J" -e "err.%J" ${1}/$file
+	
+	# for CPU processing
+	#bsub -q medium -n 12 -R rusage[mem=117000] -R span[hosts=1] -o "out.%J" -e "err.%J" ${1}/$file
+done
