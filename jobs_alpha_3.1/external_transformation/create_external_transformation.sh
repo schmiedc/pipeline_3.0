@@ -1,5 +1,5 @@
 #!/bin/bash
-source /projects/pilot_spim/Christopher/pipeline_3.0/master_3.1
+source /projects/tomancak_lightsheet/Christopher/pipeline_3.0/master_3.1
 
 mkdir -p $jobs_external_transformation	
 	
@@ -13,6 +13,8 @@ mkdir -p $jobs_external_transformation
 		-Dtransform_channel=$transform_channel \
 		-Dtransform_illumination=$transform_illumination \
 		-Dtransform_timepoint=$transform_timepoint \
+		-Dchannel_1=$channel_1 \
+		-Dchannel_2=$channel_2 \
 		-Dtransformation=$transformation \
 		-Dapply_transformation=$apply_transformation \
 		-Ddefine_mode_transform=$define_mode_transform \

@@ -24,6 +24,8 @@ process_timepoint = System.getProperty( "process_timepoint" );
 process_channel = System.getProperty( "process_channel" );
 process_illumination = System.getProperty( "process_illumination" );
 process_angle = System.getProperty( "process_angle" ); 
+channel_1 = System.getProperty( "channel_1" );
+channel_2 = System.getProperty( "channel_2" );
 
 System.out.println( "-------------------------------------------------------" );
 System.out.println( "General parameters: " );
@@ -32,6 +34,8 @@ System.out.println( "process_timepoints = " + process_timepoint );
 System.out.println( "process_channel = " + process_channel );
 System.out.println( "process_illumination = " + process_illumination );
 System.out.println( "process_angle = " + process_angle );
+System.out.println( "channel_1 = " + channel_1 ); 
+System.out.println( "channel_2 = " + channel_2 ); 
 
 // Load bounding box
 minimal_x_deco = System.getProperty( "minimal_x_deco" );
@@ -60,8 +64,8 @@ compute = System.getProperty( "compute" );
 psf_estimation = System.getProperty( "psf_estimation" );
 iterations = System.getProperty( "iterations" );
 deco_output_file_directory = System.getProperty( "deco_output_file_directory" );
-detections_to_extract_psf_for_channel_0 = System.getProperty( "detections_to_extract_psf_for_channel_0" );
-detections_to_extract_psf_for_channel_1 = System.getProperty( " detections_to_extract_psf_for_channel_1" );
+detections_to_extract_psf_for_channel_1 = System.getProperty( "detections_to_extract_psf_for_channel_1" );
+detections_to_extract_psf_for_channel_2 = System.getProperty( " detections_to_extract_psf_for_channel_2" );
 System.out.println( "-------------------------------------------------------" );
 System.out.println( "Deconvolution settings: " );
 System.out.println( "imglib2_container = " + imglib2_container_deco );
@@ -72,8 +76,8 @@ System.out.println( "compute = " + compute );
 System.out.println( "psf_estimation = " + psf_estimation );
 System.out.println( "number_of_iterations = " + iterations );
 System.out.println( "deco_output_file_directory = " + deco_output_file_directory );
-System.out.println( "detections_to_extract_psf_for_channel_0 = " + detections_to_extract_psf_for_channel_0 );
-System.out.println( "detections_to_extract_psf_for_channel_1 = " + detections_to_extract_psf_for_channel_1 );
+System.out.println( "detections_to_extract_psf_for_channel_" + channel_1 + " = " + detections_to_extract_psf_for_channel_1 );
+System.out.println( "detections_to_extract_psf_for_channel_" + channel_2 + " = " + detections_to_extract_psf_for_channel_2 );
 
 // Search for CUDA
 directory_cuda = System.getProperty( "directory_cuda" );
@@ -125,9 +129,8 @@ IJ.run("Fuse/Deconvolve Dataset",
 	"psf_estimation=[" + psf_estimation + "] " +
 	"psf_display=[Do not show PSFs] " +
 	"output_file_directory=" + deco_output_file_directory + " " +
-	"detections_to_extract_psf_for_channel_0=" + detections_to_extract_psf_for_channel_0 + " " +
-	"detections_to_extract_psf_for_channel_1=" + detections_to_extract_psf_for_channel_1 + " " + // Dual Channel
-	"psf_size_x=" + psf_size_x + " " +
+	"detections_to_extract_psf_for_channel_" + channel_1 + "=" + detections_to_extract_psf_for_channel_1 + " " +
+//	"detections_to_extract_psf_for_channel_" + channel_2 + "=" + detections_to_extract_psf_for_channel_2 + " " +	"psf_size_x=" + psf_size_x + " " +
 	"psf_size_y=" + psf_size_y + " " +
 	"psf_size_z=" + psf_size_z + "");
 
