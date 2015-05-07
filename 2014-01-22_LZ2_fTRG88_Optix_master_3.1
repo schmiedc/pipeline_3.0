@@ -19,19 +19,19 @@
 #------------------------------------------------------------------------------- 
 # Data set description 
 #
-# 	Dataset: 2015-02-23_LZ2_fTRG513
+# 	Dataset: 2014-01-22_LZ2_fTRG88_Optix
 #	  Owner: Christopher Schmied	
-#  	Created: 2015-04-28
+#  	Created: 2015-04-29
 #
 # --- Data directory -----------------------------------------------------------
-image_file_directory="/projects/tomancak_lightsheet/fTRG_project/2015-02-23_LZ2_fTRG513/"   
+image_file_directory="/projects/tomancak_lightsheet/fTRG_project/2015-01-22_LZ2_fTRG88_Optix/"   
 
 # --- jobs directory -----------------------------------------------------------
 job_directory="/projects/tomancak_lightsheet/Christopher/pipeline_3.0/jobs_alpha_3.1/" 	
 
 # --- Number of timepoints in dataset ------------------------------------------
 # IMPORTANT for processing .czi files timepoints always start with 0
-parallel_timepoints="`seq 0 74`"  # format: "`seq 1 3`" 
+parallel_timepoints="`seq 0 68`"  # format: "`seq 1 3`" 
 
 #===============================================================================
 # Preprocessing
@@ -68,9 +68,9 @@ target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of r
 #	4) Multiview Fusion
 #===============================================================================
 
-xml_filename="\"hdf5_fTRG513\""		# filename of xml file without ".xml"
+xml_filename="\"hdf5_Optix\""		# filename of xml file without ".xml"
 
-merged_xml="\"hdf5_fTRG513_merge\"" 	# filename of merged xml without ".xml"
+merged_xml="\"hdf5_Optix_merge\"" 	# filename of merged xml without ".xml"
 
 channel_1="green"		# general setting for channel names 
 channel_2="red"
@@ -101,7 +101,7 @@ channels="0,1"							# for dual channel give spim_TL0{tt}_Angle{a}_Channel{c}.ti
 # Usable for 5 view datasets 1 channel
 # Comment out line: "channel_2=" define_czi.bsh if single channel
 
-first_czi="2015-02-23_LZ2_fTRG513_2.czi"	
+first_czi="2014-01-22_LZ2_fTRG88_Optix_2.czi"	
 angle_1="0"
 angle_2="72"
 angle_3="144"
@@ -140,9 +140,9 @@ reg_processing_channel="\"channel 1\""			# Dual Channel: 1 Channel contains the 
 
 label_interest_points="\"beads\""
 type_of_detection="\"Difference-of-Mean (Integral image based)\"" # Difference
-reg_1_radius_1="3"							  # of Mean 
-reg_1_radius_2="5"
-reg_1_threshold="0.015"
+reg_1_radius_1="2"							  # of Mean 
+reg_1_radius_2="3"
+reg_1_threshold="0.005"
 
 #--- Register Dataset based on Interest Points ---------------------------------
 
@@ -175,12 +175,12 @@ fused_image="\"Append to current XML Project\"" # "\"Save as TIFF stack\""
 
 #--- Multi-view content based fusion -------------------------------------------
 
-minimal_x="160" 	# Cropping parameters of full resolution
-minimal_y="12"
-minimal_z="-372"
-maximal_x="1020"
-maximal_y="1864"
-maximal_z="468"
+minimal_x="207" 	# Cropping parameters of full resolution
+minimal_y="14"
+minimal_z="-379"
+maximal_x="1086"
+maximal_y="1927"
+maximal_z="520"
 downsample="1"
 
 #--- External transformation for multi-view deconvolution----------------------- 
@@ -223,7 +223,7 @@ psf_size_z="25"
 #-------------------------------------------------------------------------------
 XVFB_RUN="/sw/bin/xvfb-run"				 # virtual frame buffer
 #Fiji="/sw/users/schmied/packages/2015-03-19_Fiji.app.cuda/ImageJ-linux64" 		# old Fiji
-Fiji="/sw/users/schmied/packages/2015-04-25_Fiji.app.cuda/ImageJ-linux64"			# New Fiji
+Fiji="/sw/users/schmied/packages/2015-05-07_Fiji.app.cuda/ImageJ-linux64"			# New Fiji
 
 
 Fiji_resave="/sw/users/schmied/lifeline/Fiji.app.lifeline2/ImageJ-linux64" 	# Fiji that works for resaving

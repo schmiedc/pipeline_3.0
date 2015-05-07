@@ -105,7 +105,7 @@ IJ.run("Fuse/Deconvolve Dataset",
 	"process_timepoint=[" + process_timepoint + "] " +
 	"processing_timepoint=[Timepoint " + parallel_timepoints + "] " + 
 	"type_of_image_fusion=[Multi-view deconvolution] " +
-	"bounding_box=[Define manually] " +
+	"bounding_box=[Define Manually] " +
 	"fused_image=[Save as TIFF stack] " +
 	"minimal_x=" + minimal_x_deco + " " +
 	"minimal_y=" + minimal_y_deco + " " +

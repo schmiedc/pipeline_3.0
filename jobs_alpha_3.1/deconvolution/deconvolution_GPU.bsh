@@ -108,7 +108,7 @@ IJ.run("Fuse/Deconvolve Dataset",
 	"processing_timepoint=[Timepoint " + parallel_timepoints + "] " +
 //	"processing_timepoint=[Timepoint 0] " + 
 	"type_of_image_fusion=[Multi-view deconvolution] " +
-	"bounding_box=[Define manually] " +
+	"bounding_box=[Define Manually] " +
 	"fused_image=[Save as TIFF stack] " +
 	"minimal_x=" + minimal_x_deco + " " +
 	"minimal_y=" + minimal_y_deco + " " +
@@ -133,7 +133,7 @@ IJ.run("Fuse/Deconvolve Dataset",
 	"select_native_library_for_cudafourierconvolution=libFourierConvolutionCUDALib.so " + 
 	"gpu_1 " +
 //	"gpu_2 " + 
-	"detections_to_extract_psf_for_channel_0=" + detections_to_extract_psf_for_channel_0 + " " +
+	"detections_to_extract_psf_for_channel_" + channel_1 + "=" + detections_to_extract_psf_for_channel_0 + " " +
 //	"detections_to_extract_psf_for_channel_1=" + detections_to_extract_psf_for_channel_1 + " " + // Dual Channel
 	"psf_size_x=" + psf_size_x + " " +
 	"psf_size_y=" + psf_size_y + " " +
