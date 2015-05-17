@@ -19,19 +19,20 @@
 #------------------------------------------------------------------------------- 
 # Data set description 
 #
-# 	Dataset: 2014-01-22_LZ2_fTRG88_Optix
+# 	Dataset: fTRG155_SoxN
 #	  Owner: Christopher Schmied	
-#  	Created: 2015-04-29
+#  	Created: 2015-05-07
 #
 # --- Data directory -----------------------------------------------------------
-image_file_directory="/projects/tomancak_lightsheet/fTRG_project/2015-01-22_LZ2_fTRG88_Optix/"   
+#image_file_directory="/projects/tomancak_lightsheet/fTRG_project/2015-01-21_LZ2_fTRG155_SoxN/" 
+image_file_directory="/projects/tomancak_lightsheet/fTRG_project/2015-01-21_LZ2_fTRG155_SoxN/deconvo/" 
 
 # --- jobs directory -----------------------------------------------------------
 job_directory="/projects/tomancak_lightsheet/Christopher/pipeline_3.0/jobs_alpha_3.1/" 	
 
 # --- Number of timepoints in dataset ------------------------------------------
 # IMPORTANT for processing .czi files timepoints always start with 0
-parallel_timepoints="`seq 0 68`"  # format: "`seq 1 3`" 
+parallel_timepoints="`seq 0 87`"  # format: "`seq 1 3`" 
 
 #===============================================================================
 # Preprocessing
@@ -67,20 +68,19 @@ target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of r
 #	3) Detection and Registration of Interest Points
 #	4) Multiview Fusion
 #===============================================================================
+#xml_filename="\"hdf5_SoxN\""		# filename of xml file without ".xml"
+xml_filename="\"D_SoxN\""
+merged_xml="\"hdf5_SoxN_merged\"" 	# filename of merged xml without ".xml"
 
-xml_filename="\"hdf5_Optix\""		# filename of xml file without ".xml"
-
-merged_xml="\"hdf5_Optix_merge\"" 	# filename of merged xml without ".xml"
-
-channel_1="green"		# general setting for channel names 
-channel_2="red"
+channel_1="0"		# general setting for channel names 
+channel_2="1"
 
 #-------------------------------------------------------------------------------
 # Define dataset: General
 #-------------------------------------------------------------------------------
 
-pixel_distance_x="0.28590" 	# Manual calibration x
-pixel_distance_y="0.28590" 	# Manual calibration y
+pixel_distance_x="0.30496" 	# Manual calibration x
+pixel_distance_y="0.30496" 	# Manual calibration y
 pixel_distance_z="1.50000" 	# Manual calibration z
 pixel_unit="um"			# unit of manual calibration
 
@@ -92,16 +92,16 @@ multiple_timepoints="\"YES (one file per time-point)\""    	# or NO (one time-po
 multiple_channels="\"YES (one file per channel)\""			# or "\"NO (one channel)\""
 multiple_illumination_directions="\"NO (one illumination direction)\"" 	# or YES (one file per illumination direction)
 multiple_angles="\"YES (one file per angle)\"" 			# or NO (one angle)
-timepoints="1-2"			# Timepoints format: "1-2"
+timepoints="1-87"			# Timepoints format: "1-2"
 acquisition_angles="1,2,3,4,5"		# angles format: "1,2,3" or "1-3"
 image_file_pattern="spim_TL{tt}_Angle{a}_Channel{c}.tif"	# pattern of spim for padded zeros use tt 
-channels="0,1"							# for dual channel give spim_TL0{tt}_Angle{a}_Channel{c}.tif
+channels="0"							# for dual channel give spim_TL0{tt}_Angle{a}_Channel{c}.tif
 						
 #--- Define dataset: Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats) ------------
 # Usable for 5 view datasets 1 channel
 # Comment out line: "channel_2=" define_czi.bsh if single channel
 
-first_czi="2014-01-22_LZ2_fTRG88_Optix_2.czi"	
+first_czi="2015-02-23_LZ2_fTRG513_2.czi"	
 angle_1="0"
 angle_2="72"
 angle_3="144"
@@ -140,9 +140,9 @@ reg_processing_channel="\"channel 1\""			# Dual Channel: 1 Channel contains the 
 
 label_interest_points="\"beads\""
 type_of_detection="\"Difference-of-Mean (Integral image based)\"" # Difference
-reg_1_radius_1="3"							  # of Mean 
-reg_1_radius_2="5"
-reg_1_threshold="0.015"
+reg_1_radius_1="2"							  # of Mean 
+reg_1_radius_2="3"
+reg_1_threshold="0.005"
 
 #--- Register Dataset based on Interest Points ---------------------------------
 
@@ -155,7 +155,7 @@ reg_2_interest_points_channel="\"beads\""				# Dual Channel: Channel 1 contains 
 
 #--- timelapse registration ----------------------------------------------------	
 
-reference_timepoint="0"	# reference timepoint 	
+reference_timepoint="40"	# reference timepoint 	
 
 #--- Dublicate Transformations -------------------------------------------------
 
@@ -175,13 +175,13 @@ fused_image="\"Append to current XML Project\"" # "\"Save as TIFF stack\""
 
 #--- Multi-view content based fusion -------------------------------------------
 
-minimal_x="207" 	# Cropping parameters of full resolution
-minimal_y="14"
-minimal_z="-379"
-maximal_x="1086"
-maximal_y="1927"
-maximal_z="520"
-downsample="1"
+minimal_x="180" 	# Cropping parameters of full resolution
+minimal_y="36"
+minimal_z="-276"
+maximal_x="996"
+maximal_y="1912"
+maximal_z="432"
+downsample="2"
 
 #--- External transformation for multi-view deconvolution----------------------- 
 # Caution! Make copy of .xml file before application of transformation
@@ -200,17 +200,17 @@ deconvolution=${jobs_deconvolution}"/deconvolution_GPU.bsh"		# script for GPU de
 
 deco_output_file_directory=${image_file_directory}
 
-minimal_x_deco="80" 	# Cropping parameters adjusted for transformation
-minimal_y_deco="6"
-minimal_z_deco="-186"
-maximal_x_deco="510"
-maximal_y_deco="932"
-maximal_z_deco="234"
+minimal_x_deco="90" 	# Cropping parameters adjusted for transformation
+minimal_y_deco="18"
+minimal_z_deco="-138"
+maximal_x_deco="498"
+maximal_y_deco="956"
+maximal_z_deco="216"
 	
 iterations="20"						# Number of iterations
 
-detections_to_extract_psf_for_channel_0="\"beads\""	# type of detection "\"[Same PSF as channel 1]\""
-detections_to_extract_psf_for_channel_1="\"beads\""
+detections_to_extract_psf_for_channel_1="\"beads\""	# type of detection "\"[Same PSF as channel 1]\""
+detections_to_extract_psf_for_channel_2="\"beads\""
 psf_size_x="19"						# Dimensions of PSF
 psf_size_y="19"
 psf_size_z="25"
@@ -223,11 +223,12 @@ psf_size_z="25"
 #-------------------------------------------------------------------------------
 XVFB_RUN="/sw/bin/xvfb-run"				 # virtual frame buffer
 #Fiji="/sw/users/schmied/packages/2015-03-19_Fiji.app.cuda/ImageJ-linux64" 		# old Fiji
-Fiji="/sw/users/schmied/packages/2015-04-25_Fiji.app.cuda/ImageJ-linux64"			# New Fiji
-
+Fiji="/sw/users/schmied/packages/2015-05-07_Fiji.app.cuda/ImageJ-linux64"			# New Fiji
+#/sw/users/schmied/packages/2015-04-25_Fiji.app.cuda/ImageJ-linux64
+#/sw/users/schmied/packages/2015-03-19_Fiji.app.cuda/ImageJ-linux64
 
 Fiji_resave="/sw/users/schmied/lifeline/Fiji.app.lifeline2/ImageJ-linux64" 	# Fiji that works for resaving
-Fiji_Deconvolution=${Fiji}		# Fiji that works for deconvolution
+Fiji_Deconvolution=${Fiji}	# Fiji that works for deconvolution
 #-------------------------------------------------------------------------------
 # Pre-processing 
 #-------------------------------------------------------------------------------
@@ -363,7 +364,7 @@ define_mode_transform="\"Matrix\""
 #-------------------------------------------------------------------------------
 # Multi-view deconvolution 
 #
-# bounding_box=[Define manually]
+# bounding_box=[Define Manually]
 # fused_image=[Save as TIFF stack]
 # use_tikhonov_regularization
 # Do not show PSFs
@@ -377,4 +378,4 @@ Tikhonov_parameter="0.0006"
 compute="\"in 512x512x512 blocks\""
 compute_on="\"GPU (Nvidia CUDA via JNA)\""
 psf_estimation="\"Extract from beads\""
-cuda_directory="/sw/users/schmied/packages/2015-04-25_Fiji.app.cuda/lib/"
+cuda_directory="/sw/users/schmied/packages/2015-05-07_Fiji.app.cuda/lib/"

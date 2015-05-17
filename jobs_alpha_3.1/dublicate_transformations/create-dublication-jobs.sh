@@ -1,5 +1,5 @@
 #!/bin/bash
-source /projects/pilot_spim/Christopher/pipeline_3.0/master_3.1
+source ../../master_3.1
 
 mkdir -p $jobs_dublication
 

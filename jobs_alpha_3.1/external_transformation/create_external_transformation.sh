@@ -1,5 +1,5 @@
 #!/bin/bash
-source /projects/tomancak_lightsheet/Christopher/pipeline_3.0/master_3.1
+source ../../master_3.1
 
 mkdir -p $jobs_external_transformation	
 	

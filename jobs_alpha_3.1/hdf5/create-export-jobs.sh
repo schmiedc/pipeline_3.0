@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # master file path
-source /projects/pilot_spim/Christopher/pipeline_3.0/master_3.1
+source ../../master_3.1
 
 # calculation of hdf5 partitions
 num_timepoints=`echo ${parallel_timepoints} | wc -w` 	# counts number of 
