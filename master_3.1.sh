@@ -13,7 +13,7 @@
 #		Channel name cannot contain spaces
 #      Version: 3.0
 #      CREATED: 2014-04-02
-#     REVISION: 2015-03-26
+#     REVISION: 2015-05-21
 #===============================================================================
 
 #------------------------------------------------------------------------------- 
@@ -186,6 +186,21 @@ maximal_z="498"
 downsample="1"
 
 #--- Define xml on content based fusion fusion output and save as xml ----------
+# for pixel size take downsampling into account!
+fused_file_directory=${image_file_directory}"fused/"
+
+fused_image_file_pattern="TP{t}_Chgreen_Ill0_Ang0,72,144,216,288.tif"	# pattern of spim for padded zeros use tt 
+fused_xml="\"fused_Stock68\""
+fused_timepoints="0-1"			# Timepoints format: "1-2"
+fused_pixel_distance_x="1.150212" 	# Manual calibration x
+fused_pixel_distance_y="1.150212" 	# Manual calibration y
+fused_pixel_distance_z="1.150212" 	# Manual calibration z
+fused_pixel_unit="um"			# unit of manual calibration
+
+fused_hdf5_xml="\"hdf5_fused_Stock68\""
+
+output_jobs_export=${job_directory}"output_hdf5"	# directory for hdf5 export
+output_export=${output_jobs_export}"/export.bsh" 	# script for hdf5 export
 
 #--- External transformation for multi-view deconvolution----------------------- 
 # Caution! Make copy of .xml file before application of transformation
@@ -202,7 +217,7 @@ jobs_deconvolution=${job_directory}"deconvolution"		# directory for deconvolutio
 # deconvolution=${jobs_deconvolution}"/deconvolution_CPU.bsh"		# script for CPU deconvolution
 deconvolution=${jobs_deconvolution}"/deconvolution_GPU.bsh"		# script for GPU deconvolution
 
-deco_output_file_directory=${image_file_directory}
+deco_output_file_directory=${image_file_directory} # output directory: make sure it exists!
 
 minimal_x_deco="64" 	# Cropping parameters adjusted for transformation
 minimal_y_deco="-6"
@@ -220,6 +235,9 @@ psf_size_y="19"
 psf_size_z="25"
 
 #--- Define xml for deconvolution output and resave into hdf5 ------------------
+# for pixel size take downsampling into account!
+
+
 
 #===============================================================================
 # Directories for scripts and advanced settings for processing 
@@ -352,6 +370,19 @@ imglib2_container_fusion="\"ArrayImg\""
 process_views_in_paralell="\"All\""
 interpolation="\"Linear Interpolation\""
 imglib2_data_container="\"ArrayImg (faster)\""
+
+#--- Define xml on content based fusion fusion output and save as xml ----------
+
+fused_multiple_timepoints="\"YES (one file per time-point)\""   	# or NO (one time-point) 
+fused_multiple_channels="\"NO (one channel)\""					# or \"YES (one file per channel)\""
+fused_multiple_illumination_directions="\"NO (one illumination direction)\"" 	# or YES (one file per illumination direction)
+fused_multiple_angles="\"NO (one angle)\"" 					# or NO (one angle)
+fused_channels="0,1"								# for dual channel 	
+fused_jobs_xml=${job_directory}"output_define_xml"		# directory for define data set
+fused_xml_script=${fused_jobs_xml}"/define_fusion.bsh" # script for defining .czi data
+fused_type_of_dataset="\"Image Stacks (ImageJ Opener)\"" 		# raw fileformat
+fused_imglib_container="\"ArrayImg (faster)\""			
+
 #-------------------------------------------------------------------------------
 # External transformation
 #
@@ -386,3 +417,5 @@ compute="\"in 512x512x512 blocks\""
 compute_on="\"GPU (Nvidia CUDA via JNA)\""
 psf_estimation="\"Extract from beads\""
 cuda_directory="/sw/users/schmied/packages/2015-05-21_Fiji.app.cuda/lib/"
+
+#--- Define xml for deconvolution output and resave into hdf5 ------------------
