@@ -1,9 +1,9 @@
 #!/bin/bash
-source ../../master_3.1
+source ../../master_3.1.sh
 
-mkdir -p $jobs_external_transformation	
-	
-	job="$jobs_external_transformation/external_transformation.job"
+mkdir -p $jobs_external_transformation
+
+job="$jobs_external_transformation/external_transformation.job"
 	echo $job
 	echo "#!/bin/bash" > "$job"
 	echo "$XVFB_RUN -a $Fiji \

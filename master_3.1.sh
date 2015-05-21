@@ -19,19 +19,19 @@
 #------------------------------------------------------------------------------- 
 # Data set description 
 #
-# 	Dataset: 2015-04-01_LZ2_Stock46
+# 	Dataset: Test based on 2015-02-21_LZ1_Stock68_3
 #	  Owner: Christopher Schmied	
-#  	Created: 2015-04-28
+#  	Created: 2015-05-21
 #
 # --- Data directory -----------------------------------------------------------
-image_file_directory="/projects/pilot_spim/Christopher/2015-04-01_LZ2_Stock46/"   
+image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/czi/"   
 
 # --- jobs directory -----------------------------------------------------------
 job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.1/" 	
 
 # --- Number of timepoints in dataset ------------------------------------------
 # IMPORTANT for processing .czi files timepoints always start with 0
-parallel_timepoints="`seq 0 71`"  # format: "`seq 1 3`" 
+parallel_timepoints="`seq 0 1`"  # format: "`seq 1 3`" 
 
 #===============================================================================
 # Preprocessing
@@ -68,9 +68,11 @@ target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of r
 #	4) Multiview Fusion
 #===============================================================================
 
-xml_filename="\"hdf5_Dpseu_GFP_C02_VK33\""		# filename of xml file without ".xml"
+first_xml_filename="\"Stock68\""           # xml filename for czi or tif dataset without ".xml"
 
-merged_xml="\"hdf5_Dpseu_GFP_C02_VK33_merge\"" 	# filename of merged xml without ".xml"
+hdf5_xml_filename="\"hdf5_Stock68\""		# xml filename for resaving into hdf5 dataset without ".xml"
+
+merged_xml="\"hdf5_Stock68_merge\"" 	# filename of merged xml without ".xml"
 
 channel_1="green"		# general setting for channel names 
 channel_2="red"
@@ -79,8 +81,8 @@ channel_2="red"
 # Define dataset: General
 #-------------------------------------------------------------------------------
 
-pixel_distance_x="0.28590" 	# Manual calibration x
-pixel_distance_y="0.28590" 	# Manual calibration y
+pixel_distance_x="0.2875535786151886" 	# Manual calibration x
+pixel_distance_y="0.2875535786151886" 	# Manual calibration y
 pixel_distance_z="1.50000" 	# Manual calibration z
 pixel_unit="um"			# unit of manual calibration
 
@@ -101,7 +103,7 @@ channels="0,1"							# for dual channel give spim_TL0{tt}_Angle{a}_Channel{c}.ti
 # Usable for 5 view datasets 1 channel
 # Comment out line: "channel_2=" define_czi.bsh if single channel
 
-first_czi="2015-04-01_LZ2_Stock46.czi"	
+first_czi="2015-02-21_LZ1_Stock68_3.czi"	
 angle_1="0"
 angle_2="72"
 angle_3="144"
@@ -140,9 +142,9 @@ reg_processing_channel="\"green\""			# Dual Channel: 1 Channel contains the bead
 
 label_interest_points="\"beads\""
 type_of_detection="\"Difference-of-Mean (Integral image based)\"" # Difference
-reg_1_radius_1="3"							  # of Mean 
-reg_1_radius_2="5"
-reg_1_threshold="0.015"
+reg_1_radius_1="2"							  # of Mean 
+reg_1_radius_2="3"
+reg_1_threshold="0.005"
 
 #--- Register Dataset based on Interest Points ---------------------------------
 
@@ -155,7 +157,7 @@ reg_2_interest_points_channel="\"beads\""				# Dual Channel: Channel 1 contains 
 
 #--- timelapse registration ----------------------------------------------------	
 
-reference_timepoint="34"	# reference timepoint 	
+reference_timepoint="0"	# reference timepoint 	
 
 #--- Dublicate Transformations -------------------------------------------------
 
@@ -175,13 +177,15 @@ fused_image="\"Append to current XML Project\"" # "\"Save as TIFF stack\""
 
 #--- Multi-view content based fusion -------------------------------------------
 
-minimal_x="252" 	# Cropping parameters of full resolution
-minimal_y="28"
-minimal_z="-280"
-maximal_x="1052"
-maximal_y="1864"
-maximal_z="432"
+minimal_x="128" 	# Cropping parameters of full resolution
+minimal_y="-13"
+minimal_z="-407"
+maximal_x="986"
+maximal_y="1927"
+maximal_z="498"
 downsample="1"
+
+#--- Define xml on content based fusion fusion output and save as xml ----------
 
 #--- External transformation for multi-view deconvolution----------------------- 
 # Caution! Make copy of .xml file before application of transformation
@@ -200,20 +204,22 @@ deconvolution=${jobs_deconvolution}"/deconvolution_GPU.bsh"		# script for GPU de
 
 deco_output_file_directory=${image_file_directory}
 
-minimal_x_deco="126" 	# Cropping parameters adjusted for transformation
-minimal_y_deco="14"
-minimal_z_deco="-140"
-maximal_x_deco="526"
-maximal_y_deco="932"
-maximal_z_deco="216"
+minimal_x_deco="64" 	# Cropping parameters adjusted for transformation
+minimal_y_deco="-6"
+minimal_z_deco="-203"
+maximal_x_deco="493"
+maximal_y_deco="963"
+maximal_z_deco="249"
 	
-iterations="20"						# Number of iterations
+iterations="1"						# Number of iterations
 
 detections_to_extract_psf_for_channel_0="\"beads\""	# type of detection "\"[Same PSF as channel 1]\""
 detections_to_extract_psf_for_channel_1="\"beads\""
 psf_size_x="19"						# Dimensions of PSF
 psf_size_y="19"
 psf_size_z="25"
+
+#--- Define xml for deconvolution output and resave into hdf5 ------------------
 
 #===============================================================================
 # Directories for scripts and advanced settings for processing 
@@ -224,10 +230,12 @@ psf_size_z="25"
 XVFB_RUN="/sw/bin/xvfb-run"				 # virtual frame buffer
 #Fiji="/sw/users/schmied/packages/2015-03-19_Fiji.app.cuda/ImageJ-linux64" 		        # old Fiji
 #Fiji="/sw/users/schmied/packages/2015-04-25_Fiji.app.cuda/ImageJ-linux64"			# Fiji Bug
-Fiji="/sw/users/schmied/packages/2015-05-07_Fiji.app.cuda/ImageJ-linux64"                       # 
+#Fiji="/sw/users/schmied/packages/2015-05-07_Fiji.app.cuda/ImageJ-linux64"                       # works
+Fiji="/sw/users/schmied/packages/2015-05-21_Fiji.app.cuda/ImageJ-linux64"			# woriking Fiji
 
 Fiji_resave="/sw/users/schmied/lifeline/Fiji.app.lifeline2/ImageJ-linux64" 	# Fiji that works for resaving
 Fiji_Deconvolution=${Fiji}		# Fiji that works for deconvolution
+
 #-------------------------------------------------------------------------------
 # Pre-processing 
 #-------------------------------------------------------------------------------
@@ -267,7 +275,7 @@ imglib_container="\"ArrayImg (faster)\""			# options:
 # split_hdf5
 # use_deflate_compression
 #-------------------------------------------------------------------------------
-jobs_export=${job_directory}"/hdf5/"	# directory for hdf5 export
+jobs_export=${job_directory}"hdf5"	# directory for hdf5 export
 export=${jobs_export}"/export.bsh" 	# script for hdf5 export
 
 resave_angle="\"All angles\""		
@@ -377,4 +385,4 @@ Tikhonov_parameter="0.0006"
 compute="\"in 512x512x512 blocks\""
 compute_on="\"GPU (Nvidia CUDA via JNA)\""
 psf_estimation="\"Extract from beads\""
-cuda_directory="/sw/users/schmied/packages/2015-04-25_Fiji.app.cuda/lib/"
+cuda_directory="/sw/users/schmied/packages/2015-05-21_Fiji.app.cuda/lib/"

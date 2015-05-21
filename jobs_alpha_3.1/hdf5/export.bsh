@@ -18,10 +18,12 @@ System.out.println("Start loading parameters");
 System.out.println("=========================================================");
 System.out.println("Directory:");
 image_file_directory = System.getProperty( "image_file_directory" );
-xml_filename = System.getProperty( "xml_filename" );
+first_xml_filename = System.getProperty( "first_xml_filename" );
+hdf5_xml_filename = System.getProperty( "hdf5_xml_filename" );
 
 System.out.println( "dir=" + image_file_directory );
-System.out.println( "xml_filename=" + xml_filename);
+System.out.println( "xml_filename=" + first_xml_filename );
+System.out.println( "hdf5_xml_filename=" + hdf5_xml_filename );
 
 // Dataset settings
 System.out.println("=========================================================");
@@ -60,7 +62,7 @@ IJ.run("Toggle Cluster Processing", "display_cluster");
 System.out.println("=========================================================");
 System.out.println("Start plugin:");
 IJ.run("As HDF5",
-	"select_xml=" + image_file_directory + xml_filename + ".xml " +
+	"select_xml=" + image_file_directory + first_xml_filename + ".xml " +
 	"resave_angle=[" + resave_angle + "] " +
 	"resave_channel=[" + resave_channel + "] " +
 	"resave_illumination=[" + resave_illumination + "] " +
@@ -73,7 +75,7 @@ IJ.run("As HDF5",
 	"setups_per_partition=" + setups_per_partition + " " +
 	"run_only_job_number=" + run_only_job_number + " " +
 	"use_deflate_compression " +
-	"export_path=" + image_file_directory + "hdf5_" + xml_filename );
+	"export_path=" + image_file_directory + hdf5_xml_filename );
 
 /* shutdown */
 System.exit(0);

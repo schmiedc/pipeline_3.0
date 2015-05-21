@@ -1,5 +1,5 @@
 #!/bin/bash
-source ../../master_3.1
+source ../../master_3.1.sh
 
 mkdir -p $jobs_registration
  
@@ -12,7 +12,7 @@ do
     echo "$XVFB_RUN -a $Fiji \
     	-Dparallel_timepoints=$parallel_timepoints \
     	-Dimage_file_directory=$image_file_directory \
-	-Dxml_filename=$xml_filename \
+	-Dxml_filename=$hdf5_xml_filename \
 	-Dprocess_timepoint=$reg_process_timepoint \
 	-Dprocess_channel=$reg_process_channel \
 	-Dprocess_illumination=$reg_process_illumination \

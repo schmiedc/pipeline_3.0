@@ -1,5 +1,5 @@
 #!/bin/bash
-source ../../master_3.1
+source ../../master_3.1.sh
 
 mkdir -p $jobs_deconvolution
 

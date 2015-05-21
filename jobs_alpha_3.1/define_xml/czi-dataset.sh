@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # path of master file
-source ../../master_3.1
+source ../../master_3.1.sh
 
 # creates directory for job files if not present
 mkdir -p $jobs_xml
@@ -26,6 +26,6 @@ echo "$XVFB_RUN -a $Fiji \
         -Dpixel_distance_y=$pixel_distance_y \
         -Dpixel_distance_z=$pixel_distance_z \
         -Dpixel_unit=$pixel_unit \
-        -Dxml_filename=$xml_filename \
-                -- --no-splash $define_czi_xml" >> "$job"
+        -Dfirst_xml_filename=$first_xml_filename \
+		-- --no-splash $define_czi_xml" >> "$job"
 chmod a+x "$job"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ../../master_3.1
+source ../../master_3.1.sh
 
 job="$jobs_xml_merge/merge.job"
 echo $job

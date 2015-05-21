@@ -18,10 +18,10 @@ System.out.println("Start loading parameters");
 System.out.println("---------------------------------------------------------");
 System.out.println("Directory:");
 image_file_directory = System.getProperty( "image_file_directory" );
-xml_filename = System.getProperty( "xml_filename" );
+first_xml_filename = System.getProperty( "first_xml_filename" );
 first_czi = System.getProperty( "first_czi" );
 
-System.out.println( "xml_file_path = " + image_file_directory + xml_filename + ".xml" );
+System.out.println( "xml_file_path = " + image_file_directory + first_xml_filename + ".xml" );
 System.out.println( "first_czi_path = " + image_file_directory + first_czi );
 
 // Dataset settings
@@ -65,7 +65,7 @@ System.out.println("=========================================================");
 System.out.println("Start plugin:");
 IJ.run("Define Multi-View Dataset", 
 	"type_of_dataset=[Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats)] " +
-	"xml_filename=" + xml_filename + ".xml " +
+	"xml_filename=" + first_xml_filename + ".xml " +
 	"browse=" + image_file_directory + first_czi + " " + 
 	"first_czi=" + image_file_directory + first_czi + " " + 
 	"angle_1=" + angle_1 + " " +
