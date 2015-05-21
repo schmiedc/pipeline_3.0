@@ -25,7 +25,7 @@ echo "$XVFB_RUN -a $Fiji \
 	-Dmultiple_channels=$fused_multiple_channels \
 	-Dmultiple_illumination_directions=$fused_multiple_illumination_directions \
 	-Dmultiple_angles=$fused_multiple_angles \
-	-Dimglib_container=$fused_imglib_container\
+	-Dimglib_container=$fused_imglib_container \
 		-- --no-splash $fused_xml_script" >> "$job"
 chmod a+x "$job"
 

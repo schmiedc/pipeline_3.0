@@ -187,7 +187,7 @@ downsample="1"
 
 #--- Define xml on content based fusion fusion output and save as xml ----------
 # for pixel size take downsampling into account!
-fused_file_directory=${image_file_directory}"fused/"
+fused_file_directory=${image_file_directory}
 
 fused_image_file_pattern="TP{t}_Chgreen_Ill0_Ang0,72,144,216,288.tif"	# pattern of spim for padded zeros use tt 
 fused_xml="\"fused_Stock68\""
@@ -197,10 +197,7 @@ fused_pixel_distance_y="1.150212" 	# Manual calibration y
 fused_pixel_distance_z="1.150212" 	# Manual calibration z
 fused_pixel_unit="um"			# unit of manual calibration
 
-fused_hdf5_xml="\"hdf5_fused_Stock68\""
-
-output_jobs_export=${job_directory}"output_hdf5"	# directory for hdf5 export
-output_export=${output_jobs_export}"/export.bsh" 	# script for hdf5 export
+fused_hdf5_xml="\"hdf5_fused_Stock68\"" 	# name of hdf5 dataset
 
 #--- External transformation for multi-view deconvolution----------------------- 
 # Caution! Make copy of .xml file before application of transformation
@@ -237,7 +234,19 @@ psf_size_z="25"
 #--- Define xml for deconvolution output and resave into hdf5 ------------------
 # for pixel size take downsampling into account!
 
+deco_file_directory=${deco_output_file_directory}
 
+deco_image_file_pattern="TP{t}_Chgreen_Ill0_Ang0,72,144,216,288.tif"	# pattern of spim for padded zeros use tt 
+deco_xml="\"deco_Stock68\""
+
+deco_timepoints="0-1"			# Timepoints format: "1-2"
+deco_pixel_distance_x="0.575107" 	# Manual calibration x
+deco_pixel_distance_y="0.575107" 	# Manual calibration y
+deco_pixel_distance_z="0.575107" 	# Manual calibration z
+deco_pixel_unit="um"			# unit of manual calibration
+deco_channels="0,1"								# for dual channel 	
+
+deco_hdf5_xml="\"hdf5_deconvo_Stock68\"" 	# name of hdf5 dataset
 
 #===============================================================================
 # Directories for scripts and advanced settings for processing 
@@ -419,3 +428,19 @@ psf_estimation="\"Extract from beads\""
 cuda_directory="/sw/users/schmied/packages/2015-05-21_Fiji.app.cuda/lib/"
 
 #--- Define xml for deconvolution output and resave into hdf5 ------------------
+deco_multiple_timepoints="\"YES (one file per time-point)\""   	# or NO (one time-point) 
+deco_multiple_channels="\"NO (one channel)\""					# or \"YES (one file per channel)\""
+deco_multiple_illumination_directions="\"NO (one illumination direction)\"" 	# or YES (one file per illumination direction)
+deco_multiple_angles="\"NO (one angle)\"" 					# or NO (one angle)
+deco_channels="0,1"								# for dual channel 	
+deco_jobs_xml=${job_directory}"output_define_xml"		# directory for define data set
+deco_xml_script=${deco_jobs_xml}"/define_deconvo.bsh" # script for defining .czi data
+deco_type_of_dataset="\"Image Stacks (ImageJ Opener)\"" 		# raw fileformat
+deco_imglib_container="\"ArrayImg (faster)\""			
+
+#--- Export output of fusion or deconvolution ----------------------------------
+output_jobs_export=${job_directory}"output_hdf5"	# directory for hdf5 export
+fusion_output_export=${output_jobs_export}"/export_fusion.bsh" 	# script for hdf5 export
+deco_output_export=${output_jobs_export}"/export_deco.bsh" 	# script for hdf5 export
+# setting for 32Bit files
+convert_32bit="\"[Use min/max of first image (might saturate intenities over time)]\""
