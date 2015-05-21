@@ -1,6 +1,6 @@
 #!/bin/bash
 # path of master file
-source /projects/pilot_spim/Christopher/pipeline_3.0/master_3.1
+source ../master_3.1
 
 # path of source and target files
 source_pattern=${image_file_directory}${source_pattern}

@@ -1,10 +1,10 @@
 #!/bin/bash
-source /projects/pilot_spim/Christopher/pipeline_3.0/master_3.1
- 
+source ../../master_3.1
+
 mkdir -p $jobs_fusion
 
 for parallel_timepoints in $parallel_timepoints
- 
+
 do
     job="$jobs_fusion/fusion-$parallel_timepoints.job"
     echo $job

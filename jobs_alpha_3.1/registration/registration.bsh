@@ -34,6 +34,8 @@ process_channel = System.getProperty( "process_channel" );
 process_illumination = System.getProperty( "process_illumination" );
 process_angle = System.getProperty( "process_angle" ); 
 processing_channel = System.getProperty( "processing_channel" ); // Check if correct
+channel_1 = System.getProperty( "channel_1" );
+channel_2 = System.getProperty( "channel_2" );
 
 System.out.println( "parallel_timepoints = " + parallel_timepoints );
 System.out.println( "process_timepoints = " + process_timepoint ); 
@@ -41,6 +43,8 @@ System.out.println( "process_channel = " + process_channel );
 System.out.println( "process_illumination = " + process_illumination );
 System.out.println( "process_angle = " + process_angle );
 System.out.println( "processing_channel = " + processing_channel ); // Check if correct
+System.out.println( "channel_1 = " + channel_1 ); 
+System.out.println( "channel_2 = " + channel_2 ); 
 
 // Interest point detection parameters
 System.out.println( "-------------------------------------------------------" );

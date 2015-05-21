@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # path of master file
-source /projects/pilot_spim/Christopher/pipeline_3.0/master_3.0
+source ../../master_3.1
 
 # creates directory for job files if not present
 mkdir -p $jobs_compress
@@ -27,3 +27,4 @@ do
 		chmod a+x "$job"
 	done
 done
+ 

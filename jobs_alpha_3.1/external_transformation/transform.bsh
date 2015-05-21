@@ -15,6 +15,8 @@ transform_angle = System.getProperty( "transform_angle" );
 transform_channel = System.getProperty( "transform_channel" );
 transform_illumination = System.getProperty( "transform_illumination" );
 transform_timepoint = System.getProperty( "transform_timepoint" );
+channel_1 = System.getProperty( "channel_1" );
+channel_2 = System.getProperty( "channel_2" );
 transformation = System.getProperty( "transformation" );
 apply_transformation  = System.getProperty( "apply_transformation" );
 define_mode_transform = System.getProperty( "define_mode_transform" );
@@ -28,10 +30,12 @@ System.out.println( "apply_to_angle = " + transform_angle );
 System.out.println( "apply_to_channel = " + transform_channel );
 System.out.println( "apply_to_illumination = " + transform_illumination );
 System.out.println( "apply_to_timepoint = " + transform_timepoint );
+System.out.println( "channel_1 = " + channel_1 ); 
+System.out.println( "channel_2 = " + channel_2 ); 
 System.out.println( "transformation = " + transformation );
 System.out.println( "apply = " + apply_transformation );
 System.out.println( "define = " + define_mode_transform );
-System.out.println( "all_timepoints_channel_0_illumination_0_all_angles = " + matrix_transform );
+System.out.println( "all_timepoints_channel_" + channel_1 + "_illumination_0_all_angles = " + matrix_transform );
 
 // Execute Fiji Plugin
 IJ.run("Apply Transformations", 
@@ -46,8 +50,8 @@ IJ.run("Apply Transformations",
 	"define=" + define_mode_transform + " " + 
 	"same_transformation_for_all_timepoints " + 
 	"same_transformation_for_all_angles " +
-//	"all_timepoints_channel_0_illumination_0_all_angles=[0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0]");
-	"all_timepoints_channel_0_illumination_0_all_angles=[" + matrix_transform + "]");
+//	"all_timepoints_channel_" + channel_1 + "_illumination_0_all_angles=[0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0]");
+	"all_timepoints_channel_" + channel_1 + "_illumination_0_all_angles=[" + matrix_transform + "]");
 
 /* shutdown */
 runtime.exit(0);

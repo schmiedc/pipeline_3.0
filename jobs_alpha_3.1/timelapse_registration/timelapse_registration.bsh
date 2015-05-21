@@ -31,7 +31,6 @@ process_angle = System.getProperty( "process_angle" );
 channel_1 = System.getProperty( "channel_1" );
 channel_2 = System.getProperty( "channel_2" );
 
-
 System.out.println( "process_timepoints = " + timelapse_process_timepoints ); 
 System.out.println( "process_channel = " + process_channel_timelapse );
 System.out.println( "process_illumination = " + process_illumination );

@@ -1,6 +1,6 @@
 #!/bin/bash
-source /projects/pilot_spim/Christopher/pipeline_3.0/master_3.1
- 
+source ../../master_3.1
+
 mkdir -p $jobs_registration
  
 for parallel_timepoints in $parallel_timepoints
@@ -18,6 +18,8 @@ do
 	-Dprocess_illumination=$reg_process_illumination \
 	-Dprocess_angle=$reg_process_angle \
 	-Dprocessing_channel=$reg_processing_channel \
+	-Dchannel_1=$channel_1 \
+	-Dchannel_2=$channel_2 \
 	-Dlabel_interest_points=$label_interest_points \
 	-Dtype_of_registration=$type_of_registration \
         -Dtype_of_detection=$type_of_detection \
