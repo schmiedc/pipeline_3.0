@@ -1,5 +1,5 @@
 #!/bin/bash
-source ../../master_3.1
+source ../../master_3.2.sh
 
 mkdir -p $jobs_dublication
 
@@ -16,5 +16,5 @@ echo "$XVFB_RUN -a $Fiji \
 	-Dtarget_dublication=$target_dublication \
 	-Dduplicate_which_transformations=$duplicate_which_transformations \
         -- --no-splash $dublicate_transformations" >> "$job"
-        
+
 chmod a+x "$job"

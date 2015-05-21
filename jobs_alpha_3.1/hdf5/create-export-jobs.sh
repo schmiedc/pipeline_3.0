@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # master file path
-source ../../master_3.1.sh
+source ../../master_3.2.sh
 
 # calculation of hdf5 partitions
 num_timepoints=`echo ${parallel_timepoints} | wc -w` 	# counts number of
@@ -15,7 +15,7 @@ for i in `seq 0 $num_timepoints`			# starts partitions
 do
 
 	job="$jobs_export/hdf5-$i.job"
-	echo $job 
+	echo $job
 	echo "#!/bin/bash" > "$job"
 	echo "$XVFB_RUN -a $Fiji -Xmx10g \
 		-Dimage_file_directory=$image_file_directory \

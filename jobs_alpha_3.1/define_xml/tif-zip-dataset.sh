@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # path of master file
-source ../../master_3.1.sh
+source ../../master_3.2.sh
 
 # creates directory for job files if not present
 mkdir -p $jobs_xml

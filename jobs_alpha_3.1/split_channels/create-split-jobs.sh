@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ../../master_3.1.sh
+source ../../master_3.2.sh
 
 mkdir -p ${jobs_split}
 
@@ -21,8 +21,7 @@ for i in $parallel_timepoints
 				-Dtarget_split=$image_file_directory \
 				-- --no-splash \
 				$split" >> "$job"
-				
-                chmod a+x "$job"
+chmod a+x "$job"
         done
 done
 

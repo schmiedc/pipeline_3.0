@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # master file path
-source ../../master_3.1.sh
+source ../../master_3.2.sh
 
 # calculation of hdf5 partitions
 num_timepoints=`echo ${parallel_timepoints} | wc -w` 	# counts number of

@@ -1,10 +1,10 @@
 #!/bin/bash
-source ../../master_3.1.sh
+source ../../master_3.2.sh
 
 mkdir -p $jobs_registration
- 
+
 for parallel_timepoints in $parallel_timepoints
- 
+
 do
     job="$jobs_registration/register-$parallel_timepoints.job"
     echo $job
