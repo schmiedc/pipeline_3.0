@@ -19,12 +19,12 @@
 #-------------------------------------------------------------------------------
 # Data set description
 #
-# 	Dataset: Test based on 2015-02-21_LZ1_Stock68_3
+# 	Dataset: Dual Channel test: 2015-02-20_LZ2_Stock48_Stock58.czi
 #	  Owner: Christopher Schmied
 #  	Created: 2015-05-21
 #
 # --- Data directory -----------------------------------------------------------
-image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/czi/"
+image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/Dual_Channel/czi/"
 
 # --- jobs directory -----------------------------------------------------------
 job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.1/"
@@ -68,15 +68,16 @@ target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of r
 #	4) Multiview Fusion
 #===============================================================================
 
-first_xml_filename="\"Stock68\""           # xml filename for czi or tif dataset without ".xml"
+first_xml_filename="\"Dual_Channel\""           # xml filename for czi or tif dataset without ".xml"
 
-hdf5_xml_filename="\"hdf5_Stock68\""		# xml filename for resaving into hdf5 dataset without ".xml"
+hdf5_xml_filename="\"hdf5_Dual_Channel\""		# xml filename for resaving into hdf5 dataset without ".xml"
 
-merged_xml="\"hdf5_Stock68_merge\"" 	# filename of merged xml without ".xml"
+merged_xml="\"hdf5_Dual_Channel_merge\"" 	# filename of merged xml without ".xml"
 
 channel_1="green"		# general setting for channel names
 channel_2="red"
 
+channel_switch="dual" # or "single"
 #-------------------------------------------------------------------------------
 # Define dataset: General
 #-------------------------------------------------------------------------------
@@ -103,7 +104,8 @@ channels="0,1"							# for dual channel give spim_TL0{tt}_Angle{a}_Channel{c}.ti
 # Usable for 5 view datasets 1 channel
 # Comment out line: "channel_2=" define_czi.bsh if single channel
 
-first_czi="2015-02-21_LZ1_Stock68_3.czi"
+first_czi="2015-02-20_LZ2_Stock48_Stock58.czi"
+angle_number="5"
 angle_1="0"
 angle_2="72"
 angle_3="144"

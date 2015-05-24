@@ -13,11 +13,13 @@ echo "#!/bin/bash" > "$job"
 echo "$XVFB_RUN -a $Fiji \
         -Dimage_file_directory=$image_file_directory \
         -Dfirst_czi=$first_czi \
+        -Dangle_number=$angle_number \
         -Dangle_1=$angle_1 \
         -Dangle_2=$angle_2 \
         -Dangle_3=$angle_3 \
         -Dangle_4=$angle_4 \
         -Dangle_5=$angle_5 \
+        -Dchannel_switch=$channel_switch \
         -Dchannel_1=$channel_1 \
         -Dchannel_2=$channel_2 \
         -Dillumination_1=$illumination_1 \
