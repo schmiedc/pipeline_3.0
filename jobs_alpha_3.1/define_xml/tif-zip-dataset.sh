@@ -20,7 +20,7 @@ echo "$XVFB_RUN -a $Fiji \
 	-Dpixel_distance_y=$pixel_distance_y \
 	-Dpixel_distance_z=$pixel_distance_z \
 	-Dpixel_unit=$pixel_unit \
-	-Dxml_filename=$xml_filename \
+	-Dxml_filename=$first_xml_filename \
 	-Dtype_of_dataset=$type_of_dataset \
 	-Dmultiple_timepoints=$multiple_timepoints \
 	-Dmultiple_channels=$multiple_channels \
