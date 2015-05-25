@@ -31,13 +31,16 @@ job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.1/"
 
 # --- Number of timepoints in dataset ------------------------------------------
 # IMPORTANT for processing .czi files timepoints always start with 0
-parallel_timepoints="`seq 0 1`"  # format: "`seq 1 3`"
+parallel_timepoints="`seq 0 1`"  # format: "`seq 0 3`"
 
 #===============================================================================
 # Preprocessing
 #	1) rename .czi files
 #	2) resave .czi files into .tif or .zip
 #	3) resave ome.tiff files into .tif
+#	4) Splitting output for Channel is
+#		c=0,1 etc
+#		spim_TL{tt}_Angle{a}_Channel{c}.tif
 #===============================================================================
 
 #-------------------------------------------------------------------------------
@@ -70,23 +73,24 @@ target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of r
 
 first_xml_filename="\"Dual_Channel\""           # xml filename for czi or tif dataset without ".xml"
 
-hdf5_xml_filename="\"hdf5_Dual_Channel\""		# xml filename for resaving into hdf5 dataset without ".xml"
+hdf5_xml_filename="\"hdf5_Dual_Channel\""	# xml filename for resaving into hdf5 dataset without ".xml"
 
 merged_xml="\"hdf5_Dual_Channel_merge\"" 	# filename of merged xml without ".xml"
 
-# Multi angle enabled. Give number of Channels and write the channel variables
+# Multi Channel enabled. Give number of Channels and write the channel variables
 # using the following format when c starts with 1 and ch_string is 
 # the Channel name: channel_{a}="{channel_string}"
-channel_number="2"
+channel_number="2" 	# Single Channel = "1"
 channel_1="green"	
 channel_2="red"
 
 #-------------------------------------------------------------------------------
 # Define dataset: General
+# Choose between ImageJ opener for .tif and Zeiss Lightsheet Z.1 data for .czi
 #-------------------------------------------------------------------------------
 
-pixel_distance_x="0.2875535786151886" 	# Manual calibration x
-pixel_distance_y="0.2875535786151886" 	# Manual calibration y
+pixel_distance_x="0.2859010696" 	# Manual calibration x
+pixel_distance_y="0.2859010696" 	# Manual calibration y
 pixel_distance_z="1.50000" 	# Manual calibration z
 pixel_unit="um"			# unit of manual calibration
 
@@ -98,10 +102,16 @@ multiple_timepoints="\"YES (one file per time-point)\""    	# or NO (one time-po
 multiple_channels="\"YES (one file per channel)\""			# or "\"NO (one channel)\""
 multiple_illumination_directions="\"NO (one illumination direction)\"" 	# or YES (one file per illumination direction)
 multiple_angles="\"YES (one file per angle)\"" 			# or NO (one angle)
+
+# SPIM file pattern: for padded zeros use tt 
+image_file_pattern="spim_TL{tt}_Angle{a}_Channel{c}.tif"	# for multi channel give spim_TL{tt}_Angle{a}_Channel{c}.tif
+
 timepoints="1-2"			# Timepoints format: "1-2"
-acquisition_angles="1,2,3,4,5"		# angles format: "1,2,3" or "1-3"
-image_file_pattern="spim_TL{tt}_Angle{a}_Channel{c}.tif"	# pattern of spim for padded zeros use tt
-channels="0,1"							# for multi channel give spim_TL0{tt}_Angle{a}_Channel{c}.tif
+acquisition_angles="1,2,3,4,5"		# angles format: "1,2,3" or "1-3" assumes always multiple angles
+channel_switch="Multi"						# Single or Multi
+channels="0,1"							# Fill out if multi channel
+illumination_switch="Single"					# Single or Dual
+illumination="0,1"						# Fill out if multi sided
 
 #--- Define dataset: Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats) ------------
 
@@ -147,20 +157,24 @@ reg_process_angle="\"All angles\""
 
 # Channel Settings:
 reg_process_channel="\"All channels\""  			# Single Channel
-# reg_process_channel="\"Single channel (Select from List)\""  # Dual Channel: 1 Channel contains the beads
-reg_processing_channel="\"green\""			# Dual Channel: 1 Channel contains the beads
+#reg_process_channel="\"Single channel (Select from List)\""  # Dual Channel: 1 Channel contains the beads
+reg_processing_channel="\"red\""			# Dual Channel: 1 Channel contains the beads
 
 #--- Detect Interest Points for Registration -----------------------------------
 
 label_interest_points="\"beads\""
-type_of_detection="\"Difference-of-Mean (Integral image based)\"" # Difference
-reg_1_radius_1="2"							  # of Mean
+type_of_detection="\"Difference-of-Mean (Integral image based)\"" # Difference of Mean
+reg_1_radius_1="2"							  
 reg_1_radius_2="3"
 reg_1_threshold="0.005"
 
+reg_2_radius_1="3"							  
+reg_2_radius_2="5"
+reg_2_threshold="0.007"
+
 #--- Register Dataset based on Interest Points ---------------------------------
 
-reg_1_interest_points_channel="\"beads\"" # Dual Channel: Channel does not contain the beads "\"[DO NOT register this channel]\""
+reg_1_interest_points_channel="\"[(DO NOT register this channel)]\"" # Dual Channel: Channel does not contain the beads "\"[DO NOT register this channel]\""
 reg_2_interest_points_channel="\"beads\""				# Dual Channel: Channel 1 contains the beads
 
 #--- Merge .xml after registration ---------------------------------------------

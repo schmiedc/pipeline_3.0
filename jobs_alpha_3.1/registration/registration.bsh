@@ -5,7 +5,8 @@ import ij.ImagePlus;
 import java.lang.Runtime;
 import java.io.File;
 import java.io.FilenameFilter;
- 
+import java.lang.Object;
+
 runtime = Runtime.getRuntime();
 System.out.println(runtime.availableProcessors() + " cores available for multi-threading");
 
@@ -29,22 +30,16 @@ System.out.println( "-------------------------------------------------------" );
 System.out.println( "General parameters: " );
 
 parallel_timepoints = System.getProperty( "parallel_timepoints" );
-process_timepoint = System.getProperty( "process_timepoint" );
-process_channel = System.getProperty( "process_channel" );
-process_illumination = System.getProperty( "process_illumination" );
-process_angle = System.getProperty( "process_angle" ); 
-processing_channel = System.getProperty( "processing_channel" ); // Check if correct
-channel_1 = System.getProperty( "channel_1" );
-channel_2 = System.getProperty( "channel_2" );
+reg_process_timepoint = System.getProperty( "reg_process_timepoint" );
+reg_process_illumination = System.getProperty( "reg_process_illumination" );
+reg_process_angle = System.getProperty( "reg_process_angle" ); 
 
 System.out.println( "parallel_timepoints = " + parallel_timepoints );
-System.out.println( "process_timepoints = " + process_timepoint ); 
-System.out.println( "process_channel = " + process_channel );
-System.out.println( "process_illumination = " + process_illumination );
-System.out.println( "process_angle = " + process_angle );
-System.out.println( "processing_channel = " + processing_channel ); // Check if correct
-System.out.println( "channel_1 = " + channel_1 ); 
-System.out.println( "channel_2 = " + channel_2 ); 
+System.out.println( "process_timepoints = " + reg_process_timepoint ); 
+System.out.println( "process_illumination = " + reg_process_illumination );
+System.out.println( "process_angle = " + reg_process_angle );
+
+
 
 // Interest point detection parameters
 System.out.println( "-------------------------------------------------------" );
@@ -66,14 +61,6 @@ System.out.println( "imglib_container = " + imglib_container );
 System.out.println( "-------------------------------------------------------" );
 System.out.println( "Difference of Mean detection: " );
 
-int reg_1_radius_1 = Integer.parseInt( System.getProperty( "reg_1_radius_1" ) );
-int reg_1_radius_2 = Integer.parseInt( System.getProperty( "reg_1_radius_2" ) );
-float reg_1_threshold = Float.parseFloat( System.getProperty( "reg_1_threshold" ) );
-
-System.out.println( "reg_1_radius_1 = " + reg_1_radius_1 );
-System.out.println( "reg_1_radius_2 = " + reg_1_radius_2 );
-System.out.println( "reg_1_threshold = " + reg_1_threshold );
-
 //Parameters for difference of gaussian !!Comment out for Differnence of Mean!!
 //System.out.println( "-------------------------------------------------------" );
 //System.out.println( "Difference of Gaussian detection: " );
@@ -87,8 +74,7 @@ System.out.println( "-------------------------------------------------------" );
 System.out.println( "Parameters for Registration: " );
 
 registration_algorithm = System.getProperty( "registration_algorithm" );
-reg_1_interest_points_channel = System.getProperty( "reg_1_interest_points_channel" );
-reg_2_interest_points_channel = System.getProperty( "reg_2_interest_points_channel" );
+
 fix_tiles = System.getProperty( "fix_tiles" );
 map_back_tiles = System.getProperty( "map_back_tiles" );
 transformation_model = System.getProperty( "transformation_model" );
@@ -98,8 +84,6 @@ int allowed_error_for_ransac = Integer.parseInt( System.getProperty( "allowed_er
 significance = System.getProperty( "significance" );
 
 System.out.println( "registration_algorithm = " + registration_algorithm );
-System.out.println( "interest_points_channel_" + channel_1 + " = " + reg_1_interest_points_channel );
-System.out.println( "interest_points_channel_" + channel_2 + " = " + reg_2_interest_points_channel );
 System.out.println( "fix_tiles = " + fix_tiles );
 System.out.println( "map_back_tiles = " + map_back_tiles );
 System.out.println( "transformation = " + transformation_model);
@@ -111,51 +95,245 @@ System.out.println( "significance = " + significance );
 
 // detection_min_max = System.getProperty( "detection_min_max" );
 // System.out.println( "detection_min_max = " + detection_min_max );
+System.out.println( "-------------------------------------------------------" );
+System.out.println( "Channel Setting: " );
 
-//activate cluster processing
+// Channel setting for Difference-of-Mean detection
+reg_process_channel = System.getProperty( "reg_process_channel" );
+System.out.println( "process_channel = " + reg_process_channel );
+
+processing_channel = System.getProperty( "processing_channel" ); 
+System.out.println( "processing_channel = channel " + processing_channel ); 
+
+int channel_number = Integer.parseInt( System.getProperty( "channel_number" ) );
+System.out.println( "Number of Channels = " + channel_number );
+
+channel_1 = System.getProperty( "channel_1" );
+channel_2 = System.getProperty( "channel_2" );
+System.out.println( "channel_1 = " + channel_1 );
+System.out.println( "channel_2 = " + channel_2 );
+
+
+StringBuilder channel_string_multi = new StringBuilder();
+
+if (reg_process_channel.equalsIgnoreCase( "All channels" ) && channel_number > 1 )
+
+{
+	processing_channel_string = "";
+	channel_string = "";
+
+		for (int channel=1; channel <= channel_number; channel++ )
+
+		{
+			channel_part_1 = "channel_" + channel;
+			channel_part_2 = System.getProperty( channel_part_1 );
+			
+			radius1_part_1 = "reg_" + channel + "_radius_1";
+			radius_1 = System.getProperty( radius1_part_1);
+			
+			radius2_part_1 = "reg_" + channel + "_radius_2";
+			radius_2 = System.getProperty( radius2_part_1);
+			
+			threshold_part_1 = "reg_" + channel + "_threshold";
+			threshold = System.getProperty( threshold_part_1);
+			
+			channel_part_3 = "interest_point_specification_(channel_" + channel_part_2 + ")=[Advanced ...] " +
+			"radius_1_" + channel_part_2 +  "=" + radius_1 + " " +
+			"radius_2_" + channel_part_2 +  "=" + radius_2 + " " +
+			"threshold_" + channel_part_2 +  "=" + threshold + " " +
+			"find_maxima_" + channel_part_2;
+			channel_string_multi.append(channel_part_3);
+			channel_string_multi.append(" ");
+			System.out.println( channel_string_multi );
+		}
+
+}
+
+else if (reg_process_channel.equalsIgnoreCase( "All channels" ) && channel_number == 1 ) 
+{
+	processing_channel_string = "";
+	channel_string_multi.append("");
+	int reg_1_radius_1 = Integer.parseInt( System.getProperty( "reg_1_radius_1" ) );
+	int reg_1_radius_2 = Integer.parseInt( System.getProperty( "reg_1_radius_2" ) );
+	float reg_1_threshold = Float.parseFloat( System.getProperty( "reg_1_threshold" ) );
+	System.out.println( "reg_1_radius_1 = " + reg_1_radius_1 );
+	System.out.println( "reg_1_radius_2 = " + reg_1_radius_2 );
+	System.out.println( "reg_1_threshold = " + reg_1_threshold );
+
+	channel_string = "interest_point_specification=[Advanced ...] " +
+	"radius_1=" + reg_1_radius_1 + " " +
+	"radius_2=" + reg_1_radius_2 + " " +
+	"threshold=" + reg_1_threshold + " " +
+	"find_maxima";
+
+}		
+
+else if (reg_process_channel.equalsIgnoreCase( "Single channel (Select from List)" ) )
+	
+{	
+	channel_string_multi.append("");
+	int reg_1_radius_1 = Integer.parseInt( System.getProperty( "reg_1_radius_1" ) );
+	int reg_1_radius_2 = Integer.parseInt( System.getProperty( "reg_1_radius_2" ) );
+	float reg_1_threshold = Float.parseFloat( System.getProperty( "reg_1_threshold" ) );
+	System.out.println( "reg_1_radius_1 = " + reg_1_radius_1 );
+	System.out.println( "reg_1_radius_2 = " + reg_1_radius_2 );
+	System.out.println( "reg_1_threshold = " + reg_1_threshold );
+
+	processing_channel_string = "processing_channel=[channel " +  processing_channel + "] ";
+	channel_string = "interest_point_specification=[Advanced ...] " +
+	"radius_1=" + reg_1_radius_1 + " " +
+	"radius_2=" + reg_1_radius_2 + " " +
+	"threshold=" + reg_1_threshold + " " +
+	"find_maxima";
+}
+
+else 
+	
+{	
+	
+	System.out.println( "reg_process_channel is set incorrectly" );
+	
+}
+
+System.out.println( "Processing Channel = " + processing_channel_string );
+System.out.println( "Channel String = " + channel_string );
+System.out.println( "Multi channel String  = " + channel_string_multi );
+
+// Channel Setting Registration
+StringBuilder reg_multi_channel_string = new StringBuilder();
+
+if (reg_process_channel.equalsIgnoreCase( "All channels" ) && channel_number == 1 )	
+{	
+	reg_multi_channel_string.append( "" );
+	reg_1_interest_points_channel = System.getProperty( "reg_1_interest_points_channel" );
+	System.out.println( "interest_points_channel_" + channel_1 + " = " + reg_1_interest_points_channel );
+	reg_single_channel_string = "interest_points_channel_" + channel_1 + "=" + reg_1_interest_points_channel + " ";
+}
+
+else if (reg_process_channel.equalsIgnoreCase( "All channels" ) && channel_number > 1 ) 
+{
+	for (int channel=1; channel <= channel_number; channel++ )
+
+		{	
+			reg_single_channel_string = ""; 
+			channel_part_1 = "channel_" + channel;
+			channel_part_2 = System.getProperty( channel_part_1 );
+			
+			interest_points_part_1 = "reg_" + channel + "_interest_points_channel";
+			interest_points_part_2 = System.getProperty( interest_points_part_1 );
+			
+			channel_part_3 = "interest_points_channel_" + channel_part_2 + "=" + interest_points_part_2 + " ";
+			reg_multi_channel_string.append( channel_part_3 );
+			reg_multi_channel_string.append(" ");
+			System.out.println( reg_multi_channel_string );
+			
+		}
+}
+
+else if (reg_process_channel.equalsIgnoreCase( "Single channel (Select from List)" ) )	
+{
+		for (int channel=1; channel <= channel_number; channel++ )
+
+		{	
+			reg_single_channel_string = ""; 
+			channel_part_1 = "channel_" + channel;
+			channel_part_2 = System.getProperty( channel_part_1 );
+			
+			interest_points_part_1 = "reg_" + channel + "_interest_points_channel";
+			interest_points_part_2 = System.getProperty( interest_points_part_1 );
+			
+			channel_part_3 = "interest_points_channel_" + channel_part_2 + "=" + interest_points_part_2 + " ";
+			reg_multi_channel_string.append( channel_part_3 );
+			reg_multi_channel_string.append(" ");
+			System.out.println( reg_multi_channel_string );
+			
+		}
+	
+}
+
+System.out.println( "reg_single_channel_string = " + reg_single_channel_string );
+System.out.println( "reg_multi_channel_string = " + reg_multi_channel_string );
+
+
+// activate cluster processing
 System.out.println( "=======================================================" );
 IJ.run("Toggle Cluster Processing", "display_cluster");
 System.out.println( "Activated Cluster Processing" );
 
-
-//interest point detection
+// interest point detection
 System.out.println( "=======================================================" );
 System.out.println( "Starting Detection of Interest Points" );
-IJ.run("Detect Interest Points for Registration", 
-	"select_xml=" + xml_path + xml_filename + ".xml " +  
+
+System.out.println("Detect Interest Points for Registration , select_xml=" + xml_path + xml_filename + ".xml " +  
 	"unique_id=" + parallel_timepoints + " " +
-	"process_angle=[" + process_angle + "] " + 
-	"process_channel=[" + process_channel + "] " +
-	"process_illumination=[" + process_illumination + "] " + 
-	"process_timepoint=[" + process_timepoint + "] " +
-//	"processing_channel=[" +  processing_channel + "] " + // Dual Channel: 1 Channel contains the beads Check
+	"process_angle=[" + reg_process_angle + "] " + 
+	"process_channel=[" + reg_process_channel + "] " +
+	"process_illumination=[" + reg_process_illumination + "] " + 
+	"process_timepoint=[" + reg_process_timepoint + "] " +
+	processing_channel_string +
 	"xml_output=[Save every XML with user-provided unique id]" + " " + 
 	"processing_timepoint=[Timepoint " + parallel_timepoints + "] " + 
 	"type_of_interest_point_detection=[" + type_of_detection + "] " + 
 	"label_interest_points=" + label_interest_points + " " + 
 	"subpixel_localization=[" + subpixel_localization + "] " + 
-	"interest_point_specification=[Advanced ...] " + // Setting for Single Channel Check for Dual Channel
-//	"interest_point_specification_(channel_1)=[Advanced ...] " + // Dual Channel
-	"radius_1=" + reg_1_radius_1 + " " + // Setting for Single Channel Check for Dual Channel
-	"radius_2=" + reg_1_radius_2 + " " + // Setting for Single Channel Check for Dual Channel
-	"threshold=" + reg_1_threshold + " " + // Setting for Single Channel Check for Dual Channel
-	"find_maxima");
+	channel_string + "" +
+	channel_string_multi + "" +
+	"");
 
-//registration based on interest point detection
+IJ.run("Detect Interest Points for Registration", 
+	"select_xml=" + xml_path + xml_filename + ".xml " +  
+	"unique_id=" + parallel_timepoints + " " +
+	"process_angle=[" + reg_process_angle + "] " + 
+	"process_channel=[" + reg_process_channel + "] " +
+	"process_illumination=[" + reg_process_illumination + "] " + 
+	"process_timepoint=[" + reg_process_timepoint + "] " +
+	processing_channel_string +
+	"xml_output=[Save every XML with user-provided unique id]" + " " + 
+	"processing_timepoint=[Timepoint " + parallel_timepoints + "] " + 
+	"type_of_interest_point_detection=[" + type_of_detection + "] " + 
+	"label_interest_points=" + label_interest_points + " " + 
+	"subpixel_localization=[" + subpixel_localization + "] " + 
+	channel_string + "" +
+	channel_string_multi + "" +
+	"");
+
+
+// registration based on interest point detection
 System.out.println( "=======================================================" );
 System.out.println( "Starting Registration" );
-IJ.run("Register Dataset based on Interest Points",
-	"select_xml=" + xml_path + xml_filename + ".job_" + parallel_timepoints + ".xml " +
-        "process_angle=[" + process_angle + "] " +
-        "process_channel=[" + process_channel + "] " +
-        "process_illumination=[" + process_illumination + "] " +
-        "process_timepoint=[" + process_timepoint + "] " +
+
+System.out.println("Register Dataset based on Interest Points , select_xml=" + xml_path + xml_filename + ".job_" + parallel_timepoints + ".xml " +
+        "process_angle=[" + reg_process_angle + "] " +
+        "process_channel=[" + reg_process_channel + "] " +
+        "process_illumination=[" + reg_process_illumination + "] " +
+        "process_timepoint=[" + reg_process_timepoint + "] " +
 	"xml_output=[Do not process on cluster] " + 
 	"processing_timepoint=[Timepoint " + parallel_timepoints + "] " +
         "registration_algorithm=[" + registration_algorithm + "] " +
         "type_of_registration=[" + type_of_registration + "] " +
-        "interest_points_channel_" + channel_1 + "=" + reg_1_interest_points_channel + " " +
-//      "interest_points_channel_" + channel_2 + "=" + reg_2_interest_points_channel + " " + // Dual Channel
+        reg_single_channel_string +
+        reg_multi_channel_string +   
+        "fix_tiles=[" + fix_tiles + "] " +
+        "map_back_tiles=[" + map_back_tiles + "] " +
+        "transformation=" + transformation_model + " " +
+        "regularize_model " +
+        "model_to_regularize_with=" + model_to_regularize_with + " " +
+        "lamba=" + lambda + " " +
+        "allowed_error_for_ransac=" + allowed_error_for_ransac + " " +
+        "significance=" + significance + "");
+
+IJ.run("Register Dataset based on Interest Points",
+	"select_xml=" + xml_path + xml_filename + ".job_" + parallel_timepoints + ".xml " +
+        "process_angle=[" + reg_process_angle + "] " +
+        "process_channel=[" + reg_process_channel + "] " +
+        "process_illumination=[" + reg_process_illumination + "] " +
+        "process_timepoint=[" + reg_process_timepoint + "] " +
+	"xml_output=[Do not process on cluster] " + 
+	"processing_timepoint=[Timepoint " + parallel_timepoints + "] " +
+        "registration_algorithm=[" + registration_algorithm + "] " +
+        "type_of_registration=[" + type_of_registration + "] " +
+        reg_single_channel_string +
+        reg_multi_channel_string +   
         "fix_tiles=[" + fix_tiles + "] " +
         "map_back_tiles=[" + map_back_tiles + "] " +
         "transformation=" + transformation_model + " " +

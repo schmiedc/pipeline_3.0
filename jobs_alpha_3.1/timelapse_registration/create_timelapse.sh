@@ -10,10 +10,11 @@ echo "$XVFB_RUN -a $Fiji \
     -Dimage_file_directory=$image_file_directory \
     -Dmerged_xml=$merged_xml \
     -Dtimelapse_process_timepoints=$timelapse_process_timepoints \
-    -Dprocess_channel_timelapse=$reg_process_channel \
-    -Dprocess_illumination=$reg_process_illumination \
-    -Dprocess_angle=$reg_process_angle \
+    -Dreg_process_channel=$reg_process_channel \
+    -Dreg_process_illumination=$reg_process_illumination \
+    -Dreg_process_angle=$reg_process_angle \
     -Dreference_timepoint=$reference_timepoint \
+    -Dchannel_number=$channel_number \
     -Dchannel_1=$channel_1 \
     -Dchannel_2=$channel_2 \
     -Dtype_of_registration_timelapse=$type_of_registration_timelapse \
