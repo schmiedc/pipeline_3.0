@@ -74,10 +74,13 @@ hdf5_xml_filename="\"hdf5_Dual_Channel\""		# xml filename for resaving into hdf5
 
 merged_xml="\"hdf5_Dual_Channel_merge\"" 	# filename of merged xml without ".xml"
 
-channel_1="green"		# general setting for channel names
+# Multi angle enabled. Give number of Channels and write the channel variables
+# using the following format when c starts with 1 and ch_string is 
+# the Channel name: channel_{a}="{channel_string}"
+channel_number="2"
+channel_1="green"	
 channel_2="red"
 
-channel_switch="dual" # or "single"
 #-------------------------------------------------------------------------------
 # Define dataset: General
 #-------------------------------------------------------------------------------
@@ -98,19 +101,26 @@ multiple_angles="\"YES (one file per angle)\"" 			# or NO (one angle)
 timepoints="1-2"			# Timepoints format: "1-2"
 acquisition_angles="1,2,3,4,5"		# angles format: "1,2,3" or "1-3"
 image_file_pattern="spim_TL{tt}_Angle{a}_Channel{c}.tif"	# pattern of spim for padded zeros use tt
-channels="0,1"							# for dual channel give spim_TL0{tt}_Angle{a}_Channel{c}.tif
+channels="0,1"							# for multi channel give spim_TL0{tt}_Angle{a}_Channel{c}.tif
 
 #--- Define dataset: Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats) ------------
-# Usable for 5 view datasets 1 channel
-# Comment out line: "channel_2=" define_czi.bsh if single channel
 
 first_czi="2015-02-20_LZ2_Stock48_Stock58.czi"
+
+# Multi angle enabled. Give number of Angles and write the angle variables using 
+# the following format when a starts with 1 and angle_string is the angle name: 
+# angle_{a}="{angle_string}"
 angle_number="5"
 angle_1="0"
 angle_2="72"
 angle_3="144"
 angle_4="216"
 angle_5="288"
+
+# Multi Illumination side enabled. Give numbers of Illumination sides and write
+# the illumination variable using the following format when i starts with 1 and
+# illum_string is the illumination name: illumination_{i}="{illum_string}"
+illum_number="1"
 illumination_1="0" 	# For one illumination side = 0
 rotation_around="X-Axis"
 

@@ -27,25 +27,83 @@ System.out.println( "first_czi_path = " + image_file_directory + first_czi );
 
 // Dataset settings
 System.out.println("---------------------------------------------------------");
-System.out.println("Dataset:");
-angle_1 = System.getProperty( "angle_1" );
-angle_2 = System.getProperty( "angle_2" );
-angle_3 = System.getProperty( "angle_3" );
-angle_4 = System.getProperty( "angle_4" );
-angle_5 = System.getProperty( "angle_5" );
-channel_1 = System.getProperty( "channel_1" );
-channel_2 = System.getProperty( "channel_2" );
-illumination_1 = System.getProperty( "illumination_1" );
-rotation_around = System.getProperty( "rotation_around" );
+System.out.println("Angle Settings:");
 
-System.out.println( "angle_1 = " + angle_1 );
-System.out.println( "angle_2 = " + angle_2 );
-System.out.println( "angle_3 = " + angle_3 );
-System.out.println( "angle_4 = " + angle_4 );
-System.out.println( "angle_5 = " + angle_5 );
-System.out.println( "channel_1 = " + channel_1 );
-System.out.println( "channel_2 = " + channel_2 );
-System.out.println( "illumination_1 = " + illumination_1 );
+// Angle settings
+// Reads out the required number of angles from angle_number
+// then concatenates a string with all given angles for the macro
+int angle_number = Integer.parseInt( System.getProperty( "angle_number" ) );
+System.out.println( "Number of Angles = " + angle_number );
+	
+StringBuilder angle_string = new StringBuilder();
+
+for (int angle=1; angle <= angle_number; angle++ )
+
+{
+	angle_part_1 = "angle_" + angle;
+	angle_part_2 = System.getProperty( angle_part_1 );
+	System.out.println( "Angle_" + angle + " = " + angle_part_2 );
+	angle_part_3 = "angle_" + angle + "=" + angle_part_2;
+	angle_string.append(angle_part_3);
+	angle_string.append(" ");
+	
+}
+
+System.out.println( angle_string );
+
+System.out.println("---------------------------------------------------------");
+System.out.println("Channel Settings:");
+
+// Channel settings
+// reads out the required number of channels form channel_number 
+// and concatenates the appropriat string for the bsh
+int channel_number = Integer.parseInt( System.getProperty( "channel_number" ) );
+System.out.println( "Number of Channels = " + channel_number );
+
+StringBuilder channel_string = new StringBuilder();
+
+for (int channel=1; channel <= channel_number; channel++ )
+
+{
+	channel_part_1 = "channel_" + channel;
+	channel_part_2 = System.getProperty( channel_part_1 );
+	System.out.println( "Channel_" + channel + " = " + channel_part_2 );
+	channel_part_3 = "channel_" + channel + "=" + channel_part_2;
+	channel_string.append(channel_part_3);
+	channel_string.append(" ");
+	
+}
+System.out.println( channel_string );
+
+System.out.println("---------------------------------------------------------");
+System.out.println("Illumination Settings:");
+
+// Illumination settings
+// reads out the required number of illuminations sides form illum_number 
+// and concatenates the appropriat string for the bsh
+int illum_number = Integer.parseInt( System.getProperty( "illum_number" ) );
+System.out.println( "Number of Illuminations = " + illum_number );
+
+StringBuilder illum_string = new StringBuilder();
+
+for (int illum=1; illum <= illum_number; illum++ )
+
+{
+	illum_part_1 = "illumination_" + illum;
+	illum_part_2 = System.getProperty( illum_part_1 );
+	System.out.println( "Illumination_" + illum + " = " + illum_part_2 );
+	illum_part_3 = "_______illumination_" + illum + "=" + illum_part_2;
+	illum_string.append(illum_part_3);
+	illum_string.append(" ");
+	
+}
+System.out.println( illum_string );
+
+
+System.out.println("---------------------------------------------------------");
+System.out.println("Rotation setting:");
+
+rotation_around = System.getProperty( "rotation_around" );
 System.out.println( "rotation_around = " + rotation_around );
 
 // Calibaration
@@ -61,57 +119,6 @@ System.out.println( "pixel_distance_y = " + pixel_distance_y );
 System.out.println( "pixel_distance_z = " + pixel_distance_z );
 System.out.println( "pixel_unit = " + pixel_unit );
 
-// Angle settings
-// Reads out the required number of angles from angle_number
-// then concatenates a string with all given angles for the macro
-int angle_number = Integer.parseInt( System.getProperty( "angle_number" ) );
-
-StringBuilder angle = new StringBuilder();
-
-for (int a=1; a <= angle_number; a++ )
-{
-	b = "angle_" + a;
-	c = System.getProperty( b );
-	d = "angle_" + a + "=" + c;
-	angle.append(d);
-	angle.append(" ");
-	
-}
-//angle.setLength(angle.length() - 2);
-System.out.println( angle );
-
-// Channel switch 
-// reads out channel switch and creates appropriat string in master file
-channel_switch = System.getProperty( "channel_switch" );
-System.out.println( "Channels = " + channel_switch  );
-
-
-if ( channel_switch.equalsIgnoreCase( "single" ) )
-	
-{
-	
-	channel="channel=" + channel_1 + " ";
-	System.out.println( "Channel set to single channel" );
-
-} 
-
-if ( channel_switch.equalsIgnoreCase( "dual" ) )		
-	
-{
-	
-	channel="channel_1=" + channel_1 + " channel_2=" + channel_2 + " ";
-	System.out.println( "Channel set to dual channel" );
-} else
-
-{
-	
-System.out.println( "Channel switch setting is gibberish" );
-
-}
-
-System.out.println( channel );
-
-
 // Executes Fiji plugin
 System.out.println("=========================================================");
 System.out.println("Start plugin:");
@@ -119,15 +126,8 @@ System.out.println("Define Multi-View Dataset type_of_dataset=[Zeiss Lightsheet 
 	"xml_filename=" + first_xml_filename + ".xml " +
 	"browse=" + image_file_directory + first_czi + " " + 
 	"first_czi=" + image_file_directory + first_czi + " " + 
-	angle +
-//	"angle_1=" + angle_1 + " " +
-//	"angle_2=" + angle_2 + " " + 
-//	"angle_3=" + angle_3 + " " +
-//	"angle_4=" + angle_4 + " " + 
-//	"angle_5=" + angle_5 + " " +
-	channel + 
-//	"channel_1=" + channel_1 + " " +
-//	"channel_2=" + channel_2 + " " + // for dual channel comment out if single channel
+	angle_string +
+	channel_string + 
  	"_______illumination_1=" + illumination_1 + " " +
 	"modify_calibration " + 
 	"modify_rotation_axis " +
@@ -142,16 +142,10 @@ IJ.run("Define Multi-View Dataset",
 	"xml_filename=" + first_xml_filename + ".xml " +
 	"browse=" + image_file_directory + first_czi + " " + 
 	"first_czi=" + image_file_directory + first_czi + " " + 
-	angle +
-//	"angle_1=" + angle_1 + " " +
-//	"angle_2=" + angle_2 + " " + 
-//	"angle_3=" + angle_3 + " " +
-//	"angle_4=" + angle_4 + " " + 
-//	"angle_5=" + angle_5 + " " +
-	channel + 
-//	"channel_1=" + channel_1 + " " +
-//	"channel_2=" + channel_2 + " " + // for dual channel comment out if single channel
- 	"_______illumination_1=" + illumination_1 + " " +
+	angle_string +
+	channel_string + 
+	illum_string +
+// 	"_______illumination_1=" + illumination_1 + " " +
 	"modify_calibration " + 
 	"modify_rotation_axis " +
 	"pixel_distance_x=" + pixel_distance_x + " " + 
