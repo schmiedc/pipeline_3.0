@@ -156,9 +156,9 @@ reg_process_illumination="\"All illuminations\""
 reg_process_angle="\"All angles\""
 
 # Channel Settings:
-reg_process_channel="\"All channels\""  			# Single Channel
-#reg_process_channel="\"Single channel (Select from List)\""  # Dual Channel: 1 Channel contains the beads
-reg_processing_channel="\"red\""			# Dual Channel: 1 Channel contains the beads
+#reg_process_channel="\"All channels\""  			# Single Channel
+reg_process_channel="\"Single channel (Select from List)\""  # Dual Channel setting for 1 Channel contains the beads
+reg_processing_channel="\"red\""			# Dual Channel setting for 1 Channel contains the beads
 
 #--- Detect Interest Points for Registration -----------------------------------
 
@@ -187,8 +187,8 @@ reference_timepoint="0"	# reference timepoint
 
 #--- Dublicate Transformations -------------------------------------------------
 
-source_dublication="1"
-target_dublication="0"
+source_dublication="red"
+target_dublication="green"
 
 #-------------------------------------------------------------------------------
 # Fusion General Settings
@@ -203,13 +203,13 @@ fused_image="\"Append to current XML Project\"" # "\"Save as TIFF stack\""
 
 #--- Multi-view content based fusion -------------------------------------------
 
-minimal_x="128" 	# Cropping parameters of full resolution
-minimal_y="-13"
-minimal_z="-407"
-maximal_x="986"
-maximal_y="1927"
-maximal_z="498"
-downsample="1"
+minimal_x="220" 	# Cropping parameters of full resolution
+minimal_y="40"
+minimal_z="-290"
+maximal_x="976"
+maximal_y="1892"
+maximal_z="472"
+downsample="2"
 
 #--- Define xml on content based fusion fusion output and save as xml ----------
 # for pixel size take downsampling into account!
@@ -242,17 +242,17 @@ deconvolution=${jobs_deconvolution}"/deconvolution_GPU.bsh"		# script for GPU de
 
 deco_output_file_directory=${image_file_directory} # output directory: make sure it exists!
 
-minimal_x_deco="64" 	# Cropping parameters adjusted for transformation
-minimal_y_deco="-6"
-minimal_z_deco="-203"
-maximal_x_deco="493"
-maximal_y_deco="963"
-maximal_z_deco="249"
+minimal_x_deco="110" 	# Cropping parameters adjusted for transformation
+minimal_y_deco="20"
+minimal_z_deco="-145"
+maximal_x_deco="488"
+maximal_y_deco="946"
+maximal_z_deco="236"
 
 iterations="1"						# Number of iterations
 
-detections_to_extract_psf_for_channel_0="\"beads\""	# type of detection "\"[Same PSF as channel 1]\""
-detections_to_extract_psf_for_channel_1="\"beads\""
+detections_to_extract_psf_for_channel_1="\"[Same PSF as channel red]\""	# type of detection "\"[Same PSF as channel 1]\""
+detections_to_extract_psf_for_channel_2="\"beads\""
 psf_size_x="19"						# Dimensions of PSF
 psf_size_y="19"
 psf_size_z="25"
