@@ -213,15 +213,19 @@ downsample="2"
 
 #--- Define xml on content based fusion fusion output and save as xml ----------
 # for pixel size take downsampling into account!
-fused_file_directory=${image_file_directory}
+fused_file_directory=${image_file_directory}"/fusion/"
 
-fused_image_file_pattern="TP{t}_Chgreen_Ill0_Ang0,72,144,216,288.tif"	# pattern of spim for padded zeros use tt
-fused_xml="\"fused_Stock68\""
+fused_image_file_pattern="TP{t}_Ch{c}_Ill0_Ang0,72,144,216,288.tif"	# pattern of spim for padded zeros use tt
+fused_xml="\"fused_Dual_Channel\""
+
 fused_timepoints="0-1"			# Timepoints format: "1-2"
-fused_pixel_distance_x="1.150212" 	# Manual calibration x
-fused_pixel_distance_y="1.150212" 	# Manual calibration y
-fused_pixel_distance_z="1.150212" 	# Manual calibration z
+fused_pixel_distance_x="0.5718" 	# Manual calibration x
+fused_pixel_distance_y="0.5718" 	# Manual calibration y
+fused_pixel_distance_z="0.5718" 	# Manual calibration z
 fused_pixel_unit="um"			# unit of manual calibration
+
+fused_multiple_channels="\"YES (one file per channel)\""	# or "\"NO (one channel)\""
+fused_channels="green,red"
 
 fused_hdf5_xml="\"hdf5_fused_Stock68\"" 	# name of hdf5 dataset
 
@@ -262,15 +266,16 @@ psf_size_z="25"
 
 deco_file_directory=${deco_output_file_directory}
 
-deco_image_file_pattern="TP{t}_Chgreen_Ill0_Ang0,72,144,216,288.tif"	# pattern of spim for padded zeros use tt
-deco_xml="\"deco_Stock68\""
-
+deco_image_file_pattern="TP{t}_Ch{c}_Ill0_Ang0,72,144,216,288.tif"	# pattern of spim for padded zeros use tt
+deco_xml="\"deco_Dual_Channel\""
 deco_timepoints="0-1"			# Timepoints format: "1-2"
-deco_pixel_distance_x="0.575107" 	# Manual calibration x
-deco_pixel_distance_y="0.575107" 	# Manual calibration y
-deco_pixel_distance_z="0.575107" 	# Manual calibration z
+deco_pixel_distance_x="0.5718" 	# Manual calibration x
+deco_pixel_distance_y="0.5718" 	# Manual calibration y
+deco_pixel_distance_z="0.5718" 	# Manual calibration z
 deco_pixel_unit="um"			# unit of manual calibration
-deco_channels="0,1"								# for dual channel
+
+deco_multiple_channels="\"YES (one file per channel)\""					# or  "\"NO (one channel)\""
+deco_channels="green,red"								# for dual channel
 
 deco_hdf5_xml="\"hdf5_deconvo_Stock68\"" 	# name of hdf5 dataset
 
@@ -409,10 +414,8 @@ imglib2_data_container="\"ArrayImg (faster)\""
 #--- Define xml on content based fusion fusion output and save as xml ----------
 
 fused_multiple_timepoints="\"YES (one file per time-point)\""   	# or NO (one time-point)
-fused_multiple_channels="\"NO (one channel)\""					# or \"YES (one file per channel)\""
 fused_multiple_illumination_directions="\"NO (one illumination direction)\"" 	# or YES (one file per illumination direction)
 fused_multiple_angles="\"NO (one angle)\"" 					# or NO (one angle)
-fused_channels="0,1"								# for dual channel
 fused_jobs_xml=${job_directory}"output_define_xml"		# directory for define data set
 fused_xml_script=${fused_jobs_xml}"/define_fusion.bsh" # script for defining .czi data
 fused_type_of_dataset="\"Image Stacks (ImageJ Opener)\"" 		# raw fileformat
@@ -455,10 +458,8 @@ cuda_directory="/sw/users/schmied/packages/2015-05-21_Fiji.app.cuda/lib/"
 
 #--- Define xml for deconvolution output and resave into hdf5 ------------------
 deco_multiple_timepoints="\"YES (one file per time-point)\""   	# or NO (one time-point)
-deco_multiple_channels="\"NO (one channel)\""					# or \"YES (one file per channel)\""
 deco_multiple_illumination_directions="\"NO (one illumination direction)\"" 	# or YES (one file per illumination direction)
 deco_multiple_angles="\"NO (one angle)\"" 					# or NO (one angle)
-deco_channels="0,1"								# for dual channel
 deco_jobs_xml=${job_directory}"output_define_xml"		# directory for define data set
 deco_xml_script=${deco_jobs_xml}"/define_deconvo.bsh" # script for defining .czi data
 deco_type_of_dataset="\"Image Stacks (ImageJ Opener)\"" 		# raw fileformat

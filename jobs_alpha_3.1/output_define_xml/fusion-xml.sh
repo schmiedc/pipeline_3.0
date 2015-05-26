@@ -13,6 +13,7 @@ echo "#!/bin/bash" > "$job"
 echo "$XVFB_RUN -a $Fiji \
 	-Dimage_file_directory=$fused_file_directory \
 	-Dtimepoints=$fused_timepoints \
+	-Dchannel_number=$channel_number \
 	-Dchannels=$fused_channels \
 	-Dimage_file_pattern=$fused_image_file_pattern \
 	-Dpixel_distance_x=$fused_pixel_distance_x \
