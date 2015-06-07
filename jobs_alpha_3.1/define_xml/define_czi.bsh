@@ -30,24 +30,27 @@ System.out.println("---------------------------------------------------------");
 System.out.println("Angle Settings:");
 
 // Angle settings
-// Reads out the required number of angles from angle_number
-// then concatenates a string with all given angles for the macro
-int angle_number = Integer.parseInt( System.getProperty( "angle_number" ) );
-System.out.println( "Number of Angles = " + angle_number );
-	
+// Parses angles and determines the number of angles
+// uses tokens of string angles to assemble the string for angle_string
+// via StringBuilder
+angles = System.getProperty( "angles" );
+System.out.println( "Angles = " + angles );
+
+// Parses string angles
+String delims = "[,]";
+String[] angle_token = angles.split(delims);
+
+// Builds string using the number of tokens and inserts the tokens in the string
 StringBuilder angle_string = new StringBuilder();
+String angle_part;
 
-for (int angle=1; angle <= angle_number; angle++ )
-
-{
-	angle_part_1 = "angle_" + angle;
-	angle_part_2 = System.getProperty( angle_part_1 );
-	System.out.println( "Angle_" + angle + " = " + angle_part_2 );
-	angle_part_3 = "angle_" + angle + "=" + angle_part_2;
-	angle_string.append(angle_part_3);
-	angle_string.append(" ");
-	
-}
+	for ( int angle = 0; angle < angle_token.length; angle++) {
+		int num_angles = angle + 1;
+		angle_part = "Angle_" + num_angles + "=" + angle_token[angle];
+		angle_string.append(angle_part);
+		angle_string.append(" ");
+			
+		}
 
 System.out.println( angle_string );
 
@@ -55,50 +58,57 @@ System.out.println("---------------------------------------------------------");
 System.out.println("Channel Settings:");
 
 // Channel settings
-// reads out the required number of channels form channel_number 
-// and concatenates the appropriat string for the bsh
-int channel_number = Integer.parseInt( System.getProperty( "channel_number" ) );
-System.out.println( "Number of Channels = " + channel_number );
+// This parses channels and determines the number of channels
+// then uses the tokens of channels to assemble the necessary string
+// for channel_string via StringBuilder
+channels = System.getProperty( "channels" );
+System.out.println( "Channel Names = " + channels );
 
+// Parses string channel_names
+String delims = "[,]";
+String[] channel_token = channels.split(delims);
+
+// Builds string using the number of tokens and inserts the tokens in the string
 StringBuilder channel_string = new StringBuilder();
+String channel_part;
 
-for (int channel=1; channel <= channel_number; channel++ )
-
-{
-	channel_part_1 = "channel_" + channel;
-	channel_part_2 = System.getProperty( channel_part_1 );
-	System.out.println( "Channel_" + channel + " = " + channel_part_2 );
-	channel_part_3 = "channel_" + channel + "=" + channel_part_2;
-	channel_string.append(channel_part_3);
-	channel_string.append(" ");
-	
-}
-System.out.println( channel_string );
+	for ( int channel = 0; channel < channel_token.length; channel++) {
+		int num_channel = channel + 1;
+		channel_part = "Channel_" + num_channel + "=" + channel_token[channel];
+		channel_string.append(channel_part);
+		channel_string.append(" ");
+			
+		}
+			
+System.out.println( "Channel String = " + channel_string );
 
 System.out.println("---------------------------------------------------------");
 System.out.println("Illumination Settings:");
 
-// Illumination settings
-// reads out the required number of illuminations sides form illum_number 
-// and concatenates the appropriat string for the bsh
-int illum_number = Integer.parseInt( System.getProperty( "illum_number" ) );
-System.out.println( "Number of Illuminations = " + illum_number );
+// Illuminatin settings
+// This parses illumination and determines the number of illuminations
+// then uses the tokens of illuminations to assemble the string for 
+// illum_string via StringBuilder
+illumination = System.getProperty( "illumination" );
+System.out.println( "Illumination = " + illumination );
 
+// Parses string illumination
+String delims = "[,]";
+String[] illum_token = illumination.split(delims);
+
+// Builds string using the number of tokens and inserts the tokens in the string
 StringBuilder illum_string = new StringBuilder();
+String illum_part;
 
-for (int illum=1; illum <= illum_number; illum++ )
+	for ( int illum= 0; illum< illum_token.length; illum++) {
+		int num_illum = illum + 1;
+		illum_part = "_______illumination_" + num_illum + "=" + illum_token[illum];
+		illum_string.append(illum_part);
+		illum_string.append(" ");
+			
+		}
 
-{
-	illum_part_1 = "illumination_" + illum;
-	illum_part_2 = System.getProperty( illum_part_1 );
-	System.out.println( "Illumination_" + illum + " = " + illum_part_2 );
-	illum_part_3 = "_______illumination_" + illum + "=" + illum_part_2;
-	illum_string.append(illum_part_3);
-	illum_string.append(" ");
-	
-}
 System.out.println( illum_string );
-
 
 System.out.println("---------------------------------------------------------");
 System.out.println("Rotation setting:");
@@ -128,7 +138,7 @@ System.out.println("Define Multi-View Dataset type_of_dataset=[Zeiss Lightsheet 
 	"first_czi=" + image_file_directory + first_czi + " " + 
 	angle_string +
 	channel_string + 
- 	"_______illumination_1=" + illumination_1 + " " +
+ 	illum_string +
 	"modify_calibration " + 
 	"modify_rotation_axis " +
 	"pixel_distance_x=" + pixel_distance_x + " " + 
@@ -145,7 +155,6 @@ IJ.run("Define Multi-View Dataset",
 	angle_string +
 	channel_string + 
 	illum_string +
-// 	"_______illumination_1=" + illumination_1 + " " +
 	"modify_calibration " + 
 	"modify_rotation_axis " +
 	"pixel_distance_x=" + pixel_distance_x + " " + 

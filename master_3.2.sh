@@ -24,7 +24,7 @@
 #  	Created: 2015-05-21
 #
 # --- Data directory -----------------------------------------------------------
-image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/Dual_Channel/czi/"
+image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/Dual_Channel/tif/"
 
 # --- jobs directory -----------------------------------------------------------
 job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.1/"
@@ -50,17 +50,17 @@ parallel_timepoints="`seq 0 1`"  # format: "`seq 0 3`"
 # carry the index (0)
 #-------------------------------------------------------------------------------
 
-pad="2"		# for padded zeros
-angle_prep="1 2 3 4 5" # angles format: "1 2 3"
+pad="3"		# for padded zeros
+angle_prep="1" # angles format: "1 2 3"
 
 #--- Renaming ------------------------------------------------------------------
 
 first_index="0"		# First index of czi files
-last_index="9"		# Last index of czi files
-first_timepoint="1"	# The first timepoint
-angles_renaming=(1 2 3 4 5)	# Angles format: (1 2 3)
+last_index="391"		# Last index of czi files
+first_timepoint="0"	# The first timepoint
+angles_renaming=(1)	# Angles format: (1 2 3)
 
-source_pattern=2015-02-20_LZ2_Stock48_Stock58\(\{index\}\).czi # Name of .czi files
+source_pattern=2014-10-23_H2A_gsb_G3\(\{index\}\).czi # Name of .czi files
 target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of renaming
 
 #===============================================================================
@@ -77,20 +77,18 @@ hdf5_xml_filename="\"hdf5_Dual_Channel\""	# xml filename for resaving into hdf5 
 
 merged_xml="\"hdf5_Dual_Channel_merge\"" 	# filename of merged xml without ".xml"
 
-# Multi Channel enabled. Give number of Channels and write the channel variables
-# using the following format when c starts with 1 and ch_string is 
-# the Channel name: channel_{a}="{channel_string}"
-channel_number="2" 	# Single Channel = "1"
-channel_1="green"	
-channel_2="red"
+
+angles="0,72,144,216,288" 	# Format "name1,name2, etc.."
+channels="green,red"		# Format "name1,name2, etc.."
+illumination="0" 		# Format "name1,name2, etc.."
 
 #-------------------------------------------------------------------------------
 # Define dataset: General
 # Choose between ImageJ opener for .tif and Zeiss Lightsheet Z.1 data for .czi
 #-------------------------------------------------------------------------------
 
-pixel_distance_x="0.2859010696" 	# Manual calibration x
-pixel_distance_y="0.2859010696" 	# Manual calibration y
+pixel_distance_x="0.12000" 	# Manual calibration x
+pixel_distance_y="0.12000" 	# Manual calibration y
 pixel_distance_z="1.50000" 	# Manual calibration z
 pixel_unit="um"			# unit of manual calibration
 
@@ -99,39 +97,21 @@ pixel_unit="um"			# unit of manual calibration
 # Comment out "channels_=" in define_tif_zip.bsh if single channel
 
 multiple_timepoints="\"YES (one file per time-point)\""    	# or NO (one time-point)
-multiple_channels="\"YES (one file per channel)\""			# or "\"NO (one channel)\""
+multiple_channels="\"NO (one channel)\""			# or "\"NO (one channel)\""
 multiple_illumination_directions="\"NO (one illumination direction)\"" 	# or YES (one file per illumination direction)
-multiple_angles="\"YES (one file per angle)\"" 			# or NO (one angle)
+multiple_angles="\"NO (one angle)\"" 			# or NO (one angle)
 
 # SPIM file pattern: for padded zeros use tt 
-image_file_pattern="spim_TL{tt}_Angle{a}_Channel{c}.tif"	# for multi channel give spim_TL{tt}_Angle{a}_Channel{c}.tif
+image_file_pattern="spim_TL{ttt}_Angle1.tif"	# for multi channel give spim_TL{tt}_Angle{a}_Channel{c}.tif
 
-timepoints="1-2"			# Timepoints format: "1-2"
-acquisition_angles="1,2,3,4,5"		# angles format: "1,2,3" or "1-3" assumes always multiple angles
-channel_switch="Multi"						# Single or Multi
-channels="0,1"							# Fill out if multi channel
-illumination_switch="Single"					# Single or Dual
-illumination="0,1"						# Fill out if multi sided
+timepoints="0-2"			# Timepoints format: "1-2"
+acquisition_angles="1,2,3"		# angles format: "1,2,3" or "1-3" assumes always multiple angles
 
 #--- Define dataset: Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats) ------------
 
 first_czi="2015-02-20_LZ2_Stock48_Stock58.czi"
 
-# Multi angle enabled. Give number of Angles and write the angle variables using 
-# the following format when a starts with 1 and angle_string is the angle name: 
-# angle_{a}="{angle_string}"
-angle_number="5"
-angle_1="0"
-angle_2="72"
-angle_3="144"
-angle_4="216"
-angle_5="288"
-
-# Multi Illumination side enabled. Give numbers of Illumination sides and write
-# the illumination variable using the following format when i starts with 1 and
-# illum_string is the illumination name: illumination_{i}="{illum_string}"
-illum_number="1"
-illumination_1="0" 	# For one illumination side = 0
+# Rotation
 rotation_around="X-Axis"
 
 #-------------------------------------------------------------------------------
@@ -326,7 +306,7 @@ define_czi_xml=${jobs_xml}"/define_czi.bsh" # script for defining .czi data
 #--- Define dataset: ImageJ Opener or Image Stacks (LOCI Bioformats) -----------
 # Calibration Type = Same voxel-size for all views
 type_of_dataset="\"Image Stacks (ImageJ Opener)\"" 		# raw fileformat
-imglib_container="\"ArrayImg (faster)\""			# options:
+imglib_container="\"CellImg (large images)\"" 			#ArrayImg (faster)
 #-------------------------------------------------------------------------------
 # hdf5 export
 #

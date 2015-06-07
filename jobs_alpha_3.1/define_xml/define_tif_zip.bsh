@@ -48,68 +48,66 @@ System.out.println( "imglib_container = " + imglib_container );
 
 System.out.println("---------------------------------------------------------");
 System.out.println("Channel setting:");
-// Channel switch
-channel_switch = System.getProperty( "channel_switch" ); 
-System.out.println( "Channels Switch = " + channel_switch );
 
+// Channel switch: parses channels and determines if Single or Multi Channel
+// assembles the appropriate string for the channel setting
 channels = System.getProperty( "channels" ); 
 
-
-if ( channel_switch.equalsIgnoreCase( "Single" ) )
-
-{ 
-
+String channel_string = null;
+		
+String delims = "[,]";
+String[] channel_token = channels.split(delims);
+		
+if (channels.equalsIgnoreCase(""))
+	{
+	System.out.println("Warning: There are no channels set");
+	}
+			
+else if ( channel_token.length == 1  )
+	{
 	channel_string="";
-
-}
-
-else if ( channel_switch.equalsIgnoreCase( "Multi" ) )
-
-{
-
+	System.out.println("Single Channel");
+	}
+		
+	else if ( channel_token.length > 1)
+	{
 	channel_string = "channels_=" + channels + " ";
+	System.out.println("Multi Channel");
+	}
+		
+System.out.println( "Channels = " + channel_string );
 
-}
-
-else {
-
-	System.out.println( "Channel switch setting gibberish" );
-
-}
-
-System.out.println( "Channel setting = " + channel_string );
 
 System.out.println("---------------------------------------------------------");
 System.out.println("Illumination setting:");
-// Illuminatin switch
-illumination_switch = System.getProperty( "illumination_switch" );
-System.out.println( "Illumination Switch = " + illumination_switch );
+// Illuminatin switch: parses illumination and determines if there is a single
+// or multiple illumination sides and then assembles the illum_string
 
 illumination = System.getProperty( "illumination" );
 
-if ( illumination_switch.equalsIgnoreCase( "Single" ) )
-	
-{ 
-	
-	illumination_string="";
-	
-}
-
-else if ( channel_switch.equalsIgnoreCase( "Dual" ) )
-	
-{
-	
-	illumination_string = "illumination_" + illumination + " ";
-	
-}
-
-else {
-	
-	System.out.println( "Illumination switch setting gibberish" );
-	
-}
-
-System.out.println( "Illuminations = " + illumination_string );
+String illum_string = null;
+		
+String delims = "[,]";
+String[] illum_token = illumination.split(delims);
+		
+if (illumination.equalsIgnoreCase(""))
+	{
+	System.out.println("Warning: There are no illuminations set");
+	}
+			
+	else if ( illum_token.length == 1  )
+	{
+	illum_string="";
+	System.out.println("One illumination side or fused illumination");
+	}
+		
+	else if ( illum_token.length > 1)
+	{
+	illum_string = "illumination_=" + illumination + " ";
+	System.out.println("Dual Illumination sides");
+	}
+		
+System.out.println( "Illuminations = " + illum_string );
 
 // Calibaration
 System.out.println("=========================================================");
@@ -135,7 +133,7 @@ System.out.println("Define Multi-View Dataset , type_of_dataset=[" + type_of_dat
 	"image_file_pattern=" + image_file_pattern + " " + 
 	"timepoints_=" + timepoints + " " +
 	channel_string +
-	illumination_string +
+	illum_string +
 	"acquisition_angles_=" + acquisition_angles + " " +  
 	"calibration_type=[Same voxel-size for all views] calibration_definition=[User define voxel-size(s)]" + " " + 
 	"imglib2_data_container=[" + imglib_container + "] " + 
@@ -158,7 +156,7 @@ IJ.run("Define Multi-View Dataset",
 	"image_file_pattern=" + image_file_pattern + " " + 
 	"timepoints_=" + timepoints + " " +
 	channel_string +
-	illumination_string +
+	illum_string +
 	"acquisition_angles_=" + acquisition_angles + " " +  
 	"calibration_type=[Same voxel-size for all views] calibration_definition=[User define voxel-size(s)]" + " " + 
 	"imglib2_data_container=[" + imglib_container + "] " + 
