@@ -46,7 +46,7 @@ String angle_part;
 
 	for ( int angle = 0; angle < angle_token.length; angle++) {
 		int num_angles = angle + 1;
-		angle_part = "Angle_" + num_angles + "=" + angle_token[angle];
+		angle_part = "angle_" + num_angles + "=" + angle_token[angle];
 		angle_string.append(angle_part);
 		angle_string.append(" ");
 			
@@ -74,7 +74,7 @@ String channel_part;
 
 	for ( int channel = 0; channel < channel_token.length; channel++) {
 		int num_channel = channel + 1;
-		channel_part = "Channel_" + num_channel + "=" + channel_token[channel];
+		channel_part = "channel_" + num_channel + "=" + channel_token[channel];
 		channel_string.append(channel_part);
 		channel_string.append(" ");
 			

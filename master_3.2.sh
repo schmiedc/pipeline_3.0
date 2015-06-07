@@ -24,7 +24,7 @@
 #  	Created: 2015-05-21
 #
 # --- Data directory -----------------------------------------------------------
-image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/Dual_Channel/tif/"
+image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/Dual_Channel/czi/"
 
 # --- jobs directory -----------------------------------------------------------
 job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.1/"
@@ -87,8 +87,8 @@ illumination="0" 		# Format "name1,name2, etc.."
 # Choose between ImageJ opener for .tif and Zeiss Lightsheet Z.1 data for .czi
 #-------------------------------------------------------------------------------
 
-pixel_distance_x="0.12000" 	# Manual calibration x
-pixel_distance_y="0.12000" 	# Manual calibration y
+pixel_distance_x="0.28590" 	# Manual calibration x
+pixel_distance_y="0.28590" 	# Manual calibration y
 pixel_distance_z="1.50000" 	# Manual calibration z
 pixel_unit="um"			# unit of manual calibration
 

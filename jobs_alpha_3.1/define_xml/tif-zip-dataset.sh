@@ -23,9 +23,7 @@ echo "$XVFB_RUN -a $Fiji \
 	-Dxml_filename=$first_xml_filename \
 	-Dtype_of_dataset=$type_of_dataset \
 	-Dmultiple_timepoints=$multiple_timepoints \
-	-Dchannel_switch=$channel_switch \
 	-Dmultiple_channels=$multiple_channels \
-	-Dillumination_switch=$illumination_switch \
 	-Dillumination=$illumination \
 	-Dmultiple_illumination_directions=$multiple_illumination_directions \
 	-Dmultiple_angles=$multiple_angles \
