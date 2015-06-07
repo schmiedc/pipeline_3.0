@@ -105,7 +105,6 @@ multiple_angles="\"NO (one angle)\"" 			# or NO (one angle)
 image_file_pattern="spim_TL{ttt}_Angle1.tif"	# for multi channel give spim_TL{tt}_Angle{a}_Channel{c}.tif
 
 timepoints="0-2"			# Timepoints format: "1-2"
-acquisition_angles="1,2,3"		# angles format: "1,2,3" or "1-3" assumes always multiple angles
 
 #--- Define dataset: Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats) ------------
 
