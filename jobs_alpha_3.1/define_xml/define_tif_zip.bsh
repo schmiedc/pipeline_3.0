@@ -27,12 +27,12 @@ System.out.println("Dataset:");
 image_file_pattern = System.getProperty( "image_file_pattern" );
 type_of_dataset = System.getProperty( "type_of_dataset" );
 timepoints = System.getProperty( "timepoints" );
-acquisition_angles = System.getProperty( "acquisition_angles" );
+angles = System.getProperty( "angles" );
 
 System.out.println( "image_file_pattern = " + image_file_pattern );
 System.out.println( "type_of_dataset = " + type_of_dataset );
 System.out.println( "timepoints = " + timepoints );
-System.out.println( "acquisition_angles = " + acquisition_angles );
+System.out.println( "angles = " + angles );
 
 multiple_timepoints = System.getProperty( "multiple_timepoints" );
 multiple_channels = System.getProperty( "multiple_channels" );
@@ -157,7 +157,7 @@ IJ.run("Define Multi-View Dataset",
 	"timepoints_=" + timepoints + " " +
 	channel_string +
 	illum_string +
-	"acquisition_angles_=" + acquisition_angles + " " +  
+	"acquisition_angles_=" + angles + " " +  
 	"calibration_type=[Same voxel-size for all views] calibration_definition=[User define voxel-size(s)]" + " " + 
 	"imglib2_data_container=[" + imglib_container + "] " + 
 	"pixel_distance_x=" + pixel_distance_x + " " + 

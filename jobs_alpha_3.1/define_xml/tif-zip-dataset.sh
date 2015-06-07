@@ -14,7 +14,7 @@ echo "$XVFB_RUN -a $Fiji \
 	-Dimage_file_directory=$image_file_directory \
 	-Dtimepoints=$timepoints \
 	-Dchannels=$channels \
-	-Dacquisition_angles=$acquisition_angles \
+	-Dangles=$angles \
 	-Dimage_file_pattern=$image_file_pattern \
 	-Dpixel_distance_x=$pixel_distance_x \
 	-Dpixel_distance_y=$pixel_distance_y \
