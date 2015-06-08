@@ -102,7 +102,7 @@ multiple_illumination_directions="\"NO (one illumination direction)\"" 	# or YES
 multiple_angles="\"NO (one angle)\"" 			# or NO (one angle)
 
 # SPIM file pattern: for padded zeros use tt 
-image_file_pattern="spim_TL{ttt}_Angle1.tif"	# for multi channel give spim_TL{tt}_Angle{a}_Channel{c}.tif
+image_file_pattern="spim_TL{tt}_Angle1.tif"	# for multi channel give spim_TL{tt}_Angle{a}_Channel{c}.tif
 
 timepoints="0-2"			# Timepoints format: "1-2"
 
@@ -135,26 +135,19 @@ reg_process_illumination="\"All illuminations\""
 reg_process_angle="\"All angles\""
 
 # Channel Settings:
-#reg_process_channel="\"All channels\""  			# Single Channel
-reg_process_channel="\"Single channel (Select from List)\""  # Dual Channel setting for 1 Channel contains the beads
+reg_process_channel="\"All channels\"" # Single Channel: "\"Single Channel\""; Dual Channel: "\"All channels\""; Dual Channel one Channel contains beads: "\"Single channel (Select from List)\""		
 reg_processing_channel="\"red\""			# Dual Channel setting for 1 Channel contains the beads
 
 #--- Detect Interest Points for Registration -----------------------------------
 
 label_interest_points="\"beads\""
 type_of_detection="\"Difference-of-Mean (Integral image based)\"" # Difference of Mean
-reg_1_radius_1="2"							  
-reg_1_radius_2="3"
-reg_1_threshold="0.005"
-
-reg_2_radius_1="3"							  
-reg_2_radius_2="5"
-reg_2_threshold="0.007"
-
+reg_radius_1="2,2"							  
+reg_radius_2="3,3"
+reg_threshold="0.005,0.005"
 #--- Register Dataset based on Interest Points ---------------------------------
 
-reg_1_interest_points_channel="\"[(DO NOT register this channel)]\"" # Dual Channel: Channel does not contain the beads "\"[DO NOT register this channel]\""
-reg_2_interest_points_channel="\"beads\""				# Dual Channel: Channel 1 contains the beads
+reg_interest_points_channel="\"[(DO NOT register this channel)], beads\"" # Dual Channel: Channel does not contain the beads "\"[DO NOT register this channel]\""
 
 #--- Merge .xml after registration ---------------------------------------------
 

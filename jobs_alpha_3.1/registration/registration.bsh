@@ -96,160 +96,186 @@ System.out.println( "significance = " + significance );
 // detection_min_max = System.getProperty( "detection_min_max" );
 // System.out.println( "detection_min_max = " + detection_min_max );
 System.out.println( "-------------------------------------------------------" );
-System.out.println( "Channel Setting: " );
+System.out.println( "Channel setting for Detection: " );
 
 // Channel setting for Difference-of-Mean detection
+// parses channels and takes from there the number of channels
+// takes from reg_process_channel if it is Single Channel, Dual Channel or Dual Channel
+// were one Channel contains the beads
+// from this it decides which string to assemble
 reg_process_channel = System.getProperty( "reg_process_channel" );
 System.out.println( "process_channel = " + reg_process_channel );
 
-processing_channel = System.getProperty( "processing_channel" ); 
-System.out.println( "processing_channel = channel " + processing_channel ); 
+reg_processing_channel = System.getProperty( "reg_processing_channel" ); 
+System.out.println( "processing_channel = channel " + reg_processing_channel ); 
 
-int channel_number = Integer.parseInt( System.getProperty( "channel_number" ) );
-System.out.println( "Number of Channels = " + channel_number );
+channels = System.getProperty( "channels" );
+System.out.println( "Channels = " + channels );
 
-channel_1 = System.getProperty( "channel_1" );
-channel_2 = System.getProperty( "channel_2" );
-System.out.println( "channel_1 = " + channel_1 );
-System.out.println( "channel_2 = " + channel_2 );
+reg_radius_1 = System.getProperty( "reg_radius_1" );
+System.out.println( "reg_radius_1" + reg_radius_1 );
+	
+reg_radius_2 = System.getProperty( "reg_radius_2" );
+System.out.println( "reg_radius_2" + reg_radius_2 );
 
+reg_threshold = System.getProperty( "reg_threshold" );
+System.out.println( "reg_threshold" + reg_threshold);	
+	
+// Splits up channels, reg_radius_1, reg_radius_2 and reg_threshold
+String delims = "[,]";
+String[] channel_token = channels.split(delims);
+String[] radius_1_token = reg_radius_1.split(delims);
+String[] radius_2_token = reg_radius_2.split(delims);
+String[] threshold_token = reg_threshold.split(delims);
 
+String channel_string = "";
+String processing_channel_string = "";
 StringBuilder channel_string_multi = new StringBuilder();
-
-if (reg_process_channel.equalsIgnoreCase( "All channels" ) && channel_number > 1 )
+	
+// If there are no channels set returns an error
+if (channels.equalsIgnoreCase(""))
+{
+	System.out.println("Warning: There are no channels set");
+}
+	
+// Dual Channels both Channels contain beads
+else if (reg_process_channel.equalsIgnoreCase( "All channels" ) && channel_token.length > 1 )
 
 {
-	processing_channel_string = "";
-	channel_string = "";
+	// Assembles String using StringBuilder for 2 Channels		
+	for (int channel=0; channel < channel_token.length; channel++ )
+	{
+		String channel_part = "interest_point_specification_(channel_" + channel_token[channel] + ")=[Advanced ...] " +
+		"radius_1_" + channel_token[channel] +  "=" + radius_1_token[channel] + " " +
+		"radius_2_" + channel_token[channel] +  "=" + radius_2_token[channel] + " " +
+		"threshold_" + channel_token[channel] +  "=" + threshold_token[channel] + " " +
+		"find_maxima_" + channel_token[channel];
+		channel_string_multi.append(channel_part);
+		channel_string_multi.append(" ");	
+	}
 
-		for (int channel=1; channel <= channel_number; channel++ )
+	}
+		
+	// Returns an Error if there is one channel in channels but multiple settings in radius and or threshold
+	else if ( channel_token.length == 1 && (radius_1_token.length > 1 || radius_2_token.length > 1 || threshold_token.length > 1 ) )
+	{
+		System.out.println( "Error: Only one channel detected but multiple channel settings for radius or threshold" );
+	}
+	
+	// Returns an Error if set to Dual Channel one Channel contains beads but there is only one channel in channels	
+	else if ( reg_process_channel.equalsIgnoreCase( "Single channel (Select from List)" ) && channel_token.length == 1 )
+	{
+		System.out.println( "Error: reg_process_channel or channels set incorrectly" );
+	}
+	
+	// Assembles String for Singel Channel 
+	else if (reg_process_channel.equalsIgnoreCase( "Single channel" ) && channel_token.length == 1 ) 
+	{
+		processing_channel_string = "";
+		channel_string_multi.append("");	
+		channel_string = "interest_point_specification=[Advanced ...] " +
+		"radius_1=" + reg_radius_1 + " " +
+		"radius_2=" + reg_radius_2 + " " +
+		"threshold=" + reg_threshold + " " +
+		"find_maxima";
+	}		
+		
+	// Returns and Error if set to Dual Channel but there are multiple settings in radius and or threshold
+	else if ( reg_process_channel.equalsIgnoreCase( "Single channel (Select from List)" ) && (radius_1_token.length > 1 || radius_2_token.length > 1 || threshold_token.length > 1 ) )
+	{
+		System.out.println( "Error: You said you wanted to process only one channel but there are multiple settings for radius or threshold" );
+	}
 
-		{
-			channel_part_1 = "channel_" + channel;
-			channel_part_2 = System.getProperty( channel_part_1 );
-			
-			radius1_part_1 = "reg_" + channel + "_radius_1";
-			radius_1 = System.getProperty( radius1_part_1);
-			
-			radius2_part_1 = "reg_" + channel + "_radius_2";
-			radius_2 = System.getProperty( radius2_part_1);
-			
-			threshold_part_1 = "reg_" + channel + "_threshold";
-			threshold = System.getProperty( threshold_part_1);
-			
-			channel_part_3 = "interest_point_specification_(channel_" + channel_part_2 + ")=[Advanced ...] " +
-			"radius_1_" + channel_part_2 +  "=" + radius_1 + " " +
-			"radius_2_" + channel_part_2 +  "=" + radius_2 + " " +
-			"threshold_" + channel_part_2 +  "=" + threshold + " " +
-			"find_maxima_" + channel_part_2;
-			channel_string_multi.append(channel_part_3);
-			channel_string_multi.append(" ");
-			System.out.println( channel_string_multi );
+	// Assembles String for Dual Channel but only one Channel contains beads
+	else if (reg_process_channel.equalsIgnoreCase( "Single channel (Select from List)" ) && channel_token.length > 1)
+	{	
+		channel_string_multi.append("");
+		processing_channel_string = "processing_channel=[channel " +  reg_processing_channel + "] ";
+		channel_string = "interest_point_specification=[Advanced ...] " +
+		"radius_1=" + reg_radius_1 + " " +
+		"radius_2=" + reg_radius_2 + " " +
+		"threshold=" + reg_threshold + " " +
+		"find_maxima";
 		}
-
-}
-
-else if (reg_process_channel.equalsIgnoreCase( "All channels" ) && channel_number == 1 ) 
-{
-	processing_channel_string = "";
-	channel_string_multi.append("");
-	int reg_1_radius_1 = Integer.parseInt( System.getProperty( "reg_1_radius_1" ) );
-	int reg_1_radius_2 = Integer.parseInt( System.getProperty( "reg_1_radius_2" ) );
-	float reg_1_threshold = Float.parseFloat( System.getProperty( "reg_1_threshold" ) );
-	System.out.println( "reg_1_radius_1 = " + reg_1_radius_1 );
-	System.out.println( "reg_1_radius_2 = " + reg_1_radius_2 );
-	System.out.println( "reg_1_threshold = " + reg_1_threshold );
-
-	channel_string = "interest_point_specification=[Advanced ...] " +
-	"radius_1=" + reg_1_radius_1 + " " +
-	"radius_2=" + reg_1_radius_2 + " " +
-	"threshold=" + reg_1_threshold + " " +
-	"find_maxima";
-
-}		
-
-else if (reg_process_channel.equalsIgnoreCase( "Single channel (Select from List)" ) )
-	
-{	
-	channel_string_multi.append("");
-	int reg_1_radius_1 = Integer.parseInt( System.getProperty( "reg_1_radius_1" ) );
-	int reg_1_radius_2 = Integer.parseInt( System.getProperty( "reg_1_radius_2" ) );
-	float reg_1_threshold = Float.parseFloat( System.getProperty( "reg_1_threshold" ) );
-	System.out.println( "reg_1_radius_1 = " + reg_1_radius_1 );
-	System.out.println( "reg_1_radius_2 = " + reg_1_radius_2 );
-	System.out.println( "reg_1_threshold = " + reg_1_threshold );
-
-	processing_channel_string = "processing_channel=[channel " +  processing_channel + "] ";
-	channel_string = "interest_point_specification=[Advanced ...] " +
-	"radius_1=" + reg_1_radius_1 + " " +
-	"radius_2=" + reg_1_radius_2 + " " +
-	"threshold=" + reg_1_threshold + " " +
-	"find_maxima";
-}
-
-else 
-	
-{	
-	
-	System.out.println( "reg_process_channel is set incorrectly" );
-	
-}
-
+	// Returns and Error if no conditions above are met
+	else
+	{
+		System.out.println( "Error: Incorrect settings" );
+	}
+		
 System.out.println( "Processing Channel = " + processing_channel_string );
-System.out.println( "Channel String = " + channel_string );
-System.out.println( "Multi channel String  = " + channel_string_multi );
+System.out.println( "Channel String: " + channel_string );
+System.out.println( "Multi channel String: " + channel_string_multi );
 
 // Channel Setting Registration
+System.out.println( "-------------------------------------------------------" );
+System.out.println( "Channel Setting for Registration: " );
+// Splits up channels, reg_interest_points_channel
+
+reg_interest_points_channel = System.getProperty( "reg_interest_points_channel" );
+System.out.println( "reg_interest_points_channel = " + reg_interest_points_channel );
+
+String delims = "[,]";
+String[] channel_token = channels.split(delims);
+String[] interest_token = reg_interest_points_channel.split(delims);
+		
+
+String reg_single_channel_string ="";
 StringBuilder reg_multi_channel_string = new StringBuilder();
-
-if (reg_process_channel.equalsIgnoreCase( "All channels" ) && channel_number == 1 )	
-{	
-	reg_multi_channel_string.append( "" );
-	reg_1_interest_points_channel = System.getProperty( "reg_1_interest_points_channel" );
-	System.out.println( "interest_points_channel_" + channel_1 + " = " + reg_1_interest_points_channel );
-	reg_single_channel_string = "interest_points_channel_" + channel_1 + "=" + reg_1_interest_points_channel + " ";
-}
-
-else if (reg_process_channel.equalsIgnoreCase( "All channels" ) && channel_number > 1 ) 
-{
-	for (int channel=1; channel <= channel_number; channel++ )
-
-		{	
-			reg_single_channel_string = ""; 
-			channel_part_1 = "channel_" + channel;
-			channel_part_2 = System.getProperty( channel_part_1 );
-			
-			interest_points_part_1 = "reg_" + channel + "_interest_points_channel";
-			interest_points_part_2 = System.getProperty( interest_points_part_1 );
-			
-			channel_part_3 = "interest_points_channel_" + channel_part_2 + "=" + interest_points_part_2 + " ";
-			reg_multi_channel_string.append( channel_part_3 );
-			reg_multi_channel_string.append(" ");
-			System.out.println( reg_multi_channel_string );
-			
-		}
-}
-
-else if (reg_process_channel.equalsIgnoreCase( "Single channel (Select from List)" ) )	
-{
-		for (int channel=1; channel <= channel_number; channel++ )
-
-		{	
-			reg_single_channel_string = ""; 
-			channel_part_1 = "channel_" + channel;
-			channel_part_2 = System.getProperty( channel_part_1 );
-			
-			interest_points_part_1 = "reg_" + channel + "_interest_points_channel";
-			interest_points_part_2 = System.getProperty( interest_points_part_1 );
-			
-			channel_part_3 = "interest_points_channel_" + channel_part_2 + "=" + interest_points_part_2 + " ";
-			reg_multi_channel_string.append( channel_part_3 );
-			reg_multi_channel_string.append(" ");
-			System.out.println( reg_multi_channel_string );
-			
-		}
+		
+// If there are no channels set returns an error
+if (channels.equalsIgnoreCase(""))
+	{
+		System.out.println("Warning: There are no channels set");
+	}
+		
+	// Returns Error if Single Channel selected but multiple settings in channels or reg_interest_points_channel
+	else if ( reg_process_channel.equalsIgnoreCase( "Single Channel" ) && (channel_token.length > 1 || interest_token.length > 1 ))
+	{
+		System.out.println( "Error: Single Channel selected but multiple settings in channls or reg_interest_points_channel" );
+	}
 	
-}
+	// Assembles string for Single Channel registration
+	else if (reg_process_channel.equalsIgnoreCase( "Single Channel" ) && channel_token.length == 1 && interest_token.length == 1 )	
+	{	
+		reg_multi_channel_string.append( "" );
+		reg_single_channel_string = "interest_points_channel_" + channels + "=" + reg_interest_points_channel + " ";
+	}
+	
+	// Returns error if Multi Channels are selected but not enough settings in channels or 	reg_interest_points_channel
+	else if (reg_process_channel.equalsIgnoreCase( "All channels" ) &&  ( channel_token.length < 1 || interest_token.length < 1) ) 
+	{
+		System.out.println( "Error: Multi Channel selected but only one setting in channels or reg_interest_points_channel" );
+	}
+	
+	// Assembles string for Multi Channel registration
+	else if (reg_process_channel.equalsIgnoreCase( "All channels" ) && channel_token.length > 1 ) 
+	{
+		for (int channel=0; channel < channel_token.length; channel++ )
+
+			{	
+				String channel_part = "interest_points_channel_" + channel_token[channel] + "=" + interest_token[channel] + " ";
+				reg_multi_channel_string.append( channel_part );
+				reg_multi_channel_string.append(" ");
+			}
+	}
+
+	// Returns error of Multi Channels one Channel contains the beads is slected but not enough settings in channels or reg_interest_points_channel
+	else if (reg_process_channel.equalsIgnoreCase( "Single channel (Select from List)" ) && ( channel_token.length < 1 || interest_token.length < 1 ))
+	{
+		System.out.println( "Error: Multi Channel one Channel contains beads selected but only one setting in channls or reg_interest_points_channel" );
+	}
+		
+	// Assembles string for Multi Channel Processing one Channel Contains the beads
+	else if (reg_process_channel.equalsIgnoreCase( "Single channel (Select from List)" ) && channel_token.length > 1 && interest_token.length > 1)	
+	{
+			for (int channel=0; channel < channel_token.length; channel++ )
+			{	
+				String channel_part = "interest_points_channel_" + channel_token[channel] + "=" + interest_token[channel] + " ";
+				reg_multi_channel_string.append( channel_part );
+				reg_multi_channel_string.append(" ");		
+			}
+	}
 
 System.out.println( "reg_single_channel_string = " + reg_single_channel_string );
 System.out.println( "reg_multi_channel_string = " + reg_multi_channel_string );
