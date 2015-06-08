@@ -135,19 +135,19 @@ reg_process_illumination="\"All illuminations\""
 reg_process_angle="\"All angles\""
 
 # Channel Settings:
-reg_process_channel="\"All channels\"" # Single Channel: "\"Single Channel\""; Dual Channel: "\"All channels\""; Dual Channel one Channel contains beads: "\"Single channel (Select from List)\""		
+reg_process_channel="\"Single channel (Select from List)\"" # Single Channel: "\"Single Channel\""; Dual Channel: "\"All channels\""; Dual Channel one Channel contains beads: "\"Single channel (Select from List)\""		
 reg_processing_channel="\"red\""			# Dual Channel setting for 1 Channel contains the beads
 
 #--- Detect Interest Points for Registration -----------------------------------
 
 label_interest_points="\"beads\""
 type_of_detection="\"Difference-of-Mean (Integral image based)\"" # Difference of Mean
-reg_radius_1="2,2"							  
-reg_radius_2="3,3"
-reg_threshold="0.005,0.005"
+reg_radius_1="2"							  
+reg_radius_2="3"
+reg_threshold="0.005"
 #--- Register Dataset based on Interest Points ---------------------------------
 
-reg_interest_points_channel="\"[(DO NOT register this channel)], beads\"" # Dual Channel: Channel does not contain the beads "\"[DO NOT register this channel]\""
+reg_interest_points_channel="\"[(DO NOT register this channel)],beads\"" # Dual Channel: Channel does not contain the beads "\"[DO NOT register this channel]\""
 
 #--- Merge .xml after registration ---------------------------------------------
 
@@ -258,10 +258,12 @@ deco_hdf5_xml="\"hdf5_deconvo_Stock68\"" 	# name of hdf5 dataset
 # Fiji settings
 #-------------------------------------------------------------------------------
 XVFB_RUN="/sw/bin/xvfb-run"				 # virtual frame buffer
-#Fiji="/sw/users/schmied/packages/2015-03-19_Fiji.app.cuda/ImageJ-linux64" 		        # old Fiji
-#Fiji="/sw/users/schmied/packages/2015-04-25_Fiji.app.cuda/ImageJ-linux64"			# Fiji Bug
-#Fiji="/sw/users/schmied/packages/2015-05-07_Fiji.app.cuda/ImageJ-linux64"                       # works
-Fiji="/sw/users/schmied/packages/2015-05-21_Fiji.app.cuda/ImageJ-linux64"			# woriking Fiji
+# working Fiji
+#Fiji="/sw/users/schmied/packages/2015-05-21_Fiji.app.cuda/ImageJ-linux64"			# woriking Fiji
+Fiji="/sw/users/schmied/packages/2015-06-08_Fiji.app.cuda/ImageJ-linux64"
+
+#Fiji for Dual Channel timelapse and Dual Channel Deconvolution
+FijiDualTimelapse="/sw/users/schmied/packages/2015-05-29_Fiji-2.3.9-SNAP.app.cuda/ImageJ-linux64"
 
 Fiji_resave="/sw/users/schmied/lifeline/Fiji.app.lifeline2/ImageJ-linux64" 	# Fiji that works for resaving
 Fiji_Deconvolution=${Fiji}		# Fiji that works for deconvolution

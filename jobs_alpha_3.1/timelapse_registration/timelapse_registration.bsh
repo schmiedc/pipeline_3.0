@@ -65,74 +65,83 @@ System.out.println( "significance = " + significance );
 // Timelapse registration Parameter
 System.out.println("---------------------------------------------------------");
 System.out.println( "Channel Settings: " );
-
 // Channel Setting Registration
-int channel_number = Integer.parseInt( System.getProperty( "channel_number" ) );
-System.out.println( "Number of Channels = " + channel_number );
+// parses channels and takes from there the number of channels
+// takes from reg_process_channel if it is Single Channel, Dual Channel or Dual Channel
+// were one Channel contains the beads
+// from this it decides which string to assemble
 
 reg_process_channel = System.getProperty( "reg_process_channel" );
 System.out.println( "process_channel = " + reg_process_channel );
 
-channel_1 = System.getProperty( "channel_1" );
-channel_2 = System.getProperty( "channel_2" );
-System.out.println( "channel_1 = " + channel_1 );
-System.out.println( "channel_2 = " + channel_2 );
+channels = System.getProperty( "channels" );
+System.out.println( "Channels = " + channels );
 
-//reg_1_interest_points_channel = System.getProperty( "reg_1_interest_points_channel" );
-//reg_2_interest_points_channel = System.getProperty( "reg_2_interest_points_channel" ); // Dual Channel 
-//System.out.println( "interest_points_channel_" + channel_1 + " = " + reg_1_interest_points_channel );
-//System.out.println( "interest_points_channel_" + channel_2 + " = " + reg_2_interest_points_channel );
+reg_interest_points_channel = System.getProperty( "reg_interest_points_channel" );
+System.out.println( "reg_interest_points_channel = " + reg_interest_points_channel );
 
+// Splits up channels, reg_interest_points_channel
+String delims = "[,]";
+String[] channel_token = channels.split(delims);
+String[] interest_token = reg_interest_points_channel.split(delims);
+		
+String reg_single_channel_string = "";
 StringBuilder reg_multi_channel_string = new StringBuilder();
 
-if (reg_process_channel.equalsIgnoreCase( "All channels" ) && channel_number == 1 )	
-{	
-	reg_multi_channel_string.append( "" );
-	reg_1_interest_points_channel = System.getProperty( "reg_1_interest_points_channel" );
-	System.out.println( "interest_points_channel_" + channel_1 + " = " + reg_1_interest_points_channel );
-	reg_single_channel_string = "interest_points_channel_" + channel_1 + "=" + reg_1_interest_points_channel + " ";
-}
-
-else if (reg_process_channel.equalsIgnoreCase( "All channels" ) && channel_number > 1 ) 
-{
-	for (int channel=1; channel <= channel_number; channel++ )
-
-		{	
-			reg_single_channel_string = ""; 
-			channel_part_1 = "channel_" + channel;
-			channel_part_2 = System.getProperty( channel_part_1 );
-			
-			interest_points_part_1 = "reg_" + channel + "_interest_points_channel";
-			interest_points_part_2 = System.getProperty( interest_points_part_1 );
-			
-			channel_part_3 = "interest_points_channel_" + channel_part_2 + "=" + interest_points_part_2 + " ";
-			reg_multi_channel_string.append( channel_part_3 );
-			reg_multi_channel_string.append(" ");
-			System.out.println( reg_multi_channel_string );
-			
-		}
-}
-
-else if (reg_process_channel.equalsIgnoreCase( "Single channel (Select from List)" ) )	
-{
-		for (int channel=1; channel <= channel_number; channel++ )
-
-		{	
-			reg_single_channel_string = ""; 
-			channel_part_1 = "channel_" + channel;
-			channel_part_2 = System.getProperty( channel_part_1 );
-			
-			interest_points_part_1 = "reg_" + channel + "_interest_points_channel";
-			interest_points_part_2 = System.getProperty( interest_points_part_1 );
-			
-			channel_part_3 = "interest_points_channel_" + channel_part_2 + "=" + interest_points_part_2 + " ";
-			reg_multi_channel_string.append( channel_part_3 );
-			reg_multi_channel_string.append(" ");
-			System.out.println( reg_multi_channel_string );
-			
-		}
+	if (channels.equalsIgnoreCase(""))
+	{
+		System.out.println("Warning: There are no channels set");
+	}
+		
+	// Returns Error if Single Channel selected but multiple settings in channels or reg_interest_points_channel
+	else if ( reg_process_channel.equalsIgnoreCase( "Single Channel" ) && (channel_token.length > 1 || interest_token.length > 1 ))
+	{
+		System.out.println( "Error: Single Channel selected but multiple settings in channls or reg_interest_points_channel" );
+	}
 	
-}
+	// Assembles string for Single Channel registration
+	else if (reg_process_channel.equalsIgnoreCase( "Single channel" ) && channel_token.length == 1 )	
+	{	
+		reg_multi_channel_string.append( "" );
+		reg_single_channel_string = "interest_points_channel_" + channels + "=" + reg_interest_points_channel + " ";
+	}
+
+	// Returns error if Multi Channels are selected but not enough settings in channels or 	reg_interest_points_channel
+	else if (reg_process_channel.equalsIgnoreCase( "All channels" ) &&  ( channel_token.length < 1 || interest_token.length < 1) ) 
+	{
+		System.out.println( "Error: Multi Channel selected but only one setting in channels or reg_interest_points_channel" );
+	}
+	
+	// Assembles string for Multi Channel registration
+	else if (reg_process_channel.equalsIgnoreCase( "All channels" ) && channel_token.length > 1 ) 
+	{
+		for (int channel=0; channel < channel_token.length; channel++ )
+
+			{	
+				String channel_part = "interest_points_channel_" + channel_token[channel] + "=" + interest_token[channel] + " ";
+				reg_multi_channel_string.append( channel_part );
+				reg_multi_channel_string.append(" ");
+			}
+	}
+		
+	// Returns error of Multi Channels one Channel contains the beads is selected but not enough settings in channels or reg_interest_points_channel
+	else if (reg_process_channel.equalsIgnoreCase( "Single channel (Select from List)" ) && ( channel_token.length < 1 || interest_token.length < 1 ))
+	{
+		System.out.println( "Error: Multi Channel one Channel contains beads selected but only one setting in channls or reg_interest_points_channel" );
+	}
+	
+	// Assembles string for Multi Channel Processing one Channel Contains the beads	
+	else if (reg_process_channel.equalsIgnoreCase( "Single channel (Select from List)" ) && channel_token.length > 1 && interest_token.length > 1 )	
+	{
+			for (int channel=0; channel < channel_token.length; channel++ )
+
+			{	
+				String channel_part = "interest_points_channel_" + channel_token[channel] + "=" + interest_token[channel] + " ";
+				reg_multi_channel_string.append( channel_part );
+				reg_multi_channel_string.append(" ");
+			}
+			
+	}
 
 System.out.println( "reg_single_channel_string = " + reg_single_channel_string );
 System.out.println( "reg_multi_channel_string = " + reg_multi_channel_string );

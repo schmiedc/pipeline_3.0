@@ -210,11 +210,15 @@ System.out.println( "Multi channel String: " + channel_string_multi );
 // Channel Setting Registration
 System.out.println( "-------------------------------------------------------" );
 System.out.println( "Channel Setting for Registration: " );
-// Splits up channels, reg_interest_points_channel
+// parses channels and takes from there the number of channels
+// takes from reg_process_channel if it is Single Channel, Dual Channel or Dual Channel
+// were one Channel contains the beads
+// from this it decides which string to assemble
 
 reg_interest_points_channel = System.getProperty( "reg_interest_points_channel" );
 System.out.println( "reg_interest_points_channel = " + reg_interest_points_channel );
 
+// Splits up channels, reg_interest_points_channel
 String delims = "[,]";
 String[] channel_token = channels.split(delims);
 String[] interest_token = reg_interest_points_channel.split(delims);
@@ -260,7 +264,7 @@ if (channels.equalsIgnoreCase(""))
 			}
 	}
 
-	// Returns error of Multi Channels one Channel contains the beads is slected but not enough settings in channels or reg_interest_points_channel
+	// Returns error of Multi Channels one Channel contains the beads is selected but not enough settings in channels or reg_interest_points_channel
 	else if (reg_process_channel.equalsIgnoreCase( "Single channel (Select from List)" ) && ( channel_token.length < 1 || interest_token.length < 1 ))
 	{
 		System.out.println( "Error: Multi Channel one Channel contains beads selected but only one setting in channls or reg_interest_points_channel" );

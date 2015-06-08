@@ -6,7 +6,7 @@ mkdir -p $jobs_timelapse
 job="$jobs_timelapse/timelapse.job"
 echo $job
 echo "#!/bin/bash" > "$job"
-echo "$XVFB_RUN -a $Fiji \
+echo "$XVFB_RUN -a $FijiDualTimelapse \
     -Dimage_file_directory=$image_file_directory \
     -Dmerged_xml=$merged_xml \
     -Dtimelapse_process_timepoints=$timelapse_process_timepoints \
@@ -14,13 +14,10 @@ echo "$XVFB_RUN -a $Fiji \
     -Dreg_process_illumination=$reg_process_illumination \
     -Dreg_process_angle=$reg_process_angle \
     -Dreference_timepoint=$reference_timepoint \
-    -Dchannel_number=$channel_number \
-    -Dchannel_1=$channel_1 \
-    -Dchannel_2=$channel_2 \
+    -Dchannels=$channels \
     -Dtype_of_registration_timelapse=$type_of_registration_timelapse \
     -Dregistration_algorithm=$registration_algorithm \
-    -Dreg_1_interest_points_channel=$reg_1_interest_points_channel \
-    -Dreg_2_interest_points_channel=$reg_2_interest_points_channel \
+    -Dreg_interest_points_channel=$reg_interest_points_channel \
     -Dtransformation_model=$transformation_model \
     -Dmodel_to_regularize_with=$model_to_regularize_with \
     -Dlambda=$lambda \
