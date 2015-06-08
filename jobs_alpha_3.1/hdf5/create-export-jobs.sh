@@ -17,7 +17,7 @@ do
 	job="$jobs_export/hdf5-$i.job"
 	echo $job
 	echo "#!/bin/bash" > "$job"
-	echo "$XVFB_RUN -a $Fiji -Xmx10g \
+	echo "$XVFB_RUN -a $Fiji -Xmx50g \
 		-Dimage_file_directory=$image_file_directory \
 		-Dfirst_xml_filename=$first_xml_filename \
 		-Dhdf5_xml_filename=$hdf5_xml_filename \

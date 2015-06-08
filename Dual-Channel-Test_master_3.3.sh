@@ -19,12 +19,12 @@
 #-------------------------------------------------------------------------------
 # Data set description
 #
-# 	Dataset: Single Channel test: 2015-02-21_LZ1_Stock68_3
+# 	Dataset: Dual Channel test: 2015-02-20_LZ2_Stock48_Stock58.czi
 #	  Owner: Christopher Schmied
-#  	Created: 2015-06-08
+#  	Created: 2015-05-21
 #
 # --- Data directory -----------------------------------------------------------
-image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/czi/"
+image_file_directory="/projects/pilot_spim/Christopher/Test_pipeline_3.0/Dual_Channel/czi/"
 
 # --- jobs directory -----------------------------------------------------------
 job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.1/"
@@ -41,24 +41,24 @@ parallel_timepoints="`seq 0 1`"  # format: "`seq 0 3`"
 #	4) Multiview Fusion
 #===============================================================================
 
-first_xml_filename="\"Single_Channel\""           # xml filename for czi or tif dataset without ".xml"
+first_xml_filename="\"Dual_Channel\""           # xml filename for czi or tif dataset without ".xml"
 
-hdf5_xml_filename="\"hdf5_Single_Channel\""	# xml filename for resaving into hdf5 dataset without ".xml"
+hdf5_xml_filename="\"hdf5_Dual_Channel\""	# xml filename for resaving into hdf5 dataset without ".xml"
 
-merged_xml="\"hdf5_Single_Channel_merge\"" 	# filename of merged xml without ".xml"
+merged_xml="\"hdf5_Dual_Channel_merge\"" 	# filename of merged xml without ".xml"
 
 
-angles="0,72,144,216,288" 	# Format "name1,name2, etc.." no spaces delimiter = ,
-channels="green"		# Format "name1,name2, etc.." no spaces delimiter = ,
-illumination="0" 		# Format "name1,name2, etc.." no spaces delimiter = ,
+angles="0,72,144,216,288" 	# Format "name1,name2, etc.."
+channels="green,red"		# Format "name1,name2, etc.."
+illumination="0" 		# Format "name1,name2, etc.."
 
 #-------------------------------------------------------------------------------
 # Define dataset: General
 # Choose between ImageJ opener for .tif and Zeiss Lightsheet Z.1 data for .czi
 #-------------------------------------------------------------------------------
 
-pixel_distance_x="0.28755" 	# Manual calibration x
-pixel_distance_y="0.28755" 	# Manual calibration y
+pixel_distance_x="0.28590" 	# Manual calibration x
+pixel_distance_y="0.28590" 	# Manual calibration y
 pixel_distance_z="1.50000" 	# Manual calibration z
 pixel_unit="um"			# unit of manual calibration
 
@@ -78,7 +78,7 @@ timepoints="0-2"			# Timepoints format: "1-2"
 
 #--- Define dataset: Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats) ------------
 
-first_czi="2015-02-21_LZ1_Stock68_3.czi"
+first_czi="2015-02-20_LZ2_Stock48_Stock58.czi"
 
 #-------------------------------------------------------------------------------
 # Resave as hdf5
@@ -98,20 +98,19 @@ first_czi="2015-02-21_LZ1_Stock68_3.czi"
 # job script using the parallel_timepoints variable (see dataset description)
 
 # Channel Settings:
-reg_process_channel="\"Single Channel\"" # Single Channel: "\"Single Channel\""; Dual Channel: "\"All channels\""; Dual Channel one Channel contains beads: "\"Single channel (Select from List)\""		
+reg_process_channel="\"Single channel (Select from List)\"" # Single Channel: "\"Single Channel\""; Dual Channel: "\"All channels\""; Dual Channel one Channel contains beads: "\"Single channel (Select from List)\""		
 reg_processing_channel="\"red\""			# Dual Channel setting for 1 Channel contains the beads
 
 #--- Detect Interest Points for Registration -----------------------------------
 
 label_interest_points="\"beads\""
 type_of_detection="\"Difference-of-Mean (Integral image based)\"" # Difference of Mean
-reg_radius_1="2"			# Format "value1,value2, ..." no spaces deliminter = ,						  
-reg_radius_2="3"			# Format "value1,value2, ..." no spaces deliminter = ,
-reg_threshold="0.005"			# Format "value1,value2, ..." no spaces deliminter = ,
+reg_radius_1="2"							  
+reg_radius_2="3"
+reg_threshold="0.005"
 #--- Register Dataset based on Interest Points ---------------------------------
 
-reg_interest_points_channel="\"beads\"" # Dual Channel: "\"beads,beads\""
-					# Dual Channel: Channel does not contain the beads "\"[DO NOT register this channel],beads\""
+reg_interest_points_channel="\"[(DO NOT register this channel)],beads\"" # Dual Channel: Channel does not contain the beads "\"[DO NOT register this channel]\""
 
 #--- Merge .xml after registration ---------------------------------------------
 
@@ -131,12 +130,12 @@ target_dublication="green"
 #-------------------------------------------------------------------------------
 #--- Multi-view content based fusion -------------------------------------------
 
-minimal_x="152" 	# Cropping parameters of full resolution
-minimal_y="4"
-minimal_z="-412"
-maximal_x="968"
-maximal_y="1924"
-maximal_z="476"
+minimal_x="220" 	# Cropping parameters of full resolution
+minimal_y="40"
+minimal_z="-290"
+maximal_x="976"
+maximal_y="1892"
+maximal_z="472"
 downsample="2"
 
 #--- Define xml on content based fusion fusion output and save as xml ----------
@@ -174,14 +173,14 @@ deconvolution=${jobs_deconvolution}"/deconvolution_GPU.bsh"		# script for GPU de
 
 deco_output_file_directory=${image_file_directory} # output directory: make sure it exists!
 
-minimal_x_deco="76" 	# Cropping parameters adjusted for transformation
-minimal_y_deco="2"
-minimal_z_deco="-206"
-maximal_x_deco="484"
-maximal_y_deco="962"
-maximal_z_deco="238"
+minimal_x_deco="110" 	# Cropping parameters adjusted for transformation
+minimal_y_deco="20"
+minimal_z_deco="-145"
+maximal_x_deco="488"
+maximal_y_deco="946"
+maximal_z_deco="236"
 
-iterations="10"						# Number of iterations
+iterations="1"						# Number of iterations
 
 detections_to_extract_psf_for_channel="\"[Same PSF as channel red],beads\""	# type of detection "\"[Same PSF as channel 1]\""
 psf_size_x="19"						# Dimensions of PSF
