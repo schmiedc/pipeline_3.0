@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # path of master file
-source ../../master_3.2.sh
+source ../../master_3.3.sh
 
 # creates directory for job files if not present
 mkdir -p $jobs_resaving
