@@ -16,12 +16,7 @@ do
 	-Dprocess_channel=$process_channel \
 	-Dprocess_illumination=$process_illumination \
 	-Dprocess_angle=$process_angle \
-	-Dchannel_number=$channel_number \
-	-Dchannel_1=$channel_1 \
-	-Dchannel_2=$channel_2 \
-	-Dchannel_3=$channel_3 \
-	-Dchannel_4=$channel_4 \
-	-Dchannel_5=$channel_5 \
+	-Dchannels=$channels \
 	-Dminimal_x_deco=$minimal_x_deco \
 	-Dminimal_y_deco=$minimal_y_deco \
 	-Dminimal_z_deco=$minimal_z_deco \
@@ -36,11 +31,7 @@ do
 	-Dpsf_estimation=$psf_estimation \
 	-Ddeco_output_file_directory=$deco_output_file_directory \
 	-Dcuda_directory=$cuda_directory \
-	-Ddetections_to_extract_psf_for_channel_1=$detections_to_extract_psf_for_channel_1 \
-	-Ddetections_to_extract_psf_for_channel_2=$detections_to_extract_psf_for_channel_2 \
-	-Ddetections_to_extract_psf_for_channel_3=$detections_to_extract_psf_for_channel_3 \
-	-Ddetections_to_extract_psf_for_channel_4=$detections_to_extract_psf_for_channel_4 \
-	-Ddetections_to_extract_psf_for_channel_5=$detections_to_extract_psf_for_channel_5 \
+	-Ddetections_to_extract_psf_for_channel=$detections_to_extract_psf_for_channel \
 	-Dpsf_size_x=$psf_size_x \
 	-Dpsf_size_y=$psf_size_y \
 	-Dpsf_size_z=$psf_size_z \

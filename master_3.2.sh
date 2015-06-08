@@ -11,9 +11,9 @@
 #        NOTES: Works for Single Channel Data
 #		Output file directory is the image file directory
 #		Channel name cannot contain spaces
-#      Version: 3.2
+#      Version: 3.3
 #      CREATED: 2014-04-02
-#     REVISION: 2015-05-21
+#     REVISION: 2015-06-08
 #===============================================================================
 
 #-------------------------------------------------------------------------------
@@ -32,36 +32,6 @@ job_directory="/projects/pilot_spim/Christopher/pipeline_3.0/jobs_alpha_3.1/"
 # --- Number of timepoints in dataset ------------------------------------------
 # IMPORTANT for processing .czi files timepoints always start with 0
 parallel_timepoints="`seq 0 1`"  # format: "`seq 0 3`"
-
-#===============================================================================
-# Preprocessing
-#	1) rename .czi files
-#	2) resave .czi files into .tif or .zip
-#	3) resave ome.tiff files into .tif
-#	4) Splitting output for Channel is
-#		c=0,1 etc
-#		spim_TL{tt}_Angle{a}_Channel{c}.tif
-#===============================================================================
-
-#-------------------------------------------------------------------------------
-# Resaving, Renaming files and Splitting: General
-#
-# Important: For renaming and resaving .czi files the first .czi file has to
-# carry the index (0)
-#-------------------------------------------------------------------------------
-
-pad="3"		# for padded zeros
-angle_prep="1" # angles format: "1 2 3"
-
-#--- Renaming ------------------------------------------------------------------
-
-first_index="0"		# First index of czi files
-last_index="391"		# Last index of czi files
-first_timepoint="0"	# The first timepoint
-angles_renaming=(1)	# Angles format: (1 2 3)
-
-source_pattern=2014-10-23_H2A_gsb_G3\(\{index\}\).czi # Name of .czi files
-target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of renaming
 
 #===============================================================================
 # Multiview Reconstruction:
@@ -110,9 +80,6 @@ timepoints="0-2"			# Timepoints format: "1-2"
 
 first_czi="2015-02-20_LZ2_Stock48_Stock58.czi"
 
-# Rotation
-rotation_around="X-Axis"
-
 #-------------------------------------------------------------------------------
 # Resave as hdf5
 #-------------------------------------------------------------------------------
@@ -129,10 +96,6 @@ rotation_around="X-Axis"
 # General parallel processing settings
 # Time points are processed in parallel. The time point is specified in the
 # job script using the parallel_timepoints variable (see dataset description)
-
-reg_process_timepoint="\"Single Timepoint (Select from List)\""
-reg_process_illumination="\"All illuminations\""
-reg_process_angle="\"All angles\""
 
 # Channel Settings:
 reg_process_channel="\"Single channel (Select from List)\"" # Single Channel: "\"Single Channel\""; Dual Channel: "\"All channels\""; Dual Channel one Channel contains beads: "\"Single channel (Select from List)\""		
@@ -165,14 +128,6 @@ target_dublication="green"
 #-------------------------------------------------------------------------------
 # Fusion General Settings
 #-------------------------------------------------------------------------------
-
-process_timepoint="\"Single Timepoint (Select from List)\""
-process_channel="\"All channels\""
-process_illumination="\"All illuminations\""
-process_angle="\"All angles\""
-xml_output="\"Save every XML with user-provided unique id\"" # "\"Do not process on cluster\""
-fused_image="\"Append to current XML Project\"" # "\"Save as TIFF stack\""
-
 #--- Multi-view content based fusion -------------------------------------------
 
 minimal_x="220" 	# Cropping parameters of full resolution
@@ -227,8 +182,7 @@ maximal_z_deco="236"
 
 iterations="1"						# Number of iterations
 
-detections_to_extract_psf_for_channel_1="\"[Same PSF as channel red]\""	# type of detection "\"[Same PSF as channel 1]\""
-detections_to_extract_psf_for_channel_2="\"beads\""
+detections_to_extract_psf_for_channel="\"[Same PSF as channel red],beads\""	# type of detection "\"[Same PSF as channel 1]\""
 psf_size_x="19"						# Dimensions of PSF
 psf_size_y="19"
 psf_size_z="25"
@@ -251,6 +205,37 @@ deco_channels="green,red"								# for dual channel
 
 deco_hdf5_xml="\"hdf5_deconvo_Stock68\"" 	# name of hdf5 dataset
 
+
+#===============================================================================
+# Preprocessing
+#	1) rename .czi files
+#	2) resave .czi files into .tif or .zip
+#	3) resave ome.tiff files into .tif
+#	4) Splitting output for Channel is
+#		c=0,1 etc
+#		spim_TL{tt}_Angle{a}_Channel{c}.tif
+#===============================================================================
+
+#-------------------------------------------------------------------------------
+# Resaving, Renaming files and Splitting: General
+#
+# Important: For renaming and resaving .czi files the first .czi file has to
+# carry the index (0)
+#-------------------------------------------------------------------------------
+
+pad="3"		# for padded zeros
+angle_prep="1" # angles format: "1 2 3"
+
+#--- Renaming ------------------------------------------------------------------
+
+first_index="0"		# First index of czi files
+last_index="391"		# Last index of czi files
+first_timepoint="0"	# The first timepoint
+angles_renaming=(1)	# Angles format: (1 2 3)
+
+source_pattern=2014-10-23_H2A_gsb_G3\(\{index\}\).czi # Name of .czi files
+target_pattern=spim_TL\{timepoint\}_Angle\{angle\}.czi	# The output pattern of renaming
+
 #===============================================================================
 # Directories for scripts and advanced settings for processing
 #===============================================================================
@@ -266,7 +251,7 @@ Fiji="/sw/users/schmied/packages/2015-06-08_Fiji.app.cuda/ImageJ-linux64"
 FijiDualTimelapse="/sw/users/schmied/packages/2015-05-29_Fiji-2.3.9-SNAP.app.cuda/ImageJ-linux64"
 
 Fiji_resave="/sw/users/schmied/lifeline/Fiji.app.lifeline2/ImageJ-linux64" 	# Fiji that works for resaving
-Fiji_Deconvolution=${Fiji}		# Fiji that works for deconvolution
+Fiji_Deconvolution=${FijiDualTimelapse}		# Fiji that works for deconvolution
 
 #-------------------------------------------------------------------------------
 # Pre-processing
@@ -301,6 +286,8 @@ define_czi_xml=${jobs_xml}"/define_czi.bsh" # script for defining .czi data
 # Calibration Type = Same voxel-size for all views
 type_of_dataset="\"Image Stacks (ImageJ Opener)\"" 		# raw fileformat
 imglib_container="\"CellImg (large images)\"" 			#ArrayImg (faster)
+#--- Define dataset: Zeiss Lightsheet Z.1 Dataset (LOCI Bioformats) ------------
+rotation_around="X-Axis"				# Rotation
 #-------------------------------------------------------------------------------
 # hdf5 export
 #
@@ -320,6 +307,10 @@ resave_timepoint="\"All Timepoints\""
 #
 # find_maxima
 #-------------------------------------------------------------------------------
+reg_process_timepoint="\"Single Timepoint (Select from List)\""
+reg_process_illumination="\"All illuminations\""
+reg_process_angle="\"All angles\""
+
 jobs_registration=${job_directory}"registration"	# directory for registration
 registration=${jobs_registration}"/registration.bsh" 	# script for registration
 
@@ -376,6 +367,13 @@ duplicate_which_transformations="\"Replace all transformations\""
 # with blending
 # with content-based fusion
 #-------------------------------------------------------------------------------
+process_timepoint="\"Single Timepoint (Select from List)\""
+process_channel="\"All channels\""
+process_illumination="\"All illuminations\""
+process_angle="\"All angles\""
+xml_output="\"Save every XML with user-provided unique id\"" # "\"Do not process on cluster\""
+fused_image="\"Append to current XML Project\"" # "\"Save as TIFF stack\""
+
 jobs_fusion=${job_directory}"fusion"	# directory for content based fusion
 fusion=${jobs_fusion}"/fusion.bsh" 	# script for content based fusion
 
