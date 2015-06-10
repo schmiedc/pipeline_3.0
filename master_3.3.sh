@@ -141,21 +141,21 @@ downsample="2"
 
 #--- Define xml on content based fusion fusion output and save as xml ----------
 # for pixel size take downsampling into account!
-fused_file_directory=${image_file_directory}"/fusion/"
+fused_file_directory=${image_file_directory}
 
-fused_image_file_pattern="TP{t}_Ch{c}_Ill0_Ang0,72,144,216,288.tif"	# pattern of spim for padded zeros use tt
-fused_xml="\"fused_Dual_Channel\""
-
+fused_image_file_pattern="TP{t}_Chgreen_Ill0_Ang0,72,144,216,288.tif"	# Single Channel: TP{t}_Chgreen_Ill0_Ang0,72,144,216,288.tif > Ch{name} is added here
+									# Dual Channel: TP{t}_Ch{0}_Ill0_Ang0,72,144,216,288.tif > Ch{name} is added here
+fused_xml="\"fused_Single_Channel\""
 fused_timepoints="0-1"			# Timepoints format: "1-2"
 fused_pixel_distance_x="0.5718" 	# Manual calibration x
 fused_pixel_distance_y="0.5718" 	# Manual calibration y
 fused_pixel_distance_z="0.5718" 	# Manual calibration z
 fused_pixel_unit="um"			# unit of manual calibration
 
-fused_multiple_channels="\"YES (one file per channel)\""	# or "\"NO (one channel)\""
-fused_channels="green,red"
+fused_multiple_channels="\"NO (one channel)\""	# or  "\"YES (one file per channel)\""
+fused_channels="green"
 
-fused_hdf5_xml="\"hdf5_fused_Stock68\"" 	# name of hdf5 dataset
+fused_hdf5_xml="\"hdf5_Single_Channel\"" 	# name of hdf5 dataset
 
 subsampling_factors_fused="\"{ {1,1,1}, {2,2,1}, {4,4,1}, {8,8,1} }\""
 hdf5_chunk_sizes_fused="\"{ {32,32,4}, {32,32,4}, {16,16,16}, {16,16,16} }\""
@@ -196,18 +196,20 @@ psf_size_z="25"
 
 deco_file_directory=${deco_output_file_directory}
 
-deco_image_file_pattern="TP{t}_Ch{c}_Ill0_Ang0,72,144,216,288.tif"	# pattern of spim for padded zeros use tt
-deco_xml="\"deco_Dual_Channel\""
+deco_image_file_pattern="TP{t}_Chgreen_Ill0_Ang0,72,144,216,288.tif"	# Single Channel: TP{t}_Chgreen_Ill0_Ang0,72,144,216,288.tif > Ch{name} is added here
+									# Dual Channel: TP{t}_Ch{0}_Ill0_Ang0,72,144,216,288.tif > Ch{name} is added here
+									
+deco_xml="\"deco_Single_Channel\""
 deco_timepoints="0-1"			# Timepoints format: "1-2"
 deco_pixel_distance_x="0.5718" 	# Manual calibration x
 deco_pixel_distance_y="0.5718" 	# Manual calibration y
 deco_pixel_distance_z="0.5718" 	# Manual calibration z
 deco_pixel_unit="um"			# unit of manual calibration
 
-deco_multiple_channels="\"YES (one file per channel)\""					# or  "\"NO (one channel)\""
-deco_channels="green,red"								# for dual channel
+deco_multiple_channels= "\"NO (one channel)\""	# "\"YES (one file per channel)\"" or  "\"NO (one channel)\""
+deco_channels="green"				# for dual channel
 
-deco_hdf5_xml="\"hdf5_deconvo_Stock68\"" 	# name of hdf5 dataset
+deco_hdf5_xml="\"hdf5_Single_Channel\"" 	# name of hdf5 dataset
 
 subsampling_factors_deco="\"{ {1,1,1}, {2,2,2}, {4,4,4}, {8,8,8} }\""
 hdf5_chunk_sizes_deco="\"{ {16,16,16}, {16,16,16}, {16,16,16}, {16,16,16} }\""
