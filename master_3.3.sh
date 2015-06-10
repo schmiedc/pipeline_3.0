@@ -13,7 +13,7 @@
 #		Channel name cannot contain spaces
 #      Version: 3.3
 #      CREATED: 2014-04-02
-#     REVISION: 2015-06-08
+#     REVISION: 2015-06-10
 #===============================================================================
 
 #-------------------------------------------------------------------------------
@@ -157,6 +157,9 @@ fused_channels="green,red"
 
 fused_hdf5_xml="\"hdf5_fused_Stock68\"" 	# name of hdf5 dataset
 
+subsampling_factors_fused="\"{ {1,1,1}, {2,2,1}, {4,4,1}, {8,8,1} }\""
+hdf5_chunk_sizes_fused="\"{ {32,32,4}, {32,32,4}, {16,16,16}, {16,16,16} }\""
+
 #--- External transformation for multi-view deconvolution-----------------------
 # Caution! Make copy of .xml file before application of transformation
 
@@ -206,6 +209,8 @@ deco_channels="green,red"								# for dual channel
 
 deco_hdf5_xml="\"hdf5_deconvo_Stock68\"" 	# name of hdf5 dataset
 
+subsampling_factors_deco="\"{ {1,1,1}, {2,2,2}, {4,4,4}, {8,8,8} }\""
+hdf5_chunk_sizes_deco="\"{ {16,16,16}, {16,16,16}, {16,16,16}, {16,16,16} }\""
 
 #===============================================================================
 # Preprocessing

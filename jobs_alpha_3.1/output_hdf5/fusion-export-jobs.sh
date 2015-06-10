@@ -25,8 +25,8 @@ do
 		-Dresave_channel=$resave_channel \
 		-Dresave_illumination=$resave_illumination \
 		-Dresave_timepoint=$resave_timepoint \
-		-Dsubsampling_factors=$subsampling_factors \
-		-Dhdf5_chunk_sizes=$hdf5_chunk_sizes \
+		-Dsubsampling_factors=$subsampling_factors_fused \
+		-Dhdf5_chunk_sizes=$hdf5_chunk_sizes_fused \
 		-Dtimepoints_per_partition=$timepoints_per_partition \
 		-Dsetups_per_partition=$setups_per_partition \
 		-Drun_only_job_number=$i \

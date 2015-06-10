@@ -30,7 +30,7 @@ do
         -Dinitial_sigma=$initial_sigma \
         -Dthreshold_gaussian=$threshold_gaussian \
 	-Dregistration_algorithm=$registration_algorithm \
-	-Dreg_interest_points_channel=$reg_interest_points_channel\
+	-Dreg_interest_points_channel=$reg_interest_points_channel \
 	-Dfix_tiles=$fix_tiles \
 	-Dmap_back_tiles=$map_back_tiles \
 	-Dtransformation_model=$transformation_model \
