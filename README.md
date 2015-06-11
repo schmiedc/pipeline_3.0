@@ -1,19 +1,25 @@
-Supported datasets: Whole or parts of a multi-view time-lapse can be processed but parts need to be continuous. Currently all angles are processed.
+
+
+The scripts are now supporting multiple angles, multiple channels and multiple illumination direction without adjusting the .bsh or creat-jobs.sh scripts.
+
+Based on SPIM registration version 3.3.8
+
+Supported datasets are in the following format:
 
 ImageJ Opener (resave to .tif):
 
     Multiple timepoints: YES (one file per timepoint)
-    Multiple channels: NO (one channel)
-    Multiple illumination directions: No (one illumination direction)
+    Multiple channels: YES (one file per channel)
+    Multiple illumination directions: YES (one file per illumination direction) => not tested yet
     Multiple angles: YES one file per angle
 
-Zeiss Lightsheet Z.1 Dataset (LOCI): currently for 5 angle data set but can easily be adjusted
+Zeiss Lightsheet Z.1 Dataset (LOCI)
 
-    Multiple timepoints: YES (one file per timepoint)
-    Multiple channels: NO (one channel)
-    Multiple illumination directions: NO (one illumination direction)
+    Multiple timepoints: Supports multiple time points per file
+    Multiple channels: Supports multiple channels per file
+    Multiple illumination directions: YES (one file per illumination direction)
     Multiple angles: YES (one file per angle)
-
+    
 Resave as .zip (Compression) gives a compression factor of 1.7x.
 CPU time for compression was about 80sec.
 CPU time for resave to .tif was about 22sec.
