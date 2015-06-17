@@ -98,7 +98,7 @@ first_czi="2015-02-21_LZ1_Stock68_3.czi"
 # job script using the parallel_timepoints variable (see dataset description)
 
 # Channel Settings:
-reg_process_channel="\"Single Channel\"" # Single Channel: "\"Single Channel\""; Dual Channel: "\"All channels\""; Dual Channel one Channel contains beads: "\"Single channel (Select from List)\""		
+reg_process_channel= "\"All channels\"" # Single Channel:  "\"All channels\""; Dual Channel: "\"All channels\""; Dual Channel one Channel contains beads: "\"Single channel (Select from List)\""		
 reg_processing_channel="\"red\""			# Dual Channel setting for 1 Channel contains the beads
 
 #--- Detect Interest Points for Registration -----------------------------------
